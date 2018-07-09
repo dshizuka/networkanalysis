@@ -1,8 +1,0 @@
----
-layout: post
-title: New Post
-date: 2018-07-09
-comments: true
-archive: true
----
-New post New post
