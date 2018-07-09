@@ -1,5 +1,5 @@
 name: Network2018
-description:  Jekyll theme
+description:  Website for UNL Network Analysis Workshop 2018
 
 sass:
   sass_dir: assets/css/_sass
