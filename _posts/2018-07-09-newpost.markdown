@@ -64,7 +64,7 @@ panels. Click on the little icon at the top left that looks like this:
 ![](image/icon1.png)  
 Now you will have 4 panels.
 
-<img src="https://raw.github.com/dshizuka/network2018/gh-pages/assets/image/panels.png" width="1352" style="display: block; margin: auto;" />
+<img src="https://raw.github.com/dshizuka/network2018/gh-pages/assets/images/panels.png" width="1352" style="display: block; margin: auto;" />
 
 These are the 4 panels you will have:
 
