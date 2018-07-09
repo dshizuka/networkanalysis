@@ -12,10 +12,10 @@ redcarpet:
 url: https://dshizuka.github.io/network2018
 permalink: /:year/:month/:title/
 owner:
-    name: #
+    name: # Dai
     twitter: #
     github: #
-    disqus_shortname: #
+    disqus_shortname: # network2018
 
 ga_id: #
 ga_username: #
