@@ -322,27 +322,27 @@ E(g)$color=rainbow(7)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from a456210:
+## + 3/6 vertices, named, from 987e896:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from a456210:
+## + 2/6 vertices, named, from 987e896:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from a456210:
+## + 2/6 vertices, named, from 987e896:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from a456210:
+## + 2/6 vertices, named, from 987e896:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from a456210:
+## + 2/6 vertices, named, from 987e896:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from a456210:
+## + 3/6 vertices, named, from 987e896:
 ## [1] A D E</code></pre>
 </div>
 </div>
@@ -432,9 +432,9 @@ edge.dat</code></pre>
 <pre class="r"><code>set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg</code></pre>
-<pre><code>## IGRAPH a73b616 UNW- 7 10 -- 
+<pre><code>## IGRAPH 9fc61da UNW- 7 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from a73b616 (vertex names):
+## + edges from 9fc61da (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>
