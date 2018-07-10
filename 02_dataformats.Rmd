@@ -11,6 +11,7 @@ library(knitr)
 knitr::opts_chunk$set(fig.width=6, fig.height=4) 
 ```
 
+------------
 
 ##2.1 Basic Data Formats For Networks
 

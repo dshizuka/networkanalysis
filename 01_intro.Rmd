@@ -47,6 +47,7 @@ Let’s jump right in and try making a network using the `igraph` package. Here,
 
 ```{r figure1}
 g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
+set.seed(2)
 plot(g)
 ```
 
@@ -86,6 +87,7 @@ We can also create new vertex attributes using this syntax. Certain attribute na
 
 ```{r }
 V(g)$color=c("white", "red", "green", "blue", "orange", "yellow") #a random set of colors 
+set.seed(2)
 plot(g)
 ```
 
@@ -94,6 +96,7 @@ We can also add edge attributes. Let’s try adding two edge attributes, *width*
 ```{r}
 E(g)$width=1:7
 E(g)$color=rainbow(7) #rainbow() function chooses a specified number of colors 
+set.seed(2)
 plot(g)
 ```
 
