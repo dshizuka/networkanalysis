@@ -1,13 +1,11 @@
-name: "ShizukaLab_Network2018"
+name: "ShizukaLab_NetworkAnalysis"
 navbar:
-  title: "Shizuka Lab Network Retreat 2018"
+  title: "Network Analysis Tutorials"
   left:
     - text: "Home"
       href: index.html
     - text: "About"
       href: about.html
-    - text: "Syllabus"
-      href: syllabus.html
     - text: "Lessons"
-      href: lessons.html  
+      href: lessons.html
 output_dir: "."
