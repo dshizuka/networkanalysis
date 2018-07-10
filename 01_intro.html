@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Shizuka Lab Network Retreat 2018</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="syllabus.html">Syllabus</a>
+</li>
+<li>
+  <a href="lessons.html">Lessons</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol style="list-style-type: decimal">
+<li>Introduction</li>
+</ol></h1>
+
+</div>
+
+
+<div id="the-r-programming-language" class="section level3">
+<h3>1.1 The R programming language</h3>
+<p>R is a free, cross-platform, open-source programming language that allows you to do data manipulation, conduct a wide variety of tasks such as data manipulation, data analysis, produce beautiful graphs, put together and run simple models, simulations, etc. One of the huge advantages is that there is a large community of users within the scientific community producing new and improved ‘packages’, or bundles of functions and datasets that are useful for a particular set of tasks. Anyone can put together an R package. However, there are some guidelines (e.g., there must be a help file with certain level of detailed information). R packages that have been vetted are archived in the Comprehensive R Archive Network (CRAN), and those that are deposited on this server can be downloaded from within the R command console</p>
+<p>For the purposes of this workshop, I will assume that you are already familiar with R. However, I try to explain codes in a friendly way so that complete novices should be able to mostly keep up. Rstudio</p>
+<p>There are many ways to run R. You can just run R directly or use software that is designed to provide a computing environment that helps you stay organized and efficient (called ‘integrated development environment’, or IDE). In this workshop, we will use one such software called <em>Rstudio</em>. The benefit to Rstudio for me is that it looks the same in Mac and Windows, so it makes it easier to demonstrate codes. It is also very popular so many participants are likely to be familiar with it.</p>
+</div>
+<div id="the-igraph-package" class="section level3">
+<h3>1.2 The <code>igraph</code> Package</h3>
+<p>As with many other types of analyses, there are a ton of R packages available for network analysis. In this course, we will be primarily using the <code>igraph</code> package (Gabor &amp; Nepusz 2006, <a href="http://igraph.org" class="uri">http://igraph.org</a>), which combines ease of use and high-level computation (it is also available for Python and C/C++). This package has proven to be very useful, and it covers a lot of basic network analysis methods as well as plotting capabilities. However, there may be certain situations in which you will want to use other network packages. We will be introducing some of these other packages as we go.</p>
+<p>If you’ve done the “Before you start” section, you will already have installed teh <code>igraph</code> package on your machine. Let’s go ahead and look at this package offers:</p>
+<pre class="r"><code>library(help=&#39;igraph&#39;)</code></pre>
+<p>This should open a new window that gives you a lot of info. The Index shows all of the functions that come as part of the package.</p>
+<p>Now we want to try getting information on some of these. However, first, we have to load the package before we can begin to use it. Then, try looking up some functions:</p>
+<pre class="r"><code> library(igraph) #load the package 
+?graph_from_adjacency_matrix</code></pre>
+<div id="our-first-network" class="section level4">
+<h4>1.2.1 Our first network!</h4>
+<p>Let’s jump right in and try making a network using the <code>igraph</code> package. Here, we will manually make a network using the <code>make_graph()</code> function. You likely won’t use this function that often, but it is very useful for the purpose of demonstration.</p>
+<pre class="r"><code>g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
+plot(g)</code></pre>
+<p><img src="01_intro_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
+<p>Congratulations! You made your first network.</p>
+<p>So what did we do in the codes above? We used a <code>make_graph()</code> function to two make two triangles (A-B-C-A and D-E-F-D) and connect two nodes from those two triangles (A-F). We then used the<code>plot()</code> function to make the network figure.</p>
+<p><strong><em>NOTE that your network plot might be oriented differently than this one.</em></strong> Try running this command over and over again. You will notice that the plot will come out slightly differently each time. Think about what changes and what does not change. Does this mean the network changes? We will tackle issues regarding network layout a little bit later.</p>
+<p>Now let’s learn a little bit about this object, g, that we have created.</p>
+<pre class="r"><code>class(g)</code></pre>
+<pre><code>## [1] &quot;igraph&quot;</code></pre>
+<p>You can see that <code>g</code> is an ‘igraph object’. This means that it is now a <em>graph</em> or <em>network</em>. You can see more details about this object by simply:</p>
+<pre class="r"><code>g</code></pre>
+<pre><code>## IGRAPH b624ff7 UN-- 6 7 -- 
+## + attr: name (v/c)
+## + edges from b624ff7 (vertex names):
+## [1] A--B A--C A--F B--C D--E D--F E--F</code></pre>
+<p>As you can see, simply printing <code>g</code> will display the bare minimum information: “UN” means “<strong>U</strong>ndirected network with <strong>N</strong>ames of vertices”, and the numbers indicate that there are 6 vertices and 7 edges. The second line shows that there is attribute called ‘name’. The characters inside the parentheses (v/c) indicates that it is a ‘vertex attribute’ and that it is a ‘character’ attribute (i.e., rather than numeric or integers). The third and fourth lines show us the 7 edges that exist in this network.</p>
+<p>We can look up the vertices and edges using this special syntax:</p>
+<pre class="r"><code>V(g) #look up vertices </code></pre>
+<pre><code>## + 6/6 vertices, named, from b624ff7:
+## [1] A B C D E F</code></pre>
+<pre class="r"><code>E(g) #look up edges</code></pre>
+<pre><code>## + 7/7 edges from b624ff7 (vertex names):
+## [1] A--B A--C A--F B--C D--E D--F E--F</code></pre>
+<p>In addition, we can look up vertex attributes. We currently only have one vertex attribute, called ‘name’:</p>
+<pre class="r"><code>V(g)$name</code></pre>
+<pre><code>## [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot; &quot;F&quot;</code></pre>
+<p>We can also create new vertex attributes using this syntax. Certain attribute names can be directly interpreted by igraph for example, the vertex attribute ‘color’ will automatically be interpreted for plotting the network. Let’s try this out:</p>
+<pre class="r"><code> V(g)$color=c(&quot;white&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;orange&quot;, &quot;yellow&quot;) #a random set of colors 
+plot(g)</code></pre>
+<p><img src="01_intro_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
+<p>We can also add edge attributes. Let’s try adding two edge attributes, <em>width</em> and <em>color</em>.</p>
+<pre class="r"><code>E(g)$width=1:7
+E(g)$color=rainbow(7) #rainbow() function chooses a specified number of colors 
+plot(g)</code></pre>
+<p><img src="01_intro_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<p>You can see that now the edges are slightly different widths: these could represent the variations in the strength of relationships between nodes in a <em>weighted network</em>.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
