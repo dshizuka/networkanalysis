@@ -44,7 +44,7 @@ Now we want to try getting information on some of these. However, first, we have
 
 Let’s jump right in and try making a network using the `igraph` package. Here, we will manually make a network using the `make_graph()` function. You likely won’t use this function that often, but it is very useful for the purpose of demonstration.
 
-```{r}
+```{r figure1}
 g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
 plot(g)
 ```
@@ -83,7 +83,7 @@ V(g)$name
 
 We can also create new vertex attributes using this syntax. Certain attribute names can be directly interpreted by igraph for example, the vertex attribute ‘color’ will automatically be interpreted for plotting the network. Let’s try this out:
 
-```{r}
+```{r }
  V(g)$color=c("white", "red", "green", "blue", "orange", "yellow") #a random set of colors 
 plot(g)
 ```
