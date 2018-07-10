@@ -12,7 +12,7 @@ knitr::opts_chunk$set(fig.width=6, fig.height=4)
 
 -----
 
-###1.1 The R programming language
+##1.1 The R programming language
 R is a free, cross-platform, open-source programming language that allows you to do data manipulation, conduct a wide variety of tasks such as data manipulation, data analysis, produce beautiful graphs, put together and run simple models, simulations, etc.
 One of the huge advantages is that there is a large community of users within the scientific community producing new and improved ‘packages’, or bundles of functions and datasets that are useful for a particular set of tasks. Anyone can put together an R package. However, there are some guidelines (e.g., there must be a help file with certain level of detailed information). R packages that have been vetted are archived in the Comprehensive R Archive Network (CRAN), and those that are deposited on this server can be downloaded from within the R command console
 
@@ -21,7 +21,7 @@ Rstudio
 
 There are many ways to run R. You can just run R directly or use software that is designed to provide a computing environment that helps you stay organized and efficient (called ‘integrated development environment’, or IDE). In this workshop, we will use one such software called *Rstudio*. The benefit to Rstudio for me is that it looks the same in Mac and Windows, so it makes it easier to demonstrate codes. It is also very popular so many participants are likely to be familiar with it.
 
-###1.2 The `igraph` Package
+##1.2 The `igraph` Package
 As with many other types of analyses, there are a ton of R packages available for network analysis. In this course, we will be primarily using the `igraph` package (Gabor & Nepusz 2006, [http://igraph.org](http://igraph.org)), which combines ease of use and high-level computation (it is also available for Python and C/C++). This package has proven to be very useful, and it covers a lot of basic network analysis methods as well as plotting capabilities. However, there may be certain situations in which you will want to use other network packages. We will be introducing some of these other packages as we go.
 
 If you've done the "Before you start" section, you will already have installed teh `igraph` package on your machine. Let's go ahead and look at this package offers:
@@ -41,7 +41,7 @@ Now we want to try getting information on some of these. However, first, we have
 ```
 
 
-####1.2.1 Our first network!
+###1.2.1 Our first network!
 
 Let’s jump right in and try making a network using the `igraph` package. Here, we will manually make a network using the `make_graph()` function. You likely won’t use this function that often, but it is very useful for the purpose of demonstration.
 
@@ -100,4 +100,44 @@ plot(g)
 You can see that now the edges are slightly different widths: these could represent the variations in the strength of relationships between nodes in a *weighted network*.
 
 
-###1.3 Basic Data Formats
+##1.3 Basic Data Formats For Networks
+
+There are three basic data formats that can be used to describe networks: *adjacency matrix*, *edge list*, and *adjacency list*. Each format has its pros and cons. There are other variations on these (e.g., a *biadjacency matrix* for bipartite networks).
+
+###1.3.1 Adjacency Matrix
+
+An ***adjacency matrix*** is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the  edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).
+
+We can extract the adjacency matrix of the network we created, called `g`:
+```{r}
+as_adjacency_matrix(g, sparse=F)
+```
+
+**Note the argument `sparse=F` in the code above**. This displays the adjacency matrix with 0s. If `sparse=T`, the output is a special format of the matrix where the 0s are replaced with a period (this is to make it easier to see very large matrices).
+
+Also note that, because the network is undirected and unweighted, the corresponding adjacency matrix is symmetrical (value for row A, column B is identical to row B, column A) and binary (values are 0 or 1).
+
+###1.3.2 Edge List
+
+An **edge list** is a two-column list of the two nodes that are connected in a network. In the case of a directed network, the convention is that the edge goes from the vertex in the first column to the vertex in the second column. In an undirected network, the order of the vertices don’t matter. For weighted networks, you may have a third column that indicates the edge weight.
+
+You can get the edgelist of any igraph object as well:
+
+```{r}
+as_edgelist(g)
+```
+
+###1.3.3 Adjacency List
+
+An **adjacency list**, also known as a node list, presents the 'focal' node on the first column, and then all the other nodes that are connected to it (i.e., adjacent to it) as columns to the right of it. In a spreadsheet, would be a table with rows with different number of columns, which is often very awkward to deal with, like this:
+
+Focal Node| Neighbor_1 | Neighbor_2 | Neighbor_3
+---|---|---|---
+A  | B | C | F
+B  | A | C |
+C  | A | B |
+D  | E | F |
+E  | D | F |
+F  | A | D | E
+---|---|---|---
+
