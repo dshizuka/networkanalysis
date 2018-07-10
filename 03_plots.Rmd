@@ -14,4 +14,7 @@ set.seed(2)
 
 ##3.1 Network Plots: Layouts and Attributes
 
-Researchers often use network analysis as a tool for displaying complex data. But you should also know that one must be very careful not to over­interpret network plots. This is because there is no single rule for how to display networks, and network plots can obscure interesting patterns or be misleading if the layout format does not match the purpose. With that said, network plots can be a useful and powerful way to get your message across if used appropriately.
+Researchers often use network analysis as a tool for displaying complex data. But you should also know that one must be very careful not to over-interpret network plots. This is because there is no single rule for how to display networks, and network plots can obscure interesting patterns or be misleading if the layout format does not match the purpose. With that said, network plots can be a useful and powerful way to get your message across if used appropriately.
+
+
+The plotting function in igraph comes with a lot of different options. We have used several arguments already, but if you want to explore the ins and outs of plotting in R, look up `?igraph.plotting`. I also highly recommend my favorite web tutorial on static and dynamic network visualization by [Katya Ognyanova] (http://kateto.net/networkvisualization).
