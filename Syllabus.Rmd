@@ -12,10 +12,8 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Syllabus
-
 This is the syllabus for a week-long workshop/lab retreat on Network Analysis hosted at the Shizuka Lab, School of Biological Sciences, UNL in summer 2018
-<<<<<<< HEAD:Syllabus.Rmd
+
 
 ##<u>Date/Location</u>  
 * **July 16-21: Each day will start at 401 Manter Hall**  
@@ -27,5 +25,5 @@ This is the syllabus for a week-long workshop/lab retreat on Network Analysis ho
 
 ##<u>Course Website</u>  
 ####Course materials will be posted at the course blog: [https://dshizuka.github.io/network2018](https://dshizuka.github.io/network2018)####  
-=======
->>>>>>> fb50c40a7b857bd512faae44c0c7c2826fef3499:syllabus.Rmd
+
+
