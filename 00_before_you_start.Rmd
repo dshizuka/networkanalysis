@@ -10,6 +10,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 
 1. Install Rstudio
+
+This workshop will use R as the base language for all computer exercises. I have made this site as user-friendly as possible, but it is good for you to have the basics of R under your belt before you embark on these lessons. 
+
 2. Install Packages
 
 Run this code:
@@ -21,3 +24,5 @@ install.packages(c("igraph", "bipartite", "asnipe", "assortnet", "ggplot2", "ggm
 3. Download data
 
 Go to [this link](https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData.zip) and download the compressed data files. Save the file into a folder that you can remember. This will allow us to run some of the examples even if internet access fails.
+
+
