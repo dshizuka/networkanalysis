@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -21,8 +21,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -31,10 +31,12 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -88,6 +90,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -276,8 +281,8 @@ for(layout in layouts){
 <p><img src="03_plots_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
 <p>Before we move on, let’s clear the plotting region:</p>
 <pre class="r"><code>dev.off()</code></pre>
-<pre><code>## RStudioGD 
-##         2</code></pre>
+<pre><code>## null device 
+##           1</code></pre>
 <p>You can also use custom layouts. I’ll set up the vertices on a line and then used curved edges.</p>
 <pre class="r"><code>l=matrix(c(1,2,3,4,5,6,7, 1,2,3,4,5,6,7),ncol=2)
 plot(g,layout=l,edge.curved=TRUE, vertex.label=&quot;&quot;)</code></pre>
@@ -302,9 +307,9 @@ attrib</code></pre>
 <pre class="r"><code>V(g)$sex=factor(attrib[match(V(g)$name, attrib$Name), &quot;Sex&quot;]) # factor() preserves data as M/F
 V(g)$age=attrib[match(V(g)$name, attrib$Name), &quot;Age&quot;]
 g</code></pre>
-<pre><code>## IGRAPH UNW- 7 10 -- 
+<pre><code>## IGRAPH 1827112 UNW- 7 10 -- 
 ## + attr: name (v/c), sex (v/n), age (v/n), weight (e/n)
-## + edges (vertex names):
+## + edges from 1827112 (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>
@@ -342,7 +347,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

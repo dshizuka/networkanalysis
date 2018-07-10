@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -21,8 +21,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -31,10 +31,12 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -88,6 +90,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -214,6 +219,31 @@ $(document).ready(function () {
 <p>As mentioned in the <a href="04_networktypes.html">survey of network types</a>, social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). However, there are potential bananaskins to look out for when constructing social networks. The most important question here (and whenever you are making networks in general) is: <strong><em>what are your edges?</em></strong></p>
 <div id="constructing-networks-from-interactions" class="section level2">
 <h2>4.1.1. Constructing networks from interactions</h2>
+<p>Constructing networks from interactions is conceptually straightforward.</p>
+<p>Here is a sample data set of dominance interactions between pairs of individuals. Each individual has a 5 digit id number. The data is organized as a two-column matrix with winner on the first column and loser on the second column:</p>
+<pre class="r"><code>library(igraph)
+idat=read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_interactions.csv&quot;)
+head(idat)</code></pre>
+<pre><code>##   Winner Loser
+## 1  23871 23778
+## 2  23871 58098
+## 3  23778 23824
+## 4  23732 58098
+## 5  23871 23778
+## 6  23778 23732</code></pre>
+<p>Let’s make this into a network:</p>
+<pre class="r"><code>ig=graph_from_data_frame(idat, directed=T)
+plot(ig)</code></pre>
+<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+<p>You’ll notice that this network has some pairs of individuals that have multiple edges connecting them. This is because the same pair of individuals interact multiple times in this dataset.</p>
+<p>Perhaps you want to combine these ‘multiedges’ into weighted edges. That is, each pair of individuals will be connected by one edge, but the number of interactions will be represented by the edge widths. There are a few different ways to do this. Here’s one:</p>
+<pre class="r"><code>E(ig)$weight=1 #make all edge weights = 1
+ig2=simplify(ig, remove.multiple=T, edge.attr.comb=list(weight=sum))
+plot(ig2, edge.width=E(ig2)$weight)</code></pre>
+<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
+<p>Since this is a directed network, it may be good to have curved edges so we can detect instances where arrows go both ways. We will also arrange the nodes in a circle so we can see the patterns of edges a bit better.</p>
+<pre class="r"><code>plot(ig2, edge.width=E(ig2)$weight/4, edge.curved=T, layout=layout_in_circle(ig2))</code></pre>
+<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
 </div>
 <div id="constructing-networks-from-associations" class="section level2">
 <h2>4.1.2. Constructing networks from associations</h2>
@@ -242,7 +272,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

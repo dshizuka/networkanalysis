@@ -10,7 +10,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(fig.width=6, fig.height=4) 
+knitr::opts_chunk$set(fig.width=6, fig.height=4, message=F) 
 set.seed(2)
 ```
 
@@ -19,8 +19,38 @@ Animals interact and associate. These interactions and associations can build up
 As mentioned in the [survey of network types](04_networktypes.html), social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). However, there are potential bananaskins to look out for when constructing social networks. The most important question here (and whenever you are making networks in general) is: ***what are your edges?***
 
 ##4.1.1. Constructing networks from interactions
+
+Constructing networks from interactions is conceptually straightforward. 
+
+Here is a sample data set of dominance interactions between pairs of individuals. Each individual has a 5 digit id number. The data is organized as a two-column matrix with winner on the first column and loser on the second column:
+
 ```{r}
-idat=read.csv("https://dshizuka.github.io/networkanalysis/SampleData/sample_interactions.csv")
+library(igraph)
+idat=read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Sample_interactions.csv")
+head(idat)
+```
+
+Let's make this into a network:
+
+```{r}
+ig=graph_from_data_frame(idat, directed=T)
+plot(ig)
+```
+
+You'll notice that this network has some pairs of individuals that have multiple edges connecting them. This is because the same pair of individuals interact multiple times in this dataset. 
+
+Perhaps you want to combine these 'multiedges' into weighted edges. That is, each pair of individuals will be connected by one edge, but the number of interactions will be represented by the edge widths. There are a few different ways to do this. Here's one:
+
+```{r}
+E(ig)$weight=1 #make all edge weights = 1
+ig2=simplify(ig, remove.multiple=T, edge.attr.comb=list(weight=sum))
+plot(ig2, edge.width=E(ig2)$weight)
+```
+
+Since this is a directed network, it may be good to have curved edges so we can detect instances where arrows go both ways. We will also arrange the nodes in a circle so we can see the patterns of edges a bit better.
+
+```{r}
+plot(ig2, edge.width=E(ig2)$weight/4, edge.curved=T, layout=layout_in_circle(ig2))
 ```
 
 ##4.1.2. Constructing networks from associations
