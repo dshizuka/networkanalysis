@@ -1,6 +1,6 @@
-name: "my-website"
+name: "ShizukaLab_Network2018"
 navbar:
-  title: "My Website"
+  title: "Shizuka Lab Network Retreat 2018"
   left:
     - text: "Home"
       href: index.html
