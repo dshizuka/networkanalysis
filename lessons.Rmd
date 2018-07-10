@@ -3,4 +3,8 @@ title: "Lessons"
 output: html_document
 ---
 
-####[1. Introduction to Networks](https://dshizuka.github.io/network2018/00_before_you_start.html)
+###[0. Before you start](https://dshizuka.github.io/network2018/00_before_you_start.html)
+
+###[1. Introduction to Networks]()
+
+###
