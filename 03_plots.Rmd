@@ -21,13 +21,13 @@ The plotting function in igraph comes with a lot of different options. We have u
 
 Here, we will deal with two main topics: (1) layout functions and how to merge network data and (2) attribute data to illustrate the network.
 
-3.1.1 Layout
+###3.1.1 Layout
 
 Let's start where we left of [Lesson 2](02_dataformats.html) and make a network out of a fictional adjacency matrix:
 
 ```{r}
 library(igraph)
-am=as.matrix(read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv", header=T, row.names=1))
+am=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/sample_adjmatrix.csv", header=T, row.names=1))
 am
 g=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
 plot(g, edge.width=E(g)$weight)
@@ -90,4 +90,14 @@ You can also use custom layouts. I'll set up the vertices on a line and then use
 ```{r}
 l=matrix(c(1,2,3,4,5,6,7, 1,2,3,4,5,6,7),ncol=2)
 plot(g,layout=l,edge.curved=TRUE, vertex.label="")
+```
+
+The ability to control the layout is particularly useful when we want to plot spatial networks, as we will see later.
+
+###3.1.2 Vertex Attributes
+Now that we know a bit about how to change the looks of vertices and edges, we are ready to start adding information to our edges. For example, you might have other information about your vertices that you'd like to display in the graph plot: e.g., traits of individuals in a social network, or the attributes of a species in a network of species interactions. Typically, you would store these "node attributes" in a separate file. We will use a sample "attributes file" called sample_attrib.csv. Let's go ahead and import this file:
+
+```{r}
+attrib=read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Sample_attrib.csv")
+attrib
 ```
