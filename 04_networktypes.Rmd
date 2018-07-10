@@ -10,8 +10,6 @@ output:
 
 --------------
 
-##4. AN ECOLOGIST’S GUIDE TO DIFFERENT NETWORK TYPES
-
 There are dozens of different types of biological networks. I will focus on a few main types of networks here. For each network, it is particularly important to think about how nodes and edges are defined.
 
 We will present three general types of networks that have been of particular interest for ecologists, each with particular challenges. After a brief overview, I highlight a few particular topics for each type of network.
@@ -20,7 +18,7 @@ We will present three general types of networks that have been of particular int
 ###4.1. Social networks
 Social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). Examples of the types of interactions/associations involved include direct interactions (e.g., aggression, grooming), co-membership in groups such as herds and flocks, or co-use of spatial locations (e.g., roosts, refuges). The analysis of such social networks can be used to understand the structure of societies, the dynamics of social structure across time and space, and the flow of information/disease/etc through these connections.
 
-![Fig1: Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from Flack et al. (2006).[^1]](https://www.dropbox.com/s/jec9dgm7npwgh1i/ASN_fig1.png?dl=1)
+![*Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from* [*Flack et al. (2006)*](https://www.nature.com/articles/nature04326).](https://www.dropbox.com/s/jec9dgm7npwgh1i/ASN_fig1.png?dl=1)
 
 Social network analysis has a long history in fields such as sociology, where it dates back to at least the 1930s. Among ecologists, social networks have been used by primatologists for many decades. However, the study of animal social networks has undeniably exploded in the past decade. This is a field with many review articles (Krause et al. 2007, Wey et al. 2008, Sih et al. 2009, Pinter-Wollman et al. 2014) and books (Croft et al. 2008, Whitehead 2008, Krause et al. 2015) which are recommended for those who are interested in learning more.
 
@@ -29,15 +27,24 @@ Go to a specific tutorial for how to construct social networks [here](04.1_socia
 
 ###4.2 Ecological Networks
 
-In many ecological networks, nodes represent species and edges represents some sort of species interaction. Two prominent examples include food webs and mutualism networks. In food webs, the edges represent trophic interactions. In mutualism networks, the edges may represent interactions such as plant-pollinator relations. In mutualism networks in particular, the network may be *bipartite*: that is, there are two types of nodes (e.g., plants and pollinators), and interactions only occur between two different types of nodes.
+In many ecological networks, nodes represent species and edges represents some sort of species interaction. Two prominent examples include food webs and mutualism networks. 
+* In *food webs*, the edges represent trophic interactions. 
+* In *mutualism networks*, the edges may represent interactions such as plant-pollinator relations. In mutualism networks in particular, the network may be *bipartite*: that is, there are two types of nodes (e.g., plants and pollinators), and interactions only occur between two different types of nodes.
+* In *species co-occurrence networks*, edges represent the frequency or probability of two species co-occurring in a given space and/or time. 
 
 
-![Plant-pollinator network: photo by Sffubs via wikimedia, network from Burkle et al. 2013[^2]](https://www.dropbox.com/s/wzx0xxm4n2yjayt/PlantPollinator.png?dl=1)
+![*Plant-pollinator network: photo by Sffubs via wikimedia, network from* [*Burkle et al. 2013*](http://science.sciencemag.org/content/339/6127/1611)](https://www.dropbox.com/s/wzx0xxm4n2yjayt/PlantPollinator.png?dl=1)
 
 The network view of ecology has a long history (e.g., May 1973), and many great reviews/perspective pieces (Montoya et al. 2006; Bascompte & Jordano 2007; Ings et al. 2009) and books (e.g., Pacual & Dunne 2006) now exist. We will not even scratch the surface of the advances in this area over the past couple of decades!
 
+For an introductory tutorial for constructing ecological networks [here](04.2_ecolnets.html)
 
+###4.3 Spatial Networks
 
+Spatial networks are distinguished by the fact that nodes represent some point in space, e.g., habitats within a landscape, or populations across a region. The edges may represent connectivity of these sites or populations, e.g., predicted or actual movements of individuals or measures of genetic connectivity. Defining edges in these type of networks tend to be a challenge because of the inherent difficulties in observing movements, especially since rare dispersal events can have important impacts in ecological patterns and evolutionary processes.
 
-[^1] (https://www.nature.com/articles/nature04326)
-[^2] (http://science.sciencemag.org/content/339/6127/1611)
+![*Examples of spatial networks for four different species, each displaying connectivity of populations using movement or genetic data. From* [*Fletcher et al. (2013).*](https://www.nature.com/articles/ncomms3572)](https://www.dropbox.com/s/64bycrkw6ll8arb/Fletcher2013.png?dl=1)
+
+Using network analysis to assess landscape connectivity was first proposed by Urban and Keitt (2001), and has since exploded in the context of conservation (reviews and perspectives by Bunn et al. 2000; McRae et al. 2008; Urban et al. 2008). Dyer & Nelson (2004) and Dyer (2015) provide a good framework for using population genetics to define spatial networks of connectivity. Fall et al. (2007) and Dale & Fortin (2010) are also great references for general challenges in considering spatial networks. Some empirical examples include Fletcher et al. (2011; 2013), Ribeiro et al. (2009).
+
+You will find introductory tutorial matrial for constructing spatial networks [here](04.3_spatialnets.html)

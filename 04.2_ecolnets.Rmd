@@ -1,0 +1,17 @@
+---
+title: "4.2 Intro to Ecological Networks"
+author: "Dai Shizuka"
+date: "7/10/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=6, fig.height=4) 
+set.seed(2)
+```
+
+ecological networks
