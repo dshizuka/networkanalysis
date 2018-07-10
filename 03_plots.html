@@ -206,7 +206,10 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#network-plots-layouts-and-attributes">3.1 Network Plots: Layouts and Attributes</a></li>
+<li><a href="#network-plots-layouts-and-attributes">3.1 Network Plots: Layouts and Attributes</a><ul>
+<li><a href="#layout">3.1.1 Layout</a></li>
+<li><a href="#vertex-attributes">3.1.2 Vertex Attributes</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -215,18 +218,11 @@ $(document).ready(function () {
 <p>Researchers often use network analysis as a tool for displaying complex data. But you should also know that one must be very careful not to over-interpret network plots. This is because there is no single rule for how to display networks, and network plots can obscure interesting patterns or be misleading if the layout format does not match the purpose. With that said, network plots can be a useful and powerful way to get your message across if used appropriately.</p>
 <p>The plotting function in igraph comes with a lot of different options. We have used several arguments already, but if you want to explore the ins and outs of plotting in R, look up <code>?igraph.plotting</code>. I also highly recommend my favorite web tutorial on static and dynamic network visualization by <a href="http://kateto.net/network-visualization">Katya Ognyanova</a>. This site is going to cover the very basics, but I highly recommend her site when you feel ready to do more.</p>
 <p>Here, we will deal with two main topics: (1) layout functions and how to merge network data and (2) attribute data to illustrate the network.</p>
-<p>3.1.1 Layout</p>
+<div id="layout" class="section level3">
+<h3>3.1.1 Layout</h3>
 <p>Let’s start where we left of <a href="02_dataformats.html">Lesson 2</a> and make a network out of a fictional adjacency matrix:</p>
-<pre class="r"><code>library(igraph)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;igraph&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     decompose, spectrum</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     union</code></pre>
-<pre class="r"><code>am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
+<pre class="r"><code>library(igraph)
+am=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
 am</code></pre>
 <pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
 ## Adam       0     1       0      1      0     4    0
@@ -280,12 +276,46 @@ for(layout in layouts){
 <p><img src="03_plots_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
 <p>Before we move on, let’s clear the plotting region:</p>
 <pre class="r"><code>dev.off()</code></pre>
-<pre><code>## null device 
-##           1</code></pre>
+<pre><code>## RStudioGD 
+##         2</code></pre>
 <p>You can also use custom layouts. I’ll set up the vertices on a line and then used curved edges.</p>
 <pre class="r"><code>l=matrix(c(1,2,3,4,5,6,7, 1,2,3,4,5,6,7),ncol=2)
 plot(g,layout=l,edge.curved=TRUE, vertex.label=&quot;&quot;)</code></pre>
 <p><img src="03_plots_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
+<p>The ability to control the layout is particularly useful when we want to plot spatial networks, as we will see later.</p>
+</div>
+</div>
+<div id="vertex-attributes" class="section level3">
+<h3>3.1.2 Vertex Attributes</h3>
+<p>Now that we know a bit about how to change the looks of vertices and edges, we are ready to start adding information to our edges. For example, you might have other information about your vertices that you’d like to display in the graph plot: e.g., traits of individuals in a social network, or the attributes of a species in a network of species interactions. Typically, you would store these “node attributes” in a separate file. We will use a sample “attributes file” called sample_attrib.csv. Let’s go ahead and import this file:</p>
+<pre class="r"><code>attrib=read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/sample_attrib.csv&quot;)
+attrib</code></pre>
+<pre><code>##      Name Sex Age
+## 1    Adam   M  30
+## 2    Gina   F   8
+## 3 Charles   M  35
+## 4  Daniel   M  15
+## 5   Frank   M  10
+## 6   Betty   F  28
+## 7  Esther   F  12</code></pre>
+<p>Now, the goal is to incorporate these vertex attributes, Sex and Age, to the graph object. Note that I have made this data NOT alphabetized on purpose. Therefore, the vertex number and the row numbers of this attributes file do not line up correctly. So we have to first sort these attributes so that we assign the correct attribute to the correct vertex. We can do this by using the <code>match()</code> function.</p>
+<pre class="r"><code>V(g)$sex=factor(attrib[match(V(g)$name, attrib$Name), &quot;Sex&quot;]) # factor() preserves data as M/F
+V(g)$age=attrib[match(V(g)$name, attrib$Name), &quot;Age&quot;]
+g</code></pre>
+<pre><code>## IGRAPH UNW- 7 10 -- 
+## + attr: name (v/c), sex (v/n), age (v/n), weight (e/n)
+## + edges (vertex names):
+##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
+##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
+##  [9] Esther--Frank   Frank --Gina</code></pre>
+<p>The trick now is to assign colors to each sex. Here, let’s assign males and females to different colors. Here’s one way to do it:</p>
+<pre class="r"><code>V(g)$color=c(&quot;gold&quot;,&quot;slateblue&quot;)[as.numeric(V(g)$sex)]</code></pre>
+<p>This line of code converts the sex to numbers by alphabetical order, i.e., 1 = female and 2 = male. Now let’s plot the network with node colors as sex and node size as age and add a legend for the node colors:</p>
+<pre class="r"><code>set.seed(10)
+l=layout_with_fr(g)
+plot(g, layout=l,vertex.label=&quot;&quot;, vertex.size=V(g)$age, edge.width=E(g)$weight, edge.color=&quot;black&quot;)
+legend(&quot;topleft&quot;, legend=c(&quot;Female&quot;, &quot;Male&quot;), pch=21, pt.bg=c(&quot;gold&quot;, &quot;slateblue&quot;))</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 </div>
 </div>
 

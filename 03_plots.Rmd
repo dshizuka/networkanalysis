@@ -98,6 +98,30 @@ The ability to control the layout is particularly useful when we want to plot sp
 Now that we know a bit about how to change the looks of vertices and edges, we are ready to start adding information to our edges. For example, you might have other information about your vertices that you'd like to display in the graph plot: e.g., traits of individuals in a social network, or the attributes of a species in a network of species interactions. Typically, you would store these "node attributes" in a separate file. We will use a sample "attributes file" called sample_attrib.csv. Let's go ahead and import this file:
 
 ```{r}
-attrib=read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Sample_attrib.csv")
+attrib=read.csv("https://dshizuka.github.io/networkanalysis/SampleData/sample_attrib.csv")
 attrib
+```
+
+Now, the goal is to incorporate these vertex attributes, Sex and Age, to the graph object. Note that I have made this data NOT alphabetized on purpose. Therefore, the vertex number and the row numbers of this attributes file do not line up correctly. So we have to first sort these attributes so that we assign the correct attribute to the correct vertex. We can do this by using the `match()` function.
+
+```{r}
+V(g)$sex=factor(attrib[match(V(g)$name, attrib$Name), "Sex"]) # factor() preserves data as M/F
+V(g)$age=attrib[match(V(g)$name, attrib$Name), "Age"]
+g
+```
+
+The trick now is to assign colors to each sex. Here, let's assign males and females to different colors. Here’s one way to do it:
+
+```{r}
+V(g)$color=c("gold","slateblue")[as.numeric(V(g)$sex)]
+```
+
+This line of code converts the sex to numbers by alphabetical order, i.e., 1 = female and 2 = male. Now
+let’s plot the network with node colors as sex and node size as age and add a legend for the node colors:
+
+```{r}
+set.seed(10)
+l=layout_with_fr(g)
+plot(g, layout=l,vertex.label="", vertex.size=V(g)$age, edge.width=E(g)$weight, edge.color="black")
+legend("topleft", legend=c("Female", "Male"), pch=21, pt.bg=c("gold", "slateblue"))
 ```

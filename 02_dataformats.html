@@ -449,9 +449,9 @@ am</code></pre>
 ## Esther     0     0       0      1      0     1    0
 ## Frank      4     2       0      1      1     0    2
 ## Gina       0     0       0      0      0     2    0</code></pre>
-<p>Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a <em>weighted adjacency matrix</em>. Note that we are going to add an argument <code>weighted=T</code> to indicate that the edges have weights. The results from the code below should look the same as above.</p>
-<pre class="r"><code>ag=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
-plot(ag, edge.width=E(ag)$weight)</code></pre>
+<p>Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a <em>weighted adjacency matrix</em>. Note that we are going to add an argument <code>weighted=T</code> to indicate that the edges have weights. The results from the code below should look the same as above. We’ll call this new network <code>g</code>, which will overwrite the previous graph object of the same name.</p>
+<pre class="r"><code>g=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
+plot(g, edge.width=E(g)$weight)</code></pre>
 <p><img src="02_dataformats_files/figure-html/unnamed-chunk-14-1.png" width="576" /></p>
 </div>
 </div>
