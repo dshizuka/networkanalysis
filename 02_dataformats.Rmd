@@ -103,3 +103,13 @@ If you want to show an edge list as a three-column matrix with the two nodes and
 as_data_frame(g)[,c("from", "to", "width")]
 ```
 
+##2.3 Going from Data to Networks
+
+###2.3.1 Creating a network from your adjacency matrix
+
+Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:
+
+```{r}
+am=as.matrix(read.csv("https://dshizuka.github.io/network2018/NAOCworkshop_SampleData/Sample_adjmatrix.csv", header=T, row.names=1))
+am
+```
