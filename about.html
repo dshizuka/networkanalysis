@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -20,8 +20,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -30,10 +30,12 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -87,6 +89,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -221,22 +226,6 @@ $(document).ready(function () {
 <h4>The general Shizuka Lab Website can be found at: <a href="www.shizukalab.com" class="uri">www.shizukalab.com</a></h4>
 </div>
 </div>
-<div id="before-you-start" class="section level2">
-<h2><u>Before you start</u></h2>
-<div id="install-rstudio" class="section level3">
-<h3>1. Install Rstudio</h3>
-<p>This workshop will use R as the base language for all computer exercises. I have made this site as user-friendly as possible, but it is good for you to have the basics of R under your belt before you embark on these lessons.</p>
-</div>
-<div id="install-packages" class="section level3">
-<h3>2. Install Packages</h3>
-<p>Run this code:</p>
-<pre class="r"><code>install.packages(c(&quot;igraph&quot;, &quot;bipartite&quot;, &quot;asnipe&quot;, &quot;assortnet&quot;, &quot;ggplot2&quot;, &quot;ggmap&quot;, &quot;rnetcarto&quot;, &quot;ecodist&quot;, &quot;igraphdata&quot;, &quot;statnet&quot;, &quot;RColorBrewer&quot;))</code></pre>
-</div>
-<div id="download-data" class="section level3">
-<h3>3. Download data</h3>
-<p>Go to <a href="https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData.zip">this link</a> and download the compressed data files. Save the file into a folder that you can remember. This will allow us to run some of the examples even if internet access fails.</p>
-</div>
-</div>
 
 
 
@@ -261,7 +250,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
