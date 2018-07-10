@@ -1,5 +1,5 @@
 ---
-title: "Syllabus"
+title: "syllabus"
 author: "Dai Shizuka"
 date: "7/9/2018"
 output: html_document
