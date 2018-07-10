@@ -1,0 +1,17 @@
+---
+title: "03_Plotting Basics"
+author: "Dai Shizuka"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+---
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=6, fig.height=4) 
+set.seed(2)
+```
+
+##3.1 Network Plots: Layouts and Attributes
+
+Researchers often use network analysis as a tool for displaying complex data. But you should also know that one must be very careful not to over­interpret network plots. This is because there is no single rule for how to display networks, and network plots can obscure interesting patterns or be misleading if the layout format does not match the purpose. With that said, network plots can be a useful and powerful way to get your message across if used appropriately.
