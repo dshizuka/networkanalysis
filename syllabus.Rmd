@@ -3,9 +3,6 @@ title: "Syllabus"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 ---------
 
 This is the syllabus for the Shizuka Lab Retreat/Workshop on Network Analysis, hosted at School of Biological Sciences, UNL in summer 2018.
