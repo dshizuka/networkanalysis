@@ -9,6 +9,7 @@ output: html_document
 
 This workshop will use R as the base language for all computer exercises. I have made this site as user-friendly as possible, but it is good for you to have the basics of R under your belt before you embark on these lessons. 
 
+
 ###2. Install Packages
 
 Run this code:
