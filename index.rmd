@@ -3,3 +3,6 @@ title: "Network Analysis Tutorials"
 ---
 
 Hello to the my network analysis tutorials
+
+This website is a repositories of tutorials for network analysis that I have used in my course for graduate students. The materials on this page are geared towards ecologists, and behavioral ecologists in particular. 
+

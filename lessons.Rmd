@@ -11,4 +11,6 @@ output: html_document
 
 ###[3. Plotting Basics](03_plots.html)
 
-###
+###[4. Survey of Networks for Ecologists](04_networktypes.html)
+
+* ####[4.1 Intro to Animal Social Networks](04.1_socialnetworks.html)
