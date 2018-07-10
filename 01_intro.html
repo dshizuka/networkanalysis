@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8" />
+<meta charset="utf-8">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -20,8 +20,8 @@
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -30,12 +30,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -173,7 +171,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Shizuka Lab Network Retreat 2018</a>
+      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -182,9 +180,6 @@ $(document).ready(function () {
 </li>
 <li>
   <a href="about.html">About</a>
-</li>
-<li>
-  <a href="syllabus.html">Syllabus</a>
 </li>
 <li>
   <a href="lessons.html">Lessons</a>
@@ -246,17 +241,17 @@ plot(g)</code></pre>
 <pre><code>## [1] &quot;igraph&quot;</code></pre>
 <p>You can see that <code>g</code> is an ‘igraph object’. This means that it is now a <em>graph</em> or <em>network</em>. You can see more details about this object by simply:</p>
 <pre class="r"><code>g</code></pre>
-<pre><code>## IGRAPH 37ff734 UN-- 6 7 -- 
+<pre><code>## IGRAPH UN-- 6 7 -- 
 ## + attr: name (v/c)
-## + edges from 37ff734 (vertex names):
+## + edges (vertex names):
 ## [1] A--B A--C A--F B--C D--E D--F E--F</code></pre>
 <p>As you can see, simply printing <code>g</code> will display the bare minimum information: “UN” means “<strong>U</strong>ndirected network with <strong>N</strong>ames of vertices”, and the numbers indicate that there are 6 vertices and 7 edges. The second line shows that there is attribute called ‘name’. The characters inside the parentheses (v/c) indicates that it is a ‘vertex attribute’ and that it is a ‘character’ attribute (i.e., rather than numeric or integers). The third and fourth lines show us the 7 edges that exist in this network.</p>
 <p>We can look up the vertices and edges using this special syntax:</p>
 <pre class="r"><code>V(g) #look up vertices </code></pre>
-<pre><code>## + 6/6 vertices, named, from 37ff734:
+<pre><code>## + 6/6 vertices, named:
 ## [1] A B C D E F</code></pre>
 <pre class="r"><code>E(g) #look up edges</code></pre>
-<pre><code>## + 7/7 edges from 37ff734 (vertex names):
+<pre><code>## + 7/7 edges (vertex names):
 ## [1] A--B A--C A--F B--C D--E D--F E--F</code></pre>
 <p>In addition, we can look up vertex attributes. We currently only have one vertex attribute, called ‘name’:</p>
 <pre class="r"><code>V(g)$name</code></pre>
@@ -297,7 +292,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
