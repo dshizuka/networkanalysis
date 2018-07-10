@@ -122,13 +122,14 @@ as_data_frame(g)[,c("from", "to", "width")]
 Creating a network from an edgelist that you have created is easy. First, import the .csv file called "sample_edgelist.csv".
 
 ```{r}
- edge.dat=read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_edgelist.csv") 
+edge.dat=read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_edgelist.csv") 
 edge.dat
 ```
 
 So this data frame has three columns: the first two columns are the edge list, and the third column is an edge value we called "weight". If we have the data organized this way, we can simply use a function called `graph.data.frame()` to create a network we will call `eg`.
 
 ```{r}
+set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg
 plot(eg, edge.width=E(eg)$weight)
