@@ -20,9 +20,6 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -170,101 +167,6 @@ $(document).ready(function () {
 
 
 
-<script>
-$(document).ready(function ()  {
-
-    // move toc-ignore selectors from section div to header
-    $('div.section.toc-ignore')
-        .removeClass('toc-ignore')
-        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
-
-    // establish options
-    var options = {
-      selectors: "h1,h2,h3",
-      theme: "bootstrap3",
-      context: '.toc-content',
-      hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
-      },
-      ignoreSelector: ".toc-ignore",
-      scrollTo: 0
-    };
-    options.showAndHide = true;
-    options.smoothScroll = true;
-
-    // tocify
-    var toc = $("#TOC").tocify(options).data("toc-tocify");
-});
-</script>
-
-<style type="text/css">
-
-#TOC {
-  margin: 25px 0px 20px 0px;
-}
-@media (max-width: 768px) {
-#TOC {
-  position: relative;
-  width: 100%;
-}
-}
-
-
-.toc-content {
-  padding-left: 30px;
-  padding-right: 40px;
-}
-
-div.main-container {
-  max-width: 1200px;
-}
-
-div.tocify {
-  width: 20%;
-  max-width: 260px;
-  max-height: 85%;
-}
-
-@media (min-width: 768px) and (max-width: 991px) {
-  div.tocify {
-    width: 25%;
-  }
-}
-
-@media (max-width: 767px) {
-  div.tocify {
-    width: 100%;
-    max-width: none;
-  }
-}
-
-.tocify ul, .tocify li {
-  line-height: 20px;
-}
-
-.tocify-subheader .tocify-item {
-  font-size: 0.90em;
-  padding-left: 25px;
-  text-indent: 0;
-}
-
-.tocify .list-group-item {
-  border-radius: 0px;
-}
-
-
-</style>
-
-<!-- setup 3col/9col grid for toc_float and main content  -->
-<div class="row-fluid">
-<div class="col-xs-12 col-sm-4 col-md-3">
-<div id="TOC" class="tocify">
-</div>
-</div>
-
-<div class="toc-content col-xs-12 col-sm-8 col-md-9">
-
-
 
 
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
@@ -306,6 +208,14 @@ div.tocify {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#constructing-networks-from-interactions">4.1.1. Constructing networks from interactions</a></li>
+<li><a href="#constructing-networks-from-associations">4.1.2. Constructing networks from associations</a><ul>
+<li><a href="#construct-social-network-from-associations-using-the-asnipe-package">Construct social network from associations using the <code>asnipe</code> package</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p>Animals interact and associate. These interactions and associations can build up to social relations between individuals in a population. <em>Social structure</em> refers to the global description of these social relations (Hinde 1976). Social network analysis can be used as a method to quantify the structure and dynamics of animal societies. There has been an explosion of empirical studies (and review articles) on the topic since the early 2000s.</p>
 <p>As mentioned in the <a href="04_networktypes.html">survey of network types</a>, social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). However, there are potential bananaskins to look out for when constructing social networks. The most important question here (and whenever you are making networks in general) is: <strong><em>what are your edges?</em></strong></p>
@@ -345,12 +255,87 @@ plot(ig2, edge.width=E(ig2)$weight)</code></pre>
 <img src="https://www.dropbox.com/s/0suulftm2762l41/flocktable1.png?dl=1" alt="Sample individual-by-group matrix" />
 <p class="caption"><em>Sample individual-by-group matrix</em></p>
 </div>
+<p>Let’s play with a sample dataset (<em>Sample_association.csv</em>), which is a snippet of real data from a study on Golden-crowned Sparrows. My colleagues and I collected some data on which individually-marked sparrow was observed together in flocks (typically 2-10 birds), defined as a collection of individuals within a 5m radius during a given observation (Shizuka et al. 2014). Flock membership changes within minutes—some birds leave and other birds join. Here, each individual is presented in the rows, and each flock is presented in columns (‘individual-by-group matrix’). The cell value is 1 if that individual was seen in that flock, and 0 if not.. Let’s take a look at a slice of the data (output not shown):</p>
+<pre class="r"><code>assoc=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_association.csv&quot;, header=T, row.names=1))
+assoc</code></pre>
+<pre><code>##       flock_6 flock_7 flock_8 flock_10 flock_11 flock_12 flock_13 flock_14
+## 23820       1       0       0        0        0        0        1        0
+## 23726       1       0       0        0        0        0        1        0
+## 23831       1       0       0        0        0        0        1        0
+## 23763       1       0       0        0        0        0        1        0
+## 23772       0       1       1        0        0        0        0        0
+## 23770       0       1       0        0        0        0        0        0
+## 23771       0       1       0        0        0        0        0        0
+## 23777       0       1       0        1        1        0        0        1
+## 23774       0       1       0        1        0        0        0        1
+## 23860       0       0       1        0        0        1        0        0
+## 23779       0       0       0        1        0        0        0        0
+## 23773       0       0       0        1        1        0        0        1
+## 23862       0       0       0        1        1        0        0        0
+## 23857       0       0       0        0        0        1        0        0
+## 23871       0       0       0        0        0        1        0        0
+## 23853       0       0       0        0        0        0        1        0
+## 23732       0       0       0        0        0        0        0        0
+## 23734       0       0       0        0        0        0        0        0
+## 23756       0       0       0        0        0        0        0        0
+## 23759       0       0       0        0        0        0        0        0
+## 23768       0       0       0        0        0        0        0        0
+## 23758       0       0       0        0        0        0        0        0
+## 23781       0       0       0        0        0        0        0        0
+## 23815       0       0       0        0        0        0        0        0
+## 23809       0       0       0        0        0        0        0        0
+##       flock_15 flock_16 flock_17 flock_20 flock_24 flock_25 flock_26
+## 23820        0        0        0        0        1        0        0
+## 23726        0        0        0        0        1        0        0
+## 23831        0        0        0        0        1        0        0
+## 23763        0        0        0        0        1        0        0
+## 23772        0        0        1        0        0        0        0
+## 23770        0        0        0        0        0        0        1
+## 23771        0        0        0        1        0        0        0
+## 23777        0        0        0        0        0        0        0
+## 23774        0        1        0        0        0        0        0
+## 23860        1        0        0        0        0        0        1
+## 23779        0        0        0        0        0        0        0
+## 23773        1        1        0        1        0        0        0
+## 23862        1        1        0        1        0        0        0
+## 23857        0        0        0        0        0        0        0
+## 23871        0        0        0        0        0        1        0
+## 23853        0        0        0        0        0        0        0
+## 23732        0        1        0        0        0        0        0
+## 23734        0        0        1        0        0        0        0
+## 23756        0        0        0        1        0        0        0
+## 23759        0        0        0        1        0        0        0
+## 23768        0        0        0        1        0        0        0
+## 23758        0        0        0        1        0        1        0
+## 23781        0        0        0        0        0        0        1
+## 23815        0        0        0        0        0        0        1
+## 23809        0        0        0        0        0        0        1</code></pre>
+<p>Using an association index However, note that in this type of data, the probability that we draw a connection between any two nodes is partially dependent on how often we saw each individual. For example, if two individuals are simply observed more often, they are more likely to be observed together. Conversely, if an individual is rarely seen, it is likely to be seen only with a small subset of other individuals. We may like to take this into account. One popular solution to this is to define network edges based on an ‘association index’ that accounts for the frequency of observation of each node. One simple association index is called the Simple Ratio Index (Cairns &amp; Schwager 1987; this is the same as the Jaccard Index).</p>
+<p>Association Index = <span class="math inline">\(\displaystyle \frac{|A \cap B|}{|A \cup B|}\)</span> = <span class="math inline">\(\displaystyle \frac{|A \cap B|}{|A|+|B|-|A \cap B|}\)</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(|A \cap B|\)</span> is the number of times A and B were seen together</li>
+<li><span class="math inline">\(|A|\)</span> is the total number of times A was seen (together or separate from B)</li>
+<li><span class="math inline">\(|B|\)</span> is the total number of times B was seen (together or separate from A)</li>
+</ul>
+<div id="construct-social-network-from-associations-using-the-asnipe-package" class="section level3">
+<h3>Construct social network from associations using the <code>asnipe</code> package</h3>
+<p><a href="http://collectivebehaviour.com/farinelab/">Damien Farine</a> has created a very useful R package called <code>asnipe</code>, which is tailored for the analysis of animal social network. We will use the <code>get_network()</code> function in this handy package to convert our association matrix into a social network.</p>
+<pre class="r"><code>library(asnipe) #load the asnipe package
+gbi=t(assoc) #assoc is in individual-by-group format, but this package likes group-by-individual, so we will transpose the matrix.
+adj.m=get_network(t(assoc), association_index=&quot;SRI&quot;) #this function converts the association matrix into an adjacency matrix using the Simple Ratio Index.</code></pre>
+<pre><code>## Generating  25  x  25  matrix</code></pre>
+<pre class="r"><code>assoc.g=graph_from_adjacency_matrix(adj.m, &quot;undirected&quot;, weighted=T) #create a graph object
+plot(assoc.g, edge.width=E(assoc.g)$weight*10) #Since the edge weights are small (values = 0 to 1), let&#39;s multiply by 10 for edge widths.</code></pre>
+<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p>Let’s make it look prettier:</p>
+<pre class="r"><code> plot(assoc.g, edge.width=E(assoc.g)$weight*10, vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;cornflowerblue&quot;, vertex.frame.color=&quot;black&quot;)</code></pre>
+<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
+</div>
 </div>
 
 
 
-</div>
-</div>
 
 </div>
 
