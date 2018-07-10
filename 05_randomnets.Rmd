@@ -1,0 +1,147 @@
+---
+title: "5. Simulating Random Graphs and Simulations"
+author: "Dai Shizuka"
+date: "7/10/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
+set.seed(2)
+```
+
+-------
+
+##5.1 What is a random graph?
+
+Thus far, we have spent most of our time playing around with empirical networks. However, it is often very instructive to understand the behavior of networks that are generated using simple mechanisms.
+The simplest type of random graph is what is called the Erdös-Renyí Random Graph. This is what people typically mean when they say "Random Graph" (though, you will see later, that there are many different ways to be random). 
+
+These come in two flavors:
+
+1. G(n,m) model, in which n nodes are randomly connected by m edges.
+2. G(n,p) model, in which we have a graph of n nodes, and each pair of nodes has
+probability p of being connected.
+
+The main property of an Erdös-Renyí Random Graph is that, given *n* nodes and *m* edges (or probability *p* of an edge between each pair of nodes), everything else is *unconditioned*--i.e., random.
+
+Both of these types of random graphs can be created using a function called `erdos.renyi.game()`. Let’s first make a G(n,m) random graph with n = 20 and m = 38, calculate the density and plot it.
+
+```{r}
+library(igraph)
+g1=erdos.renyi.game(20,38,type="gnm") 
+g1
+graph.density(g1) 
+plot(g1,layout=layout.circle)
+```
+
+This random graph will “look” different each time you run this set of codes—different sets of nodes will be connected (Unless you've used the `set.seed()` function). However, the density will always remain the same (#edges/[#dyads] = 38/[20*19/2] = 0.2).
+
+Let’s contrast this now with a G(n,p) random graph with n = 20 and p = 0.2. We’ll print the number of edges and the graph density, and plot the graph.
+
+```{r}
+g2=erdos.renyi.game(20,0.2,type="gnp") 
+ecount(g2)
+graph.density(g2) 
+plot(g2,layout=layout.circle)
+```
+
+Your output will look approximately like mine, but it’ll be a bit different. This is because now the number of edges is a probabilistic outcome of having p = 0.2 chance of each dyad being connected. This means that if you run this set of codes repeatedly (try it), you will get densities that hover around 0.2.
+
+##5.2 Making ensembles of random graphs
+
+Let’s now try to better understand the behavior of random graphs by creating an ensemble of 100 random graphs with some known property and calculating the mean density of these graphs. We can do this by using “for-loops”
+
+What we want to do is use the for-loop to calculate densities for 100 random graphs of n = 20 and p = 0.2, and take the mean of these values.
+
+```{r}
+densities=vector(length=100) #set up empty vector 
+for (i in 1:100){
+r=erdos.renyi.game(20,0.2,type="gnp") #random graph
+densities[i]=graph.density(r) #store the density of random graph as the ith element of the vector
+}
+densities #print the resulting vector (I won't show this below) mean(densities) #calculate the mean density
+```
+
+The result should always be very close to 0.2. You can visualize this data by making a histogram of the densities of your random graphs, and then compare it to the theoretical average by drawing a line at density = 0.2. The peak of the histogram should be near the line.
+
+```{r fig.width=3, fig.height=3}
+hist(densities)
+abline(v=0.2,lwd=3,lty=2,col="red") #draw a vertical line at x = 0.2. Make this line width = 3, line type = 2 (dashed line), and the line color = red
+```
+
+While we're at it, let's visualize a set of random graphs. Here, we are going to first set up the plotting region using the `par()` function. We will divide up the plotting region into a 3x3 grid to accommodate 9 figures.
+
+```{r }
+# Make a plot of 9 random graphs
+par(mfrow=c(3,3),mar=c(1,1,1,1)) #the mfrow= argument sets up the number of rows and columns within the plotting region. mar= argument sets the margins of the figures:c(bottom,left,top,right).
+for (i in 1:9){
+r=erdos.renyi.game(20,p=0.2)
+plot(r,layout=layout.circle,edge.color="black",edge.width=2,vertex.color="red",vertex.label="") #a bunch of arguments to make the figure look pretty.
+}
+```
+
+##5.3 Understanding how random graphs change with size
+
+We can use the same scheme for creating ensembles of random graphs to explore how properties of these networks change with size. As an example, let’s explore how average path length of a network changes as we add more nodes.
+
+As an example, let’s explore the relationship between the size of the network and its average path length. Recall that here, a “path” means the shortest path (aka geodesic path) between any pair of nodes. As the network grows in size, we would expect that the average path length will increase... but how fast? Is it proportional to the number of nodes? Let's explore this question using simulations of random graphs.
+
+First, let's think about what we want to do... We want to build random graphs of varying size: let's say we'll make n = 10, 20, 30, ... to 100. To get a vector of this sequence of numbers, we'll use a function called `seq()`:
+
+```{r}
+ seq(from=10,to=100,by=10) #create a vector of numbers starting from 10, ending in 100, in intervals of 10.
+```
+
+For each network size, we'd like to make a bunch of random graphs, let's say 500. This means we are going to calculate average path lengths for 10 x 500 graphs.
+
+Another thing to keep in mind is that, since we are interested in the effect of network size per se, we want to keep other components of the network constant as we manipulate network size. For instance, we want to keep the average degree of nodes constant. For example, let's say each person knows 5 people. Then what do we need p to be?
+
+If mean degree = (n-1)p = 5, then p = 5/(n-1)
+
+So when we create our random graphs, we want to use this probability for *p*.
+
+Now, we're going to embed a For-loop within a For-loop (not the most elegant way to do this, but it works fine). This is when things can potentially get out of hand—you are essentially going to be running 5,000 lines of code at once (actually 5,000 x 2 = 10,000 lines). Thankfully, R can handle this... for reference, it takes about 0.0015 seconds to generate a random graph of n = 100 and calculate its average path length.
+
+Remember, before we get started, we first need to create an empty matrix with 10 columns and 500 rows to 'store' all the 'average path length' values that we are going to produce (you can choose to do 10 rows of 500 columns. It doesn't matter as long as you keep track).
+
+So here we go: We are going to create random graphs of size n=10, 20, 30,... 100, and we are going to do it i=500 times per each size n. The result of each iteration will be stored in the ith row, (n/10)th column (1st column for n = 10, 2nd column for n = 20, so on) of the matrix called paths.
+
+```{r}
+paths=matrix(ncol=10,nrow=500) 
+for (n in seq(10,100,10)){
+for(i in 1:500){ 
+  r=erdos.renyi.game(n,p=(5/(n-1))) 
+  paths[i,n/10]=average.path.length(r)
+}
+}
+head(paths)
+```
+
+The next step is to plot the average value of the average path lengths for each network size n. That is, we want to take the mean value of each column of this matrix. The quickest way to do this is to use the `apply()` function. The `apply()` function is a really powerful way to apply the same function to multiple components of an array or matrix. The syntax is: `apply('the matrix or array', 'margin'—1 for rows and 2 for columns, 'function')`. In this case, we want to apply the function mean() to the columns of the matrix called paths.
+
+```{r}
+ paths.avg=apply(paths,2,mean) 
+paths.avg
+```
+
+Now let's plot these results.
+
+```{r}
+x=seq(10,100,10) #the x-axis is going to be 10, 20, 30,...100
+plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length")
+```
+
+As you can see, the average path length does not increase as fast as network size: it has only doubled, while network size has increased 10-fold. Now, let's plot make the x-axis a log-scale. To do this, we just add another argument: log="x").
+
+```{r}
+plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length",log="x")
+```
+
+So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are *s* steps away scales exponentially with the average degree--if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc. 
+
