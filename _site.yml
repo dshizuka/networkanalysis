@@ -8,4 +8,6 @@ navbar:
       href: about.html
     - text: "Syllabus"
       href: syllabus.html
+    - text: "Lessons"
+      href: lessons.html  
 output_dir: "."
