@@ -216,6 +216,9 @@ $(document).ready(function () {
 <li><a href="#directed-networks">2.2.1 Directed networks</a></li>
 <li><a href="#weighted-networks">2.2.1 Weighted networks</a></li>
 </ul></li>
+<li><a href="#going-from-data-to-networks">2.3 Going from Data to Networks</a><ul>
+<li><a href="#creating-a-network-from-your-adjacency-matrix">2.3.1 Creating a network from your adjacency matrix</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -225,7 +228,13 @@ $(document).ready(function () {
 <div id="adjacency-matrix" class="section level3">
 <h3>2.1.1 Adjacency Matrix</h3>
 <p>An <strong><em>adjacency matrix</em></strong> is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).</p>
-<p>We can extract the adjacency matrix of the network we created, called <code>g</code>:</p>
+<p>Let’s start by loading the <code>igraph</code> package and setting up a toy network (same as in <a href="01_intro.html">Lesson 1: Intro</a>)</p>
+<pre class="r"><code>library(igraph)
+g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
+V(g)$color=c(&quot;white&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;orange&quot;, &quot;yellow&quot;)
+E(g)$width=1:7
+E(g)$color=rainbow(7)</code></pre>
+<p>We can now extract the adjacency matrix of the network we created, called <code>g</code>:</p>
 <pre class="r"><code>as_adjacency_matrix(g, sparse=F)</code></pre>
 <pre><code>##   A B C D E F
 ## A 0 1 1 0 0 1
@@ -311,27 +320,27 @@ $(document).ready(function () {
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from fb5786f:
+## + 3/6 vertices, named, from fc95f49:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from fb5786f:
+## + 2/6 vertices, named, from fc95f49:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from fb5786f:
+## + 2/6 vertices, named, from fc95f49:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from fb5786f:
+## + 2/6 vertices, named, from fc95f49:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from fb5786f:
+## + 2/6 vertices, named, from fc95f49:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from fb5786f:
+## + 3/6 vertices, named, from fc95f49:
 ## [1] A D E</code></pre>
 </div>
 </div>
@@ -343,7 +352,7 @@ $(document).ready(function () {
 <p>Let’s create an igraph object for a <em>directed network</em> called <code>dir.g</code>. For directed networks, the adjacency matrix is not symmetrical. Rather, the cell value is 1 if the edge goes from the <em>row vertex</em> to the <em>column vertex</em>.</p>
 <pre class="r"><code>dir.g=make_graph(~A-+B-+C-+A, D-+E-+F-+D, A+-+F)
 plot(dir.g)</code></pre>
-<p><img src="02_dataformats_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
 <pre class="r"><code>as_adjacency_matrix(dir.g, sparse=F)</code></pre>
 <pre><code>##   A B C D E F
 ## A 0 1 0 0 0 1
@@ -397,6 +406,27 @@ plot(dir.g)</code></pre>
 ## 5    D  E     5
 ## 6    D  F     6
 ## 7    E  F     7</code></pre>
+</div>
+</div>
+<div id="going-from-data-to-networks" class="section level2">
+<h2>2.3 Going from Data to Networks</h2>
+<div id="creating-a-network-from-your-adjacency-matrix" class="section level3">
+<h3>2.3.1 Creating a network from your adjacency matrix</h3>
+<p>Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:</p>
+<pre class="r"><code>am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
+am</code></pre>
+<pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
+## Adam       0     1       0      1      0     4    0
+## Betty      1     0       3      1      0     2    0
+## Charles    0     3       0      0      0     0    0
+## Daniel     1     1       0      0      1     1    0
+## Esther     0     0       0      1      0     1    0
+## Frank      4     2       0      1      1     0    2
+## Gina       0     0       0      0      0     2    0</code></pre>
+<p>Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a <em>weighted adjacency matrix</em>. Note that we are going to add an argument <code>weighted=T</code> to indicate that the edges have weights. The results from the code below should look the same as above.</p>
+<pre class="r"><code>g2=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
+plot(g2, edge.width=E(g)$weight)</code></pre>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 </div>
 </div>
 
