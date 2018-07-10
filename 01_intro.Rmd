@@ -3,7 +3,7 @@ title: "01. Introduction"
 output: 
   html_document:
     toc: yes
-    toc_depth: 2
+    toc_depth: 3
 ---
 ```{r setup, include=FALSE}
 library(knitr)
