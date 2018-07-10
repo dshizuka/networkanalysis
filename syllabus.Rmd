@@ -13,19 +13,24 @@ This is the syllabus for the Shizuka Lab Retreat/Workshop on Network Analysis, h
 ##<u>Dates/Location</u>  
 * **July 16-20, 2018. Sessions start daily at 9am in Room 401 Manter Hall**  
   
+     
 ##<u>Instructor</u>  
 * **Dai Shizuka**
 * **Office: 410B Manter Hall**
 * **Email: dshizuka2'at'unl.edu** 
 
+    
 ##<u>Course Website</u>  
 ####Course materials will be posted at the course blog: [https://dshizuka.github.io/network2018](https://dshizuka.github.io/network2018)####  
 
+    
 ##<u>Before you start</u>
+
 
 ###1. Install Rstudio
 
 This workshop will use R as the base language for all computer exercises. I have made this site as user-friendly as possible, but it is good for you to have the basics of R under your belt before you embark on these lessons. 
+
 
 ###2. Install Packages
 
