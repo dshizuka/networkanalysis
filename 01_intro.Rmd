@@ -4,7 +4,6 @@ output:
   html_document:
     toc: yes
     toc_depth: 2
-
 ---
 ```{r setup, include=FALSE}
 library(knitr)
@@ -97,3 +96,6 @@ plot(g)
 ```
 
 You can see that now the edges are slightly different widths: these could represent the variations in the strength of relationships between nodes in a *weighted network*.
+
+
+###1.3 Basic Data Formats
