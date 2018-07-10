@@ -130,3 +130,21 @@ Now we have our adjacency matrix, and we are ready to convert this into an igrap
 g2=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
 plot(g2, edge.width=E(g)$weight)
 ```
+
+
+###2.3.2 Creating a network from your edge list
+
+Creating a network from an edgelist that you have created is easy. First, import the .csv file called "sample_edgelist.csv".
+
+```{r}
+ edge.dat=read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_edgelist.csv") 
+edge.dat
+```
+
+So this data frame has three columns: the first two columns are the edge list, and the third column is an edge value we called "weight". If we have the data organized this way, we can simply use a function called `graph.data.frame()` to create a network we will call `eg`.
+
+```{r}
+eg=graph_from_data_frame(edge.dat, directed=FALSE) 
+eg
+plot(eg, edge.width=E(eg)$weight)
+```

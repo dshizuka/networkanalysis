@@ -218,6 +218,7 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#going-from-data-to-networks">2.3 Going from Data to Networks</a><ul>
 <li><a href="#creating-a-network-from-your-adjacency-matrix">2.3.1 Creating a network from your adjacency matrix</a></li>
+<li><a href="#creating-a-network-from-your-edge-list">2.3.2 Creating a network from your edge list</a></li>
 </ul></li>
 </ul>
 </div>
@@ -320,27 +321,27 @@ E(g)$color=rainbow(7)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from fc95f49:
+## + 3/6 vertices, named, from 49f1501:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from fc95f49:
+## + 2/6 vertices, named, from 49f1501:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from fc95f49:
+## + 2/6 vertices, named, from 49f1501:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from fc95f49:
+## + 2/6 vertices, named, from 49f1501:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from fc95f49:
+## + 2/6 vertices, named, from 49f1501:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from fc95f49:
+## + 3/6 vertices, named, from 49f1501:
 ## [1] A D E</code></pre>
 </div>
 </div>
@@ -427,6 +428,34 @@ am</code></pre>
 <pre class="r"><code>g2=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
 plot(g2, edge.width=E(g)$weight)</code></pre>
 <p><img src="02_dataformats_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+</div>
+<div id="creating-a-network-from-your-edge-list" class="section level3">
+<h3>2.3.2 Creating a network from your edge list</h3>
+<p>Creating a network from an edgelist that you have created is easy. First, import the .csv file called “sample_edgelist.csv”.</p>
+<pre class="r"><code> edge.dat=read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_edgelist.csv&quot;) 
+edge.dat</code></pre>
+<pre><code>##        V1      V2 weight
+## 1    Adam   Betty      1
+## 2    Adam  Daniel      1
+## 3    Adam   Frank      4
+## 4   Betty Charles      3
+## 5   Betty  Daniel      1
+## 6   Betty   Frank      2
+## 7  Daniel  Esther      1
+## 8  Daniel   Frank      1
+## 9  Esther   Frank      1
+## 10  Frank    Gina      2</code></pre>
+<p>So this data frame has three columns: the first two columns are the edge list, and the third column is an edge value we called “weight”. If we have the data organized this way, we can simply use a function called <code>graph.data.frame()</code> to create a network we will call <code>eg</code>.</p>
+<pre class="r"><code>eg=graph_from_data_frame(edge.dat, directed=FALSE) 
+eg</code></pre>
+<pre><code>## IGRAPH 08a0d7f UNW- 7 10 -- 
+## + attr: name (v/c), weight (e/n)
+## + edges from 08a0d7f (vertex names):
+##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
+##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
+##  [9] Esther--Frank   Frank --Gina</code></pre>
+<pre class="r"><code>plot(eg, edge.width=E(eg)$weight)</code></pre>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-14-1.png" width="576" /></p>
 </div>
 </div>
 
