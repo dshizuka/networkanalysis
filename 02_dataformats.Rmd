@@ -11,6 +11,7 @@ library(knitr)
 knitr::opts_chunk$set(fig.width=6, fig.height=4) 
 ```
 
+
 ##2.1 Basic Data Formats For Networks
 
 There are three basic data formats that can be used to describe networks: *adjacency matrix*, *edge list*, and *adjacency list*. Each format has its pros and cons. There are other variations on these (e.g., a *biadjacency matrix* for bipartite networks).
@@ -19,7 +20,16 @@ There are three basic data formats that can be used to describe networks: *adjac
 
 An ***adjacency matrix*** is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the  edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).
 
-We can extract the adjacency matrix of the network we created, called `g`:
+Let's start by loading the `igraph` package and setting up a toy network (same as in [Lesson 1: Intro](01_intro.html))
+```{r}
+library(igraph)
+g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
+V(g)$color=c("white", "red", "green", "blue", "orange", "yellow")
+E(g)$width=1:7
+E(g)$color=rainbow(7)
+```
+
+We can now extract the adjacency matrix of the network we created, called `g`:
 ```{r}
 as_adjacency_matrix(g, sparse=F)
 ```
@@ -112,4 +122,11 @@ Importing an adjacency matrix written in .csv format is just slightly trickier. 
 ```{r}
 am=as.matrix(read.csv("https://dshizuka.github.io/network2018/NAOCworkshop_SampleData/Sample_adjmatrix.csv", header=T, row.names=1))
 am
+```
+
+Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a *weighted adjacency matrix*. Note that we are going to add an argument `weighted=T` to indicate that the edges have weights. The results from the code below should look the same as above.
+
+```{r}
+g=graph_from_adjacency_matrix(am, mode="undirected", weighted=T) g
+plot(g, edge.width=E(g)$weight)
 ```

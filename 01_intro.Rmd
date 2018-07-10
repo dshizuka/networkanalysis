@@ -85,7 +85,7 @@ V(g)$name
 We can also create new vertex attributes using this syntax. Certain attribute names can be directly interpreted by igraph for example, the vertex attribute ‘color’ will automatically be interpreted for plotting the network. Let’s try this out:
 
 ```{r }
- V(g)$color=c("white", "red", "green", "blue", "orange", "yellow") #a random set of colors 
+V(g)$color=c("white", "red", "green", "blue", "orange", "yellow") #a random set of colors 
 plot(g)
 ```
 
