@@ -1,0 +1,16 @@
+---
+title: "4. Survey of Networks for Ecologists"
+author: "Dai Shizuka"
+date: "7/10/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+---
+
+
+4. AN ECOLOGIST’S GUIDE TO DIFFERENT NETWORK TYPES
+
+There are dozens of different types of biological networks. I will focus on a few main types of networks here. For each network, it is particularly important to think about how nodes and edges are defined.
+
+We will present three general types of networks that have been of particular interest for ecologists, each with particular challenges. After a brief overview, I highlight a few particular topics for each type of network.
