@@ -7,6 +7,6 @@ output: html_document
 
 ###[1. Introduction to Networks](01_intro.html)
 
-###[2. Data Formats for Networks](01_intro.html)
+###[2. Data Formats for Networks](02_dataformats.html)
 
 ###
