@@ -9,6 +9,7 @@ output:
 ```{r setup, include=FALSE}
 library(knitr)
 knitr::opts_chunk$set(fig.width=6, fig.height=4) 
+set.seed(2)
 ```
 
 ------------
