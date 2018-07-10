@@ -117,24 +117,7 @@ as_data_frame(g)[,c("from", "to", "width")]
 
 ##2.3 Going from Data to Networks
 
-###2.3.1 Creating a network from your adjacency matrix
-
-Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:
-
-```{r}
-am=as.matrix(read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv", header=T, row.names=1))
-am
-```
-
-Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a *weighted adjacency matrix*. Note that we are going to add an argument `weighted=T` to indicate that the edges have weights. The results from the code below should look the same as above.
-
-```{r}
-g2=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
-plot(g2, edge.width=E(g)$weight)
-```
-
-
-###2.3.2 Creating a network from your edge list
+###2.3.1 Creating a network from your edge list
 
 Creating a network from an edgelist that you have created is easy. First, import the .csv file called "sample_edgelist.csv".
 
@@ -150,3 +133,21 @@ eg=graph_from_data_frame(edge.dat, directed=FALSE)
 eg
 plot(eg, edge.width=E(eg)$weight)
 ```
+
+###2.3.2 Creating a network from your adjacency matrix
+
+Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:
+
+```{r}
+am=as.matrix(read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv", header=T, row.names=1))
+am
+```
+
+Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a *weighted adjacency matrix*. Note that we are going to add an argument `weighted=T` to indicate that the edges have weights. The results from the code below should look the same as above.
+
+```{r}
+ag=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
+plot(ag, edge.width=E(ag)$weight)
+```
+
+

@@ -1,5 +1,5 @@
 ---
-title: "03_Plotting Basics"
+title: "3. Plotting Basics"
 author: "Dai Shizuka"
 output: 
   html_document:
@@ -17,4 +17,29 @@ set.seed(2)
 Researchers often use network analysis as a tool for displaying complex data. But you should also know that one must be very careful not to over-interpret network plots. This is because there is no single rule for how to display networks, and network plots can obscure interesting patterns or be misleading if the layout format does not match the purpose. With that said, network plots can be a useful and powerful way to get your message across if used appropriately.
 
 
-The plotting function in igraph comes with a lot of different options. We have used several arguments already, but if you want to explore the ins and outs of plotting in R, look up `?igraph.plotting`. I also highly recommend my favorite web tutorial on static and dynamic network visualization by [Katya Ognyanova](http://kateto.net/network-visualization).
+The plotting function in igraph comes with a lot of different options. We have used several arguments already, but if you want to explore the ins and outs of plotting in R, look up `?igraph.plotting`. I also highly recommend my favorite web tutorial on static and dynamic network visualization by [Katya Ognyanova](http://kateto.net/network-visualization). This site is going to cover the very basics, but I highly recommend her site when you feel ready to do more. 
+
+Here, we will deal with two main topics: (1) layout functions and how to merge network data and (2) attribute data to illustrate the network.
+
+3.1.1 Layout
+
+Let's start where we left of [Lesson 2](02_dataformats.html) and make a network out of a fictional adjacency matrix:
+
+```{r}
+library(igraph)
+am=as.matrix(read.csv("https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv", header=T, row.names=1))
+am
+ag=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
+plot(ag, edge.width=E(ag)$weight)
+```
+
+There are several graph layout functions in igraph. You can use these layout functions inside the `plot()` function, or you can specify the layout as a separate two-column matrix. For example, let’s say you want to arrange the network as a circle:
+
+```{r}
+#option 1
+plot(ag, layout=layout_in_circle(ag))
+
+#option 2:
+l=layout_in_circle(ag) 
+plot(ag, layout=l)
+```

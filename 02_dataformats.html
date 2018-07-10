@@ -212,8 +212,8 @@ $(document).ready(function () {
 <li><a href="#weighted-networks">2.2.1 Weighted networks</a></li>
 </ul></li>
 <li><a href="#going-from-data-to-networks">2.3 Going from Data to Networks</a><ul>
-<li><a href="#creating-a-network-from-your-adjacency-matrix">2.3.1 Creating a network from your adjacency matrix</a></li>
-<li><a href="#creating-a-network-from-your-edge-list">2.3.2 Creating a network from your edge list</a></li>
+<li><a href="#creating-a-network-from-your-edge-list">2.3.1 Creating a network from your edge list</a></li>
+<li><a href="#creating-a-network-from-your-adjacency-matrix">2.3.2 Creating a network from your adjacency matrix</a></li>
 </ul></li>
 </ul>
 </div>
@@ -407,26 +407,8 @@ plot(dir.g)</code></pre>
 </div>
 <div id="going-from-data-to-networks" class="section level2">
 <h2>2.3 Going from Data to Networks</h2>
-<div id="creating-a-network-from-your-adjacency-matrix" class="section level3">
-<h3>2.3.1 Creating a network from your adjacency matrix</h3>
-<p>Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:</p>
-<pre class="r"><code>am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
-am</code></pre>
-<pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
-## Adam       0     1       0      1      0     4    0
-## Betty      1     0       3      1      0     2    0
-## Charles    0     3       0      0      0     0    0
-## Daniel     1     1       0      0      1     1    0
-## Esther     0     0       0      1      0     1    0
-## Frank      4     2       0      1      1     0    2
-## Gina       0     0       0      0      0     2    0</code></pre>
-<p>Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a <em>weighted adjacency matrix</em>. Note that we are going to add an argument <code>weighted=T</code> to indicate that the edges have weights. The results from the code below should look the same as above.</p>
-<pre class="r"><code>g2=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
-plot(g2, edge.width=E(g)$weight)</code></pre>
-<p><img src="02_dataformats_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
-</div>
 <div id="creating-a-network-from-your-edge-list" class="section level3">
-<h3>2.3.2 Creating a network from your edge list</h3>
+<h3>2.3.1 Creating a network from your edge list</h3>
 <p>Creating a network from an edgelist that you have created is easy. First, import the .csv file called “sample_edgelist.csv”.</p>
 <pre class="r"><code> edge.dat=read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_edgelist.csv&quot;) 
 edge.dat</code></pre>
@@ -451,6 +433,24 @@ eg</code></pre>
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>
 <pre class="r"><code>plot(eg, edge.width=E(eg)$weight)</code></pre>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+</div>
+<div id="creating-a-network-from-your-adjacency-matrix" class="section level3">
+<h3>2.3.2 Creating a network from your adjacency matrix</h3>
+<p>Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:</p>
+<pre class="r"><code>am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
+am</code></pre>
+<pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
+## Adam       0     1       0      1      0     4    0
+## Betty      1     0       3      1      0     2    0
+## Charles    0     3       0      0      0     0    0
+## Daniel     1     1       0      0      1     1    0
+## Esther     0     0       0      1      0     1    0
+## Frank      4     2       0      1      1     0    2
+## Gina       0     0       0      0      0     2    0</code></pre>
+<p>Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a <em>weighted adjacency matrix</em>. Note that we are going to add an argument <code>weighted=T</code> to indicate that the edges have weights. The results from the code below should look the same as above.</p>
+<pre class="r"><code>ag=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
+plot(ag, edge.width=E(ag)$weight)</code></pre>
 <p><img src="02_dataformats_files/figure-html/unnamed-chunk-14-1.png" width="576" /></p>
 </div>
 </div>

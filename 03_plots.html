@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>03_Plotting Basics</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -197,7 +197,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">03_Plotting Basics</h1>
+<h1 class="title toc-ignore"><ol start="3" style="list-style-type: decimal">
+<li>Plotting Basics</li>
+</ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
 
 </div>
@@ -211,7 +213,32 @@ $(document).ready(function () {
 <div id="network-plots-layouts-and-attributes" class="section level2">
 <h2>3.1 Network Plots: Layouts and Attributes</h2>
 <p>Researchers often use network analysis as a tool for displaying complex data. But you should also know that one must be very careful not to over-interpret network plots. This is because there is no single rule for how to display networks, and network plots can obscure interesting patterns or be misleading if the layout format does not match the purpose. With that said, network plots can be a useful and powerful way to get your message across if used appropriately.</p>
-<p>The plotting function in igraph comes with a lot of different options. We have used several arguments already, but if you want to explore the ins and outs of plotting in R, look up <code>?igraph.plotting</code>. I also highly recommend my favorite web tutorial on static and dynamic network visualization by <a href="http://kateto.net/network-visualization">Katya Ognyanova</a>.</p>
+<p>The plotting function in igraph comes with a lot of different options. We have used several arguments already, but if you want to explore the ins and outs of plotting in R, look up <code>?igraph.plotting</code>. I also highly recommend my favorite web tutorial on static and dynamic network visualization by <a href="http://kateto.net/network-visualization">Katya Ognyanova</a>. This site is going to cover the very basics, but I highly recommend her site when you feel ready to do more.</p>
+<p>Here, we will deal with two main topics: (1) layout functions and how to merge network data and (2) attribute data to illustrate the network.</p>
+<p>3.1.1 Layout</p>
+<p>Let’s start where we left of <a href="02_dataformats.html">Lesson 2</a> and make a network out of a fictional adjacency matrix:</p>
+<pre class="r"><code>library(igraph)
+am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
+am</code></pre>
+<pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
+## Adam       0     1       0      1      0     4    0
+## Betty      1     0       3      1      0     2    0
+## Charles    0     3       0      0      0     0    0
+## Daniel     1     1       0      0      1     1    0
+## Esther     0     0       0      1      0     1    0
+## Frank      4     2       0      1      1     0    2
+## Gina       0     0       0      0      0     2    0</code></pre>
+<pre class="r"><code>ag=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
+plot(ag, edge.width=E(ag)$weight)</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-1-1.png" width="576" /></p>
+<p>There are several graph layout functions in igraph. You can use these layout functions inside the <code>plot()</code> function, or you can specify the layout as a separate two-column matrix. For example, let’s say you want to arrange the network as a circle:</p>
+<pre class="r"><code>#option 1
+plot(ag, layout=layout_in_circle(ag))
+
+#option 2:
+l=layout_in_circle(ag) 
+plot(ag, layout=l)</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
 </div>
 
 
