@@ -20,4 +20,4 @@ install.packages(c("igraph", "bipartite", "asnipe", "assortnet", "ggplot2", "ggm
 
 3. Download data
 
-Go to [this link](https://dshizuka.github.io/network2018/sample_data.zip) and download the compressed data files. Save the file into a folder that you can remember. This will allow us to run some of the examples even if internet access fails.
+Go to [this link](https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData.zip) and download the compressed data files. Save the file into a folder that you can remember. This will allow us to run some of the examples even if internet access fails.
