@@ -1,0 +1,22 @@
+---
+title: "Syllabus"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+This is the syllabus for the Shizuka Lab Retreat/Workshop on Network Analysis, hosted at School of Biological Sciences, UNL in summer 2018.
+
+##<u>Dates/Location</u>  
+* **July 16-20, 2018. Sessions start daily at 9am in Room 401 Manter Hall**  
+  
+##<u>Instructor</u>  
+* **Dai Shizuka**
+* **Office: 410B Manter Hall**
+* **Email: dshizuka2'at'unl.edu** 
+
+##<u>Course Website</u>  
+####Course materials will be posted at the course blog: [https://dshizuka.github.io/network2018](https://dshizuka.github.io/network2018)####  
