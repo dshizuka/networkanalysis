@@ -19,7 +19,8 @@ Animals interact and associate. These interactions and associations can build up
 As mentioned in the [survey of network types](04_networktypes.html), social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). However, there are potential bananaskins to look out for when constructing social networks. The most important question here (and whenever you are making networks in general) is: ***what are your edges?***
 
 ##4.1.1. Constructing networks from interactions
-
-
+```{r}
+idat=read.csv("https://dshizuka.github.io/networkanalysis/SampleData/sample_interactions.csv")
+```
 
 ##4.1.2. Constructing networks from associations
