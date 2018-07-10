@@ -1,0 +1,14 @@
+---
+title: "Syllabus"
+author: "Dai Shizuka"
+date: "7/9/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Syllabus
+
+This is the syllabus for a week-long workshop/lab retreat on Network Analysis hosted at the Shizuka Lab, School of Biological Sciences, UNL in summer 2018
