@@ -217,8 +217,16 @@ $(document).ready(function () {
 <p>Here, we will deal with two main topics: (1) layout functions and how to merge network data and (2) attribute data to illustrate the network.</p>
 <p>3.1.1 Layout</p>
 <p>Let’s start where we left of <a href="02_dataformats.html">Lesson 2</a> and make a network out of a fictional adjacency matrix:</p>
-<pre class="r"><code>library(igraph)
-am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
+<pre class="r"><code>library(igraph)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code>am=as.matrix(read.csv(&quot;https://dshizuka.github.io/network2018/NetworkWorkshop_SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
 am</code></pre>
 <pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
 ## Adam       0     1       0      1      0     4    0
@@ -228,17 +236,57 @@ am</code></pre>
 ## Esther     0     0       0      1      0     1    0
 ## Frank      4     2       0      1      1     0    2
 ## Gina       0     0       0      0      0     2    0</code></pre>
-<pre class="r"><code>ag=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
-plot(ag, edge.width=E(ag)$weight)</code></pre>
+<pre class="r"><code>g=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
+plot(g, edge.width=E(g)$weight)</code></pre>
 <p><img src="03_plots_files/figure-html/unnamed-chunk-1-1.png" width="576" /></p>
 <p>There are several graph layout functions in igraph. You can use these layout functions inside the <code>plot()</code> function, or you can specify the layout as a separate two-column matrix. For example, let’s say you want to arrange the network as a circle:</p>
 <pre class="r"><code>#option 1
-plot(ag, layout=layout_in_circle(ag))
+plot(g, layout=layout_in_circle(g))
 
 #option 2:
-l=layout_in_circle(ag) 
-plot(ag, layout=l)</code></pre>
+l=layout_in_circle(g) 
+plot(g, layout=l)</code></pre>
 <p><img src="03_plots_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+<pre class="r"><code>class(l) </code></pre>
+<pre><code>## [1] &quot;matrix&quot;</code></pre>
+<pre class="r"><code>l</code></pre>
+<pre><code>##            [,1]       [,2]
+## [1,]  1.0000000  0.0000000
+## [2,]  0.6234898  0.7818315
+## [3,] -0.2225209  0.9749279
+## [4,] -0.9009689  0.4338837
+## [5,] -0.9009689 -0.4338837
+## [6,] -0.2225209 -0.9749279
+## [7,]  0.6234898 -0.7818315</code></pre>
+<p>You can see that the object <code>l</code> is a two-column matrix of x- and y-coordinates. So this is what the layout functions create, and the plotting functions uses these coordinates to place the nodes. Now let’s learn a little bit about the different types of layout functions.</p>
+<div id="force-directed-layouts" class="section level4">
+<h4>Force-directed layouts</h4>
+<p>Networks are generally plotted using a <em>force-directed algorithm</em>, which is a class of algorithms for drawing graphs. The default function in igraph is called the Fruchterman-Reingold (1991) algorithm. Typically, force-directed algorithms use a physical simulation where some kind of attractive force (imagine a spring) are used to attract nodes connected by edges together. So ‘tightly’ connected clusters of nodes will show up close to each other, and those that are ‘loosely’ connected will be repulsed towards the outside. However, the algorithm does not specify where any node has to be other than these constraints. Therefore, every time you run the <code>plot()</code> command, you will get a slightly different configuration of the graph. Let’s try plotting the network with the default Fruchterman-Reingold algorithm. Run this line of code several times:</p>
+<pre class="r"><code>plot(g, layout=layout_with_fr(g))</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p>You will observe that each time you plot the graph, you get a different configuration. They all follow the same algorithm, but they turn out differently because the algorithm is simulating a stochastic process of forces acting on nodes. In order to create reproducible layouts, you can use the <code>set.seed()</code> function when setting up the layout.</p>
+<pre class="r"><code>set.seed(10) 
+l=layout_with_fr(g) 
+plot(g, layout=l)</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p>Now, your plot should be reproducible when you run the plotting function again. Other popular force-directed algorithms include Kamada &amp; Kawai (1989) and Davidson &amp; Harel (1996), and “GEM” (Frick et al. 1995). They all have slightly different properties and there is no single ‘best method’. Below, we will plot the same network in 8 different ways. The top row will be force-directed methods, and the bottom row will be static methods:</p>
+<pre class="r"><code>set.seed(10)
+layouts = c(&quot;layout_with_fr&quot;, &quot;layout_with_kk&quot;, &quot;layout_with_dh&quot;, &quot;layout_with_gem&quot;, &quot;layout_as_star&quot;, &quot;layout_as_tree&quot;, &quot;layout_in_circle&quot;, &quot;layout_on_grid&quot;)
+par(mfrow=c(2,4), mar=c(1,1,1,1))
+for(layout in layouts){
+  l=do.call(layout, list(g))
+  plot(g, layout=l, edge.color=&quot;black&quot;, vertex.label=&quot;&quot;, main=layout)
+}</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p>Before we move on, let’s clear the plotting region:</p>
+<pre class="r"><code>dev.off()</code></pre>
+<pre><code>## null device 
+##           1</code></pre>
+<p>You can also use custom layouts. I’ll set up the vertices on a line and then used curved edges.</p>
+<pre class="r"><code>l=matrix(c(1,2,3,4,5,6,7, 1,2,3,4,5,6,7),ncol=2)
+plot(g,layout=l,edge.curved=TRUE, vertex.label=&quot;&quot;)</code></pre>
+<p><img src="03_plots_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
+</div>
 </div>
 
 

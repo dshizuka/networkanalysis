@@ -145,10 +145,11 @@ am
 ```
 
 Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a *weighted adjacency matrix*. Note that we are going to add an argument `weighted=T` to indicate that the edges have weights. The results from the code below should look the same as above.
+We'll call this new network `g`, which will overwrite the previous graph object of the same name. 
 
 ```{r}
-ag=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
-plot(ag, edge.width=E(ag)$weight)
+g=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
+plot(g, edge.width=E(g)$weight)
 ```
 
 
