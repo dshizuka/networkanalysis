@@ -323,7 +323,7 @@ head(idat)</code></pre>
 ## 4  23732 58098
 ## 5  23871 23778
 ## 6  23778 23732</code></pre>
-<p>Let’s make this into a network:</p>
+<p>Let’s make this into a directed network, with arrows going from winner to loser:</p>
 <pre class="r"><code>ig=graph_from_data_frame(idat, directed=T)
 plot(ig)</code></pre>
 <p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
@@ -339,6 +339,12 @@ plot(ig2, edge.width=E(ig2)$weight)</code></pre>
 </div>
 <div id="constructing-networks-from-associations" class="section level2">
 <h2>4.1.2. Constructing networks from associations</h2>
+<p>Association networks are created by connecting nodes that belong to the same ‘group’. For example, individuals that belong to the same club may be considered to be ‘associates’ and therefore connected in a network. Similarly, in animal social networks, individuals that are observed to be in the same flock or herd may be considered to be associated in some way. Keep in mind though that this is an assumption, and the inference of social networks from patterns of group association is often called the ‘gambit of the group’ (Franks et al. 2010).</p>
+<p>Typically, association data would be first be gathered as an individual-by-group matrix (or group-by-individual matrix). That is, individuals are listed in rows and groups (e.g., flocks/herds/schools) listed in columns (or vice-versa). The cell value is 1 if that individual is in that group, and 0 if not.</p>
+<div class="figure">
+<img src="https://www.dropbox.com/s/0suulftm2762l41/flocktable1.png?dl=1" alt="Sample individual-by-group matrix" />
+<p class="caption"><em>Sample individual-by-group matrix</em></p>
+</div>
 </div>
 
 
