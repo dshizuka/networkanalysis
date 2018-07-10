@@ -3,8 +3,10 @@ title: "Lessons"
 output: html_document
 ---
 
-###[0. Before you start](https://dshizuka.github.io/network2018/00_before_you_start.html)
+###[0. Before you start](00_before_you_start.html)
 
-###[1. Introduction to Networks](https://dshizuka.github.io/network2018/01_intro.html)
+###[1. Introduction to Networks](01_intro.html)
+
+###[2. Data Formats for Networks](01_intro.html)
 
 ###
