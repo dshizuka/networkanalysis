@@ -1,5 +1,6 @@
-_site
-.DS_Store
-nbproject
-.sass-cache
 .Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.DS_Store
+_site/
