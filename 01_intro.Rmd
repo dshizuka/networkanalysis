@@ -141,3 +141,53 @@ E  | D | F |
 F  | A | D | E
 ---|---|---|---
 
+In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:
+
+```{r}
+as_adj_list(g)
+```
+
+###1.3.4 Data formats for directed and weighted networks
+Let’s consider some important aspects of data formats that come with networks that are directed or weighted. I will keep this short by listing some important things to consider, and a line of code that will display this.
+
+####Directed networks
+
+Let's create an igraph object for a *directed network* called `dir.g`.
+For directed networks, the adjacency matrix is not symmetrical. Rather, the cell value is 1 if the edge goes from the *row vertex* to the *column vertex*.
+
+```{r}
+dir.g=make_graph(~A-+B-+C-+A, D-+E-+F-+D, A+-+F)
+plot(dir.g)
+```
+
+```{r}
+as_adjacency_matrix(dir.g, sparse=F)
+```
+
+For directed networks with mutual edges (represented by double-edged arrows), the edge list lists both directions separately:
+
+```{r}
+as_edgelist(dir.g)
+```
+
+You can see that, since the `dir.g` network object contains one mutual edge (A<->F), the edge list has 8 rows, while the edgelist for the undirected version of the network has 7 rows.
+
+####Weighted networks
+Let’s now consider what the data formats would look like. To do this, let’s go back to our original network, `g`. Let’s say that the edge widths that we added represent edge weights or values. Then, the adjacency matrix for this network can be shown by using the `attr=` argument within the function to call the adjacency matrix to specify the edge weights:
+
+```{r}
+as_adjacency_matrix(g, sparse=F, attr="width")
+```
+
+You can display the edge weights as an edgelist as well. In fact, `igraph` has a convenient function that will display all of the edge attributes together as a data frame:
+
+```{r}
+as_data_frame(g)
+```
+
+Recall that in undirected networks, the “from” and “to” designation are arbitrary (it is simply organized in alphabetical order here).
+
+If you want to show an edge list as a three-column matrix with the two nodes and edge weights only, you can just specify which edge attribute you want to use as the edge weight, e.g.:
+```{r}
+as_data_frame(g)[,c("from", "to", "width")]
+```
