@@ -205,8 +205,116 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#species-co-occurrence-networks">4.2.1 Species Co-occurrence Networks</a></li>
+<li><a href="#bipartite-networks-e.g.-mutualism-etc">4.2.2 Bipartite Networks (e.g., Mutualism, etc)</a><ul>
+<li><a href="#working-with-bipartite-networks-in-r">Working with bipartite networks in R</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p>ecological networks</p>
+<div id="species-co-occurrence-networks" class="section level2">
+<h2>4.2.1 Species Co-occurrence Networks</h2>
+</div>
+<div id="bipartite-networks-e.g.-mutualism-etc" class="section level2">
+<h2>4.2.2 Bipartite Networks (e.g., Mutualism, etc)</h2>
+<p>.3.1 Intro to bipartite networks Bipartite network, or two-mode network, is a special type of network in which there are two kinds of nodes, and only nodes of different type are connected. In this case, the data is often organized as a ‘biadjacency matrix’, in which rows and columns are two different types of nodes. For example, let’s take a hypothetical dataset on plant-pollinator interactions. The following interaction matrix describes which animal pollinates which plant: cell value is 1 if there is an interaction and 0 if not.</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="center">Hummingbird</th>
+<th align="center">Bat</th>
+<th align="center">Moth</th>
+<th align="center">Butterfly</th>
+<th align="center">Bee</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Plant 1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td>Plant 2</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td>Plant 3</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td>Plant 4</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p>You can see that this can be expressed as as bipartite network in which plant species are one type of node (e.g., black squares) and pollinator species are another type of node (e.g., white circles). These types of networks are called <em>mutualism networks</em>, and constitute one type of ecological network. A <em>two-trophic food web</em> can be considered a bipartite network, although food webs in general can take more complex forms (multiple trophic levels, intraguild predation, etc.). Intuitively <em>sexual networks</em>, i.e., a network of social or genetic mates, can also be considered a bipartite network consisting of male and female nodes.</p>
+<div id="working-with-bipartite-networks-in-r" class="section level3">
+<h3>Working with bipartite networks in R</h3>
+<p>Let’s now try playing around with this type of data in R. We will start by using the igraph package. First, we will read the sample data into R. The file Sample_bipartite.csv is the plant-pollinator interaction matrix as presented above:</p>
+<pre class="r"><code>bmat=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_bipartite.csv&quot;, header=T, row.names=1))</code></pre>
+<pre><code>## Warning in read.table(file = file, header = header, sep = sep, quote
+## = quote, : incomplete final line found by readTableHeader on &#39;https://
+## dshizuka.github.io/networkanalysis/SampleData/Sample_bipartite.csv&#39;</code></pre>
+<pre class="r"><code>bmat</code></pre>
+<pre><code>##         hummingbird bat moth butterfly bee
+## Plant_1           1   1    0         1   0
+## Plant_2           1   0    0         1   0
+## Plant_3           0   1    1         1   0
+## Plant_4           0   0    0         1   1</code></pre>
+<p>To read this interaction matrix into an igraph object called <em>bg</em>, we will use the function <code>graph_from_incidence_matrix()</code>.</p>
+<pre class="r"><code>library(igraph)
+bg=graph_from_incidence_matrix(bmat) 
+bg</code></pre>
+<pre><code>## IGRAPH eb141aa UN-B 9 10 -- 
+## + attr: type (v/l), name (v/c)
+## + edges from eb141aa (vertex names):
+##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
+##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
+##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
+## [10] Plant_4--bee</code></pre>
+<p>Here, the first line of information for object <code>bg</code> tells us that we have an <strong>U</strong>ndirected, <strong>N</strong>amed network that is <strong>B</strong>ipartite, and it has 9 nodes and 10 edges. The second line of information tells that there are two vertex attributes: vertex type and vertex name. The rest of the lines show us the edges that exist.</p>
+<p>Now let’s take a moment to learn how to deal with the vertex attribute called “type”. You will see that this attribute is coded as TRUE/FALSE, but you can convert this into numbers (output not shown).</p>
+<pre class="r"><code>V(bg)$type #Display the vertex types. They are &quot;FALSE&quot; or &quot;TRUE&quot;</code></pre>
+<pre><code>## [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</code></pre>
+<pre class="r"><code>V(bg)$type+1 #If you add 1 to FALSE/TRUE vector in R, they convert to 1 and 2, respectively.</code></pre>
+<pre><code>## [1] 1 1 1 1 2 2 2 2 2</code></pre>
+<p>Then, you can use this to assign vertex shapes and colors.</p>
+<pre class="r"><code>V(bg)$shape=c(&quot;square&quot;,&quot;circle&quot;)[V(bg)$type+1]# you can assign vertex shapes this way 
+V(bg)$color=c(&quot;tomato&quot;,&quot;lightblue&quot;)[V(bg)$type+1] # assign colors the same way 
+plot(bg) </code></pre>
+<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><code>igraph</code> also includes a ‘bipartite layout’, in which the two node types are arranged in two rows.</p>
+<pre class="r"><code>plot(bg, layout=layout_as_bipartite(bg), edge.color=&quot;black&quot;, edge.width=4,vertex.label.dist=1, vertex.label.degree=c(rep(-pi/2, 4), rep(pi/2, 5)))</code></pre>
+<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p>The ‘bipartite’ package also has plotting function that produces a prettier version of this:</p>
+<pre class="r"><code>library(bipartite)
+plotweb(bmat) #the base function for bipartite network plot</code></pre>
+<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
+<p>or,</p>
+<pre class="r"><code>plotweb(bmat, method=&quot;normal&quot;,ybig=0.1, col.interaction=&quot;wheat2&quot;, bor.col.interaction=&quot;white&quot;, arrow=&quot;no&quot;,  col.high=&quot;lightblue&quot;, col.low=&quot;tomato&quot;,labsize=2,  adj.low=c(0.5,0.8), adj.high=c(0.5,0))</code></pre>
+<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+</div>
+</div>
 
 
 

@@ -97,8 +97,6 @@ plot(assoc.g, edge.width=E(assoc.g)$weight*10) #Since the edge weights are small
 Let's make it look prettier:
 
 ```{r}
- plot(assoc.g, edge.width=E(assoc.g)$weight*10, vertex.label="", vertex.color="gold", edge.color="cornflowerblue", vertex.frame.color="black")
+plot(assoc.g, edge.width=E(assoc.g)$weight*10, vertex.label="", vertex.color="gold", edge.color="cornflowerblue", vertex.frame.color="black")
 ```
-
-
 
