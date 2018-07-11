@@ -14,4 +14,18 @@ knitr::opts_chunk$set(fig.width=6, fig.height=4)
 set.seed(2)
 ```
 
-spatial networks
+Spatial networks
+
+With spatial networks, the nodes represent spatial locations and the edges represent connections between those locations, e.g., *habitat connectivity* (‘ landscape connectivity networks’: Urban & Keitt 2001, Urban et al. 2009), *movements of individuals* (‘movement networks’: Jacoby & Freeman 2016), *genetic covariance among populations* (‘population graphs’: Dyer & Nason 2004, Dyer 2015), *migration pathways* (‘migratory flow networks’: Taylor & Norris 2010). Such networks of connectivity between populations are important in a variety of fields including conservation biology, population genetics, evolution and metapopulation ecology.
+
+To explore this type of data, we will be demonstrating the construction of space-based networks using a dataset on genetic connectivity (‘population graph’) of the cactus *Lophocereus schottii* from Dyer & Nason (2004). We will be using an R package called ‘popgraph’, written by Rodney Dyer. A nice tutorial is available online (http://dyerlab.github.io/popgraph/), and the codes here are mostly adapted from this site.
+
+First, we will import an adjacency matrix of genetic connectivity among sites in L. schottii (Dyer & Nason 2004). Nason et al. (2002) assayed 29 polymorphic allozyme loci from 948 individual cacti in 21 populations. This data was converted to a 21 x 21 genetic distance matrix. Then the pairs of populations that were (using a method called edge exclusion deviance; see Dyer and Nason 2004 for details). In the resulting network (i.e., ‘population graph’), sites are connected by an edge if they are genetically ‘significantly similar’ (i.e., there is gene flow).
+
+```{r message=F}
+library(igraph)
+library(popgraph)
+library(ggmap)
+```
+
+Let’s read the data and take a look (output not shown here):
