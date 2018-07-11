@@ -210,6 +210,7 @@ $(document).ready(function () {
 <li><a href="#species-co-occurrence-networks">4.2.1 Species Co-occurrence Networks</a></li>
 <li><a href="#bipartite-networks-e.g.-mutualism-etc">4.2.2 Bipartite Networks (e.g., Mutualism, etc)</a><ul>
 <li><a href="#working-with-bipartite-networks-in-r">Working with bipartite networks in R</a></li>
+<li><a href="#bipartite-projections">Bipartite projections</a></li>
 </ul></li>
 </ul>
 </div>
@@ -285,9 +286,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH eb141aa UN-B 9 10 -- 
+<pre><code>## IGRAPH f520feb UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from eb141aa (vertex names):
+## + edges from f520feb (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -313,6 +314,27 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <p>or,</p>
 <pre class="r"><code>plotweb(bmat, method=&quot;normal&quot;,ybig=0.1, col.interaction=&quot;wheat2&quot;, bor.col.interaction=&quot;white&quot;, arrow=&quot;no&quot;,  col.high=&quot;lightblue&quot;, col.low=&quot;tomato&quot;,labsize=2,  adj.low=c(0.5,0.8), adj.high=c(0.5,0))</code></pre>
 <p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+</div>
+<div id="bipartite-projections" class="section level3">
+<h3>Bipartite projections</h3>
+<p>Sometimes, you are only interested in the relationships between one type of node: e.g., Which pollinators compete over the same nectar sources? Which males compete over the same females? In such cases, we are interested in what is called a <em>one-mode projection</em> of the bipartite network. For example, Hummingbird, Bat and Butterfly would be connected because they all pollinate Plant 1, whereas Bee and Butterfly would be connected because they are both pollinate Plant 4; so on and so forth.</p>
+<p>Note that we can make bipartite projections in two directions: we can make: (1) one-mode network of plants by shared pollinators, or (2) one-mode network of pollinators by shared plants. We can make both of these using a single function in igraph called <code>bipartite_projection()</code>.</p>
+<pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
+proj</code></pre>
+<pre><code>## $proj1
+## IGRAPH 93888b1 UNW- 4 6 -- 
+## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
+## + edges from 93888b1 (vertex names):
+## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
+## [5] Plant_2--Plant_4 Plant_3--Plant_4
+## 
+## $proj2
+## IGRAPH 9d28e53 UNW- 5 6 -- 
+## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
+## + edges from 9d28e53 (vertex names):
+## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
+## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
+<p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
 </div>
 </div>
 

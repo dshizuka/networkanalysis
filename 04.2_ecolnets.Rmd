@@ -86,3 +86,25 @@ or,
 ```{r fig.width=5, fig.height=4}
 plotweb(bmat, method="normal",ybig=0.1, col.interaction="wheat2", bor.col.interaction="white", arrow="no",  col.high="lightblue", col.low="tomato",labsize=2,  adj.low=c(0.5,0.8), adj.high=c(0.5,0))
 ```
+
+### Bipartite projections
+Sometimes, you are only interested in the relationships between one type of node: e.g., Which pollinators compete over the same nectar sources? Which males compete over the same females? In such cases, we are interested in what is called a *one-mode projection* of the bipartite network. For example, Hummingbird, Bat and Butterfly would be connected because they all pollinate Plant 1, whereas Bee and Butterfly would be connected because they are both pollinate Plant 4; so on and so forth. 
+
+Note that we can make bipartite projections in two directions: we can make: (1) one-mode network of plants by shared pollinators, or (2) one-mode network of pollinators by shared plants. We can make both of these using a single function in igraph called `bipartite_projection()`.
+
+```{r}
+proj=bipartite_projection(bg, multiplicity = T)
+proj
+```
+
+This new object, called proj, is in a format called list [you can see this by running `class(proj)`]. A list is an object that has multiple components—in this case, `proj` is a list with two distinct graphs: (1) `proj$proj1` (or alternatively, `proj[[1]]`) is a network with 4 nodes and 6 edges. (2) `proj$proj2` (or alternatively, `proj[[2]]`) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:
+
+```{r}
+plot(proj$proj1, edge.color="black", edge.width=E(proj$proj1)$weight^3)
+plot(proj$proj2, edge.color="black", edge.width=E(proj$proj2)$weight^3)
+```
+
+#### What is a bipartite projection anyway?
+
+Although I’ve presented the bipartite projection using a canned function in igraph, so let’s explain it briefly here. Mathematically, the adjacency matrices of the bipartite projection is the matrix product of the interaction matrix and its transpose. That is:
+
