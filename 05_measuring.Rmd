@@ -195,7 +195,7 @@ pk=degree.distribution(g)
 plot(pk, pch=19)
 ```
 
-Average path length & Diameter
+###5.2.4 Average path length & Diameter
 In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “*degrees of separation*” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.
 
 You can calculate path lengths with or without the edge weights (if using edge weights, you often simply count up the weights as you go along the path). The igraph package includes a convenient function for finding the shortest paths between every dyad in a network. Here, makes sure you specify the algorithm = “unweighted” (output not shown):
@@ -238,3 +238,35 @@ diams=sapply(path.list, max) #diameter of each component
 avg.paths
 diams
 ```
+
+###5.2.5 Clustering Coefficient (Transitivity)
+
+Clustering coefficients
+There are two formal definitions of the Clustering Coefficient (or Transitivity): “global clustering coefficient” and “locla clustering coefficient”. Though they are slightly different, they both deal with the probability of two nodes that are connected to a common node being connected themselves (e.g., the probability of two of your friends knowing each other).
+
+![](https://www.dropbox.com/s/ic9rofy292z0njj/transitivity.png?dl=1)
+
+Here are the verbal definitions:
+
+(1) *Global Clustering Coefficient* = “ratio of triangles to connected triples”
+
+(2) *Local Clustering Coefficient* = for each node, the proportion of their neighbors that are connected to each other
+
+(3) *Average Local Clustering Coefficient*: If $C_i$ is the proportion of two nodes connected to node *i* that are also connected to each other (i.e., the Local Clustering Coefficient), then Average Local Clustering
+Coefficient = $\frac {1}{n} \sum_{i=1}^{n} C_i$
+
+Try these:
+
+```{r}
+g.cluster=transitivity(g, "global")
+l.cluster=transitivity(g, "local")
+av.l.cluster=transitivity(g, "localaverage")
+```
+```{r}
+g.cluster
+l.cluster
+av.l.cluster
+```
+
+
+

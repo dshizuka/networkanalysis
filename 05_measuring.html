@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -221,6 +218,8 @@ $(document).ready(function () {
 <li><a href="#size-and-density">5.2.1 Size and density</a></li>
 <li><a href="#components">5.2.2 Components</a></li>
 <li><a href="#degree-distributions">5.2.3 Degree distributions</a></li>
+<li><a href="#average-path-length-diameter">5.2.4 Average path length &amp; Diameter</a></li>
+<li><a href="#clustering-coefficient-transitivity">5.2.5 Clustering Coefficient (Transitivity)</a></li>
 </ul></li>
 </ul>
 </div>
@@ -404,7 +403,10 @@ density</code></pre>
 <pre class="r"><code>pk=degree.distribution(g)
 plot(pk, pch=19)</code></pre>
 <p><img src="05_measuring_files/figure-html/unnamed-chunk-16-1.png" width="384" /></p>
-<p>Average path length &amp; Diameter In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “<em>degrees of separation</em>” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.</p>
+</div>
+<div id="average-path-length-diameter" class="section level3">
+<h3>5.2.4 Average path length &amp; Diameter</h3>
+<p>In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “<em>degrees of separation</em>” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.</p>
 <p>You can calculate path lengths with or without the edge weights (if using edge weights, you often simply count up the weights as you go along the path). The igraph package includes a convenient function for finding the shortest paths between every dyad in a network. Here, makes sure you specify the algorithm = “unweighted” (output not shown):</p>
 <pre class="r"><code>paths=distances(g, algorithm=&quot;unweighted&quot;)</code></pre>
 <pre><code>## Warning in distances(g, algorithm = &quot;unweighted&quot;): Unweighted algorithm
@@ -423,16 +425,16 @@ mean(paths[upper.tri(paths)], na.rm=T)</code></pre>
 <pre class="r"><code>comps=decompose(g)
 comps # a list object consisting of each component as graph object</code></pre>
 <pre><code>## [[1]]
-## IGRAPH 695d349 UNW- 5 10 -- 
+## IGRAPH e76e412 UNW- 5 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 695d349 (vertex names):
+## + edges from e76e412 (vertex names):
 ##  [1] 23820--23726 23820--23831 23726--23831 23820--23763 23726--23763
 ##  [6] 23831--23763 23820--23853 23726--23853 23831--23853 23763--23853
 ## 
 ## [[2]]
-## IGRAPH 43e3daf UNW- 20 60 -- 
+## IGRAPH f139489 UNW- 20 60 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 43e3daf (vertex names):
+## + edges from f139489 (vertex names):
 ##  [1] 23772--23770 23772--23771 23772--23777 23772--23774 23772--23860
 ##  [6] 23772--23734 23770--23771 23770--23777 23770--23774 23770--23860
 ## [11] 23770--23781 23770--23815 23770--23809 23771--23777 23771--23774
@@ -454,6 +456,33 @@ avg.paths</code></pre>
 <pre><code>## [1] 0.800 1.815</code></pre>
 <pre class="r"><code>diams</code></pre>
 <pre><code>## [1] 1 3</code></pre>
+</div>
+<div id="clustering-coefficient-transitivity" class="section level3">
+<h3>5.2.5 Clustering Coefficient (Transitivity)</h3>
+<p>Clustering coefficients There are two formal definitions of the Clustering Coefficient (or Transitivity): “global clustering coefficient” and “locla clustering coefficient”. Though they are slightly different, they both deal with the probability of two nodes that are connected to a common node being connected themselves (e.g., the probability of two of your friends knowing each other).</p>
+<div class="figure">
+<img src="https://www.dropbox.com/s/ic9rofy292z0njj/transitivity.png?dl=1" />
+
+</div>
+<p>Here are the verbal definitions:</p>
+<ol style="list-style-type: decimal">
+<li><p><em>Global Clustering Coefficient</em> = “ratio of triangles to connected triples”</p></li>
+<li><p><em>Local Clustering Coefficient</em> = for each node, the proportion of their neighbors that are connected to each other</p></li>
+<li><p><em>Average Local Clustering Coefficient</em>: If <span class="math inline">\(C_i\)</span> is the proportion of two nodes connected to node <em>i</em> that are also connected to each other (i.e., the Local Clustering Coefficient), then Average Local Clustering Coefficient = <span class="math inline">\(\frac {1}{n} \sum_{i=1}^{n} C_i\)</span></p></li>
+</ol>
+<p>Try these:</p>
+<pre class="r"><code>g.cluster=transitivity(g, &quot;global&quot;)
+l.cluster=transitivity(g, &quot;local&quot;)
+av.l.cluster=transitivity(g, &quot;localaverage&quot;)</code></pre>
+<pre class="r"><code>g.cluster</code></pre>
+<pre><code>## [1] 0.6219512</code></pre>
+<pre class="r"><code>l.cluster</code></pre>
+<pre><code>##  [1] 1.0000000 1.0000000 1.0000000 1.0000000 0.4666667 0.4642857 0.5555556
+##  [8] 0.6666667 0.5714286 0.2500000 1.0000000 0.4727273 0.4727273 1.0000000
+## [15] 0.3333333 1.0000000 1.0000000       NaN 1.0000000 1.0000000 1.0000000
+## [22] 0.7142857 1.0000000 1.0000000 1.0000000</code></pre>
+<pre class="r"><code>av.l.cluster</code></pre>
+<pre><code>## [1] 0.7903199</code></pre>
 </div>
 </div>
 
