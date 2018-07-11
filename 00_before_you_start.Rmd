@@ -19,7 +19,7 @@ install.packages(c("igraph", "bipartite", "asnipe", "assortnet", "ggplot2", "ggm
 
 In addition, run this code to download and install the `popgraph` package from github
 
-```{r}
+```{r eval=F}
 require(devtools)
 install_github("popgraph","dyerlab")
 ```
