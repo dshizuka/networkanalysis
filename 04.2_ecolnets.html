@@ -286,9 +286,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH e35cd2e UN-B 9 10 -- 
+<pre><code>## IGRAPH 667bf1b UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from e35cd2e (vertex names):
+## + edges from 667bf1b (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -322,20 +322,21 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 9aa87bb UNW- 4 6 -- 
+## IGRAPH d2669ea UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 9aa87bb (vertex names):
+## + edges from d2669ea (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH d4c2b02 UNW- 5 6 -- 
+## IGRAPH b28ff2b UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from d4c2b02 (vertex names):
+## + edges from b28ff2b (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
-<pre class="r"><code>plot(proj$proj1, edge.color=&quot;black&quot;, edge.width=E(proj$proj1)$weight^3)</code></pre>
+<pre class="r"><code>set.seed(2)
+plot(proj$proj1, edge.color=&quot;black&quot;, edge.width=E(proj$proj1)$weight^3)</code></pre>
 <p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
 <pre class="r"><code>plot(proj$proj2, edge.color=&quot;black&quot;, edge.width=E(proj$proj2)$weight^3)</code></pre>
 <p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-10-2.png" width="576" /></p>
@@ -360,7 +361,8 @@ proj1</code></pre>
 ## butterfly             2   2    1         4   1
 ## bee                   0   0    0         1   1</code></pre>
 <p>Here, one thing to note is that the diagonal of the matrix represents the number of times each plant or pollinator interacts. We may want to ignore this when plotting the networks. These codes should produce the same as the plots above (outputs not shown):</p>
-<pre class="r"><code>pg1=graph_from_adjacency_matrix(proj1, mode=&quot;undirected&quot;,diag=F, weighted=T)
+<pre class="r"><code>set.seed(2)
+pg1=graph_from_adjacency_matrix(proj1, mode=&quot;undirected&quot;,diag=F, weighted=T)
 pg2=graph_from_adjacency_matrix(proj2, mode=&quot;undirected&quot;,diag=F, weighted=T)
 plot(pg1, vertex.color=&quot;tomato&quot;, vertex.shape=&quot;square&quot;, edge.color=&quot;black&quot;,edge.width=E(pg1)$weight^3)</code></pre>
 <p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>

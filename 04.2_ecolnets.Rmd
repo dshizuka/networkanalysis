@@ -100,6 +100,7 @@ proj
 This new object, called proj, is in a format called list [you can see this by running `class(proj)`]. A list is an object that has multiple components—in this case, `proj` is a list with two distinct graphs: (1) `proj$proj1` (or alternatively, `proj[[1]]`) is a network with 4 nodes and 6 edges. (2) `proj$proj2` (or alternatively, `proj[[2]]`) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:
 
 ```{r}
+set.seed(2)
 plot(proj$proj1, edge.color="black", edge.width=E(proj$proj1)$weight^3)
 plot(proj$proj2, edge.color="black", edge.width=E(proj$proj2)$weight^3)
 ```
@@ -122,6 +123,7 @@ proj2
 Here, one thing to note is that the diagonal of the matrix represents the number of times each plant or pollinator interacts. We may want to ignore this when plotting the networks. These codes should produce the same as the plots above (outputs not shown):
 
 ```{r}
+set.seed(2)
 pg1=graph_from_adjacency_matrix(proj1, mode="undirected",diag=F, weighted=T)
 pg2=graph_from_adjacency_matrix(proj2, mode="undirected",diag=F, weighted=T)
 plot(pg1, vertex.color="tomato", vertex.shape="square", edge.color="black",edge.width=E(pg1)$weight^3)
