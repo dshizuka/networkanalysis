@@ -9,6 +9,17 @@ output:
     toc_float: false
 ---
 
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
+
+```
+
+```{r echo=FALSE}
+set.seed(2)
+```
+-------
+
 Now that we have a handle on visualizing a network and the basics of relevant types of networks, we will go about the task of quantitatively describing its characteristics.
 There are multiple levels at which we can measure and describe networks: 
 
@@ -111,6 +122,7 @@ Let's plot the relationship between degree and strength
 ```{r}
 plot(strength~degree, data=d)
 ```
+
 Obviously, these are correlated, since strength is simply the weighted version of degree. 
 
 How about the relationship between betweenness and strength?
@@ -121,3 +133,33 @@ plot(betweenness~strength, data=d)
 
 These are not well correlated, since they describe something different...
 
+##5.2 Network-level measures
+
+Size and density
+Let’s start by getting some basic information for the network, such as the number of nodes and edges. There are a couple of functions to help you extract this information without having to look it up in the "object summary" (e.g., `summary(g)`). Using these functions, you can store this information as separate objects, e.g., *n* for # nodes and *m* for # edges.
+
+```{r}
+n=vcount(g)
+m=ecount(g)
+n
+m
+```
+
+Since we now have the network size and the number of edges, we can calculate the density of the network. The definition of network density is:
+
+density = [# edges that exist] / [# edges that are possible]
+
+In an undirected network with no loops, the number of edges that are possible is exactly the number of dyads that exist in the network. In turn, the number of dyads is $\frac {n(n−1)}{2}$ where *n* = number of nodes. Withthis information, we can calculate the density with the following:
+
+```{r}
+dyads=n*(n-1)/2
+density=m/dyads
+density
+```
+
+
+Of course, there is a pre-packaged function for calculating density, called `edge_density()`:
+
+```{r}
+edge_density(g)
+```
