@@ -84,7 +84,7 @@ Now, let’s make this spatial network much nicer using the ‘popgraph’ packa
 ```{r}
 library(popgraph)
 library(ggmap)
-
+library(ggplot2)
 location = c( mean(V(g)$x), mean(V(g)$y))
 map = get_map(location,maptype="satellite", zoom=6) #use ggmap to get a satellite image of the study area.
 p = ggmap( map ) #plot will include this image
