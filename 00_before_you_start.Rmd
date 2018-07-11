@@ -17,6 +17,12 @@ Run this code:
 install.packages(c("igraph", "bipartite", "asnipe", "assortnet", "ggplot2", "ggmap", "rnetcarto", "ecodist", "igraphdata", "statnet", "RColorBrewer"))
 ```
 
+In addition, run this code to download and install the `popgraph` package from github
+
+```{r}
+require(devtools)
+install_github("popgraph","dyerlab")
+```
 
 ###3. Download data
 

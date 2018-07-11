@@ -209,6 +209,57 @@ $(document).ready(function () {
 <p>Spatial networks</p>
 <p>With spatial networks, the nodes represent spatial locations and the edges represent connections between those locations, e.g., <em>habitat connectivity</em> (‘landscape connectivity networks’: Urban &amp; Keitt 2001, Urban et al. 2009), <em>movements of individuals</em> (‘movement networks’: Jacoby &amp; Freeman 2016), <em>genetic covariance among populations</em> (‘population graphs’: Dyer &amp; Nason 2004, Dyer 2015), <em>migration pathways</em> (‘migratory flow networks’: Taylor &amp; Norris 2010). Such networks of connectivity between populations are important in a variety of fields including conservation biology, population genetics, evolution and metapopulation ecology.</p>
 <p>To explore this type of data, we will be demonstrating the construction of space-based networks using a dataset on genetic connectivity (‘population graph’) of the cactus <em>Lophocereus schottii</em> from Dyer &amp; Nason (2004). We will be using an R package called ‘popgraph’, written by Rodney Dyer. A nice tutorial is available online (<a href="http://dyerlab.github.io/popgraph/" class="uri">http://dyerlab.github.io/popgraph/</a>), and the codes here are mostly adapted from this site.</p>
+<p>First, we will import an adjacency matrix of genetic connectivity among sites in L. schottii (Dyer &amp; Nason 2004). Nason et al. (2002) assayed 29 polymorphic allozyme loci from 948 individual cacti in 21 populations. This data was converted to a 21 x 21 genetic distance matrix. Then the pairs of populations that were (using a method called edge exclusion deviance; see Dyer and Nason 2004 for details). In the resulting network (i.e., ‘population graph’), sites are connected by an edge if they are genetically ‘significantly similar’ (i.e., there is gene flow).</p>
+<pre class="r"><code>library(igraph)
+library(popgraph)
+library(ggmap)</code></pre>
+<p>Let’s read the data and take a look (output not shown here):</p>
+<pre class="r"><code>lopnet=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/lopho_network.csv&quot;, header=T, row.names=1)) #From Dyer et al. 2004
+lopnet</code></pre>
+<pre><code>##        BaC CP Ctv LaV LF Lig PL PtC PtP SenBas Seri SG SI SLG SN SnE SnF
+## BaC      0  0   0   1  0   1  0   1   1      0    0  0  0   0  0   1   0
+## CP       0  0   0   0  0   0  0   0   0      0    1  1  0   0  1   0   0
+## Ctv      0  0   0   0  0   0  0   0   1      1    0  0  0   1  0   0   1
+## LaV      1  0   0   0  0   1  0   1   0      0    0  0  0   0  0   1   1
+## LF       0  0   0   0  0   0  1   0   0      0    0  1  1   0  0   0   0
+## Lig      1  0   0   1  0   0  0   1   0      0    0  0  0   0  0   0   0
+## PL       0  0   0   0  1   0  0   0   0      1    0  1  1   0  1   0   0
+## PtC      1  0   0   1  0   1  0   0   0      1    0  0  0   0  0   1   0
+## PtP      1  0   1   0  0   0  0   0   0      1    0  0  0   0  0   0   1
+## SenBas   0  0   1   0  0   0  1   1   1      0    0  0  0   0  0   0   0
+## Seri     0  1   0   0  0   0  0   0   0      0    0  1  0   0  1   0   0
+## SG       0  1   0   0  1   0  1   0   0      0    1  0  1   0  0   0   0
+## SI       0  0   0   0  1   0  1   0   0      0    0  1  0   0  1   0   0
+## SLG      0  0   1   0  0   0  0   0   0      0    0  0  0   0  0   0   1
+## SN       0  1   0   0  0   0  1   0   0      0    1  0  1   0  0   0   0
+## SnE      1  0   0   1  0   0  0   1   0      0    0  0  0   0  0   0   0
+## SnF      0  0   1   1  0   0  0   0   1      0    0  0  0   1  0   0   0
+## SnI      1  0   0   0  0   1  0   0   1      0    0  0  0   1  0   0   1
+## StR      1  0   0   0  0   1  0   1   0      1    0  0  0   0  0   1   0
+## TS       0  1   0   0  0   0  0   0   0      0    0  0  1   0  1   0   0
+## TsS      0  0   0   1  0   1  0   1   0      0    0  0  0   0  0   1   0
+##        SnI StR TS TsS
+## BaC      1   1  0   0
+## CP       0   0  1   0
+## Ctv      0   0  0   0
+## LaV      0   0  0   1
+## LF       0   0  0   0
+## Lig      1   1  0   1
+## PL       0   0  0   0
+## PtC      0   1  0   1
+## PtP      1   0  0   0
+## SenBas   0   1  0   0
+## Seri     0   0  0   0
+## SG       0   0  0   0
+## SI       0   0  1   0
+## SLG      1   0  0   0
+## SN       0   0  1   0
+## SnE      0   1  0   1
+## SnF      1   0  0   0
+## SnI      0   1  0   0
+## StR      1   0  0   1
+## TS       0   0  0   0
+## TsS      0   1  0   0</code></pre>
 
 
 
