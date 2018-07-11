@@ -27,7 +27,7 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 * ####[4.3 Intro to Spatial Networks](04.3_spatialnets.html)
 
-###[5. Measuring Networks](05_measuring.html)
+###[5. Measuring Networks Part 1: Centrality and Global Measures](05_measuring.html)
 
 ###[6. Random Graphs](06_randomnets.html)
 

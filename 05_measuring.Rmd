@@ -1,5 +1,5 @@
 ---
-title: "5. Measuring Networks"
+title: "5. Measuring Networks Part 1: Centrality and Global Measures"
 author: "Dai Shizuka"
 date: "7/11/2018"
 output: 
@@ -22,11 +22,8 @@ set.seed(2)
 -------
 
 Now that we have a handle on visualizing a network and the basics of relevant types of networks, we will go about the task of quantitatively describing its characteristics.
-There are multiple levels at which we can measure and describe networks: 
 
-* Node-level
-* Subcomponent-level
-* Networklevel
+Generally speaking, you can measure network properties at the level of nodes (aka, 'centrality measures') or at the level of the network (aka, 'global measures'). That is, if you are interested in the position of nodes within a system, then you are measuring something at the node-level. Conversely, if you want to understand the structure of the system as a whole, you are measuring something at the network-level. Network analysis often combines both.
 
 Let's start by loading the sample social network we introduced in [section 4.1](04.1_socialnetworks.html). Here, we are going to be using both the `igraph` and `asnipe` packages.
 
