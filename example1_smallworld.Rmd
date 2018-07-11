@@ -15,7 +15,7 @@ set.seed(2)
 
 -----
 
-##1.1 Exploring the Small-World Effect
+##1. Exploring the Small-World Effect
 
 In 1998, [Duncan Watts and Steve Strogatz](https://www.nature.com/articles/30918) published one of the most influential papers in network theory (it has been cited over 36,000 times as of July 2018). In it, they show how, in between "regularity" and "randomness" lies a range of disorder in which networks exhibit a property they call "small-world": They are highly clustered but have small average path lengths. That is, each node is connected to every other node with small degrees of separation, despite the fact that most nodes exist in tight clusters. 
 
@@ -105,4 +105,29 @@ points(s,colMeans(Cp),type="b",pch=0,ylim=c(0,1),xaxt="n",yaxt="n",xlab="",ylab=
 legend("bottomleft", pch=c(20,0), legend=c("Clustering Coefficient (Cp)", "Average Path Length (Lp)"))
 ```
 
+##2. Scale-free networks
 
+Now we’ll move on to the idea of power-law or “scale-free” degree distributions in networks. If you recall, [Barabási and Albert (1999)](http://science.sciencemag.org/content/286/5439/509) proposed that degree distributions of many real-world networks follow a power-law. This is significant because a major characteristic of a power-law distribution is that you can have some nodes with very very high degree. That is, the degree distribution has a ‘fat-tail’. These very high degree nodes
+
+ may be very important nodes in the network. Barabási and Albert also proposed a mechanism by which you might get a power-law degree distribution: the so-called “preferential attachment” model, in which the network starts out with a few nodes, and as it grows the new nodes attach preferentially to the nodes that have relatively high degree.
+ 
+There is a pre-packaged function in igraph for modeling this preferential attachment process, called `barabasi.game()`. We’ll use this to quickly demonstrate how you can get a figure similar to Figure 2A in Barabási and Albert (1999), and how this differs from the degree distribution of an Erdös-Renyí random graph.
+
+![](https://www.dropbox.com/s/ngf3plgqnkxyt0u/Barabasi1999_fig.png?dl=1)
+
+First, let’s start by producing two graphs—one with the random graph model, and one with the preferential attachment model.
+
+```{r}
+g1=erdos.renyi.game(50,p=0.15) 
+b1=barabasi.game(50,power=1,m=3,directed=FALSE) 
+summary(g1)
+summary(b1)
+```
+
+So we have produced two graphs of the same size and roughly the same number of edges. Let’s plot these graphs side-by-side. And for illustrative purposes, we’ll make the sizes of the vertices proportional to their degree. We’ll also use a force-directed layout algorithm (e.g. Fruchterman-Reingold) so that we can get a sense for how the network is structured.
+
+```{r fig.width=8, fig.height=4}
+par(mfrow=c(1,2),mar=c(1,1,3,1))
+plot(g1,layout=layout.fruchterman.reingold,vertex.size=degree(g1),vertex.label="",vertex.color="black",main="Erdos-Renyi Random Graph")
+plot(b1,layout=layout.fruchterman.reingold,vertex.size=degree(b1),vertex.label="",vertex.color="black",main="Preferential Attachment")
+```
