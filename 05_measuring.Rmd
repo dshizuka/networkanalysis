@@ -16,5 +16,21 @@ There are multiple levels at which we can measure and describe networks:
 * Subcomponent-level
 * Networklevel
 
-For this section, let’s use the sample social network we used in section 2.1. We will first start by loading the required libraries, reading the sample association data, converting to an adjacency matrix, and then creating a graph to plot. We will just use the default Fruchterman-Reingold layout.
+Let's start by loading the sample social network we introduced in [section 4.1](04.1_socialnetworks.html). Here, we are going to be using both the `igraph` and `asnipe` packages.
+
+```{r, message=F, results='hide'}
+library(igraph)
+library(asnipe)
+assoc=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Sample_association.csv", header=T, row.names=1))
+gbi=t(assoc) 
+mat=get_network(t(assoc), association_index="SRI") 
+g=graph_from_adjacency_matrix(mat, "undirected", weighted=T) #create a graph object
+```
+
+```{r}
+# plot the network
+set.seed(10)
+l=layout_with_fr(g)
+plot(g, layout=l, vertex.label="", vertex.color="gold", edge.color="slateblue", edge.width=E(g)$weight*10)
+```
 
