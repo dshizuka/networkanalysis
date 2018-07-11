@@ -1,5 +1,5 @@
 ---
-title: "5. Simulating Random Graphs and Simulations"
+title: "6. Simulating Random Graphs and Simulations"
 author: "Dai Shizuka"
 date: "7/10/2018"
 output: 
@@ -86,7 +86,19 @@ plot(r,layout=layout.circle,edge.color="black",edge.width=2,vertex.color="red",v
 }
 ```
 
-##5.3 Understanding how random graphs change with size
+##5.3 Properties of Random Graphs
+
+So, why are we fooling around with random graphs anyway? Well, the main reason is that it serves as a good *null hypothesis* of what the structure of a basic system of *n* components and *m* connections or *p* probability of connections look like, all else equal. The great thing about Erdös-Renyí Random Graphs is that the process to generate them is extremely simple, and the properties of the resulting system is highly predictable and simple. 
+
+An example: we can't know exactly what the mean degree or density of any given random graph is, but we can know what the average value of those things are given we make enough random graphs with the same property. 
+
+Here are some basic properties of random graphs of size *n* and probability of links *p*:
+
+* total number of edges = $p \frac{n(n-1)}{2}$
+* mean degree = $(n-1)p$
+* clustering coefficient = $p$
+
+##5.4 Simple exercise: path length and network size
 
 We can use the same scheme for creating ensembles of random graphs to explore how properties of these networks change with size. As an example, let’s explore how average path length of a network changes as we add more nodes.
 

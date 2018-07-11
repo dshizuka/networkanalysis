@@ -1,0 +1,20 @@
+---
+title: "5. Measuring Networks"
+author: "Dai Shizuka"
+date: "7/11/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: false
+---
+
+Now that we have a handle on visualizing a network and the basics of relevant types of networks, we will go about the task of quantitatively describing its characteristics.
+There are multiple levels at which we can measure and describe networks: 
+
+* Node-level
+* Subcomponent-level
+* Networklevel
+
+For this section, let’s use the sample social network we used in section 2.1. We will first start by loading the required libraries, reading the sample association data, converting to an adjacency matrix, and then creating a graph to plot. We will just use the default Fruchterman-Reingold layout.
+

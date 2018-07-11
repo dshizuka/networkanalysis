@@ -27,6 +27,7 @@ I'm posting two different types of tutorials. First, the "General Tutorials" are
 
 ###[5. Random Graphs](05_randomnets.html)
 
+###[6. Measuring Networks]
 --------
 
 ##Worked Examples
