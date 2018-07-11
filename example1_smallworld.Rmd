@@ -2,7 +2,10 @@
 title: "Small World and Scale-Free Networks"
 author: "Dai Shizuka"
 date: "7/10/2018"
-output: html_document
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
 ---
 ```{r setup, include=FALSE}
 library(knitr)
@@ -11,4 +14,95 @@ set.seed(2)
 ```
 
 -----
+
+##1.1 Exploring the Small-World Effect
+
+In 1998, [Duncan Watts and Steve Strogatz](https://www.nature.com/articles/30918) published one of the most influential papers in network theory (it has been cited over 36,000 times as of July 2018). In it, they show how, in between "regularity" and "randomness" lies a range of disorder in which networks exhibit a property they call "small-world": They are highly clustered but have small average path lengths. That is, each node is connected to every other node with small degrees of separation, despite the fact that most nodes exist in tight clusters. 
+
+Here is the figure in the paper that describes the dynamic:
+
+![Figures 1 and 2 from Watts & Strogatz 1998](https://www.dropbox.com/s/xam888ro4ne5l2h/WattsStrogats_fig1.png?dl=1)
+
+Let’s begin by creating a ‘lattice’ or ‘regular graph’ (i.e., all nodes have the same degree). Here, we will make a regular graph with 20 nodes in which all nodes are connected to their adjacent node and their ‘second-degree neighbor’. We can use a function called `make_lattice()`. We’ll call the object lat. 
+
+```{r}
+library(igraph)
+lat=make_lattice(dimvector=20, nei=2, circular=T) #dimvector=20 means 20 nodes in a line. nei=2 means connect up to neighbor of neighbor. circular=T means connect the ends to make a ring.
+```
+
+Try plotting that and see what it looks like. If you want to really make it look like the figure in Watts & Strogatz, copy these arguments:
+
+```{r}
+plot(lat, layout=layout.circle, edge.curved=c(rep(0,20), 1, -1, -1, rep(1,17)), vertex.color="red", edge.color="black", vertex.label="")
+```
+
+Now, we want to start rewiring the edges of this network at some probability. We can use a function called `rewire()`. This function allows us to rewire edges in a graph at given probability. Let’s rewire the lattice graph with probability p = 0.1.
+
+```{r}
+g.new=rewire(lat, with=each_edge(p=0.1, loops=F))
+plot(g.new, layout=layout.circle, edge.curved=T, vertex.color="red", edge.color="black", vertex.label="")
+```
+
+(Your figure will look different than mine.)
+Try this again, but this time change the rewiring probability to p = 1. You might get something like this.
+
+Now we can make Figure 1 by plotting these three figures side-by-side:
+
+```{r fig.width=6, fig.height=4}
+# First create the lattice
+lat=make_lattice(dimvector=c(20), nei=2, circular=T)
+# Next make rewired version with low p (e.g., p = 0.1)
+g1=rewire(lat, with=each_edge(p=0.1, loops=F))
+# Finally, make the rewired version with p = 1
+g2=rewire(lat, with=each_edge(p=1, loops=F))
+# Make a plot with three figures lined up in a row
+par(mfrow=c(1,3), mar=c(1,1,1,1))
+plot(lat, layout=layout.circle, vertex.label="", vertex.color="red", edge.color="black", edge.curved=T)
+plot(g1, layout=layout.circle, vertex.label="", vertex.color="red", edge.color="black", edge.curved=T)
+plot(g2, layout=layout.circle, vertex.label="", vertex.color="red", edge.color="black", edge.curved=T)
+```
+
+There are a couple of tweaks you could make, but this is a pretty good replication of the figure!
+
+Now, for Figure 2—which is the real 'meat' of the paper. A main thing to note about the difference between Figure 1 and 2 is that they use a much larger network to get the data for Figure 2. 
+Here, we'll use a network with size = 500 and "nei"=10. The goal is to tweak p between 0 and 1 and calculate the 'local' clustering coefficient (the proportion of a neighbors of a node that is connected, averaged over all nodes) and the 'characteristic path length' (average geodesic path length). We'll use six values for p: 0.00001, 0.0001, 0.001, 0.01, 0.1, and 1. To reduce stochastic variation a bit, we'll do 25 replicates of the graph at each value of p. Again, for each time we make a graph, we're going to calculate two values (clustering coefficient, C, and characteristic path length, L). This means that we'll need a 25 x 6 matrix to store these values, and then we'll later take the average values for graphs of a given p.
+
+Here's the code:
+```{r}
+L=matrix(nrow=25,ncol=6)
+C=matrix(nrow=25,ncol=6)
+s=c(0.00001,0.0001,0.001,0.01,0.1,1)
+lat=make_lattice(dimvector=500, nei=10, circular=T)
+for (j in 1:6){
+	for (k in 1:25){
+	g=rewire(lat, with=each_edge(prob=s[j], loops=F))
+	L[k,j]=average.path.length(g)
+	C[k,j]=transitivity(g,"localaverage")
+}
+}
+
+```
+
+```{r}
+L0=average.path.length(lat) #average path length of lattice
+C0=transitivity(lat, "localaverage") #clustering coefficient of lattice
+
+Lp=L/L0 #The average path length of graph relative to lattice
+Cp=C/C0 #The clustering coefficient of graph relative to lattice
+
+```
+
+Now we can calculate the means of these values at each rewiring probability. That is, we want to take the means of the columns of the matrices Lp and Cp. 
+
+```{r}
+colMeans(Lp)
+colMeans(Cp)
+```
+
+```{r, fig.height=4, fig.width=6}
+plot(s,colMeans(Lp),type="b",pch=20,log="x",ylim=c(0,1),xlab="p",ylab="") #ylim=c() argument sets the range of the y-axis 
+points(s,colMeans(Cp),type="b",pch=0,ylim=c(0,1),xaxt="n",yaxt="n",xlab="",ylab="") #xaxt="n" and yaxt="n" means "don't plot the x-axis or y-axis". This is because we've already drawn these axes in the previous plot. xlab="", ylab="" keeps the axis labels blank as well. 
+legend("bottomleft", pch=c(20,0), legend=c("Clustering Coefficient (Cp)", "Average Path Length (Lp)"))
+```
+
 
