@@ -1,11 +1,11 @@
 ---
-title: "About This Website"
+title: ""
 output: 
   html_document:
     theme: flatly
 ---
 
-
+![](https://www.dropbox.com/s/8kd22mvat8qf29s/Shizuka_small.jpg?dl=1)
 
 ##<u>About the author</u>  
 * **Dai Shizuka**
