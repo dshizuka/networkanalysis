@@ -29,3 +29,7 @@ library(ggmap)
 ```
 
 Let’s read the data and take a look (output not shown here):
+```{r}
+lopnet=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/lopho_network.csv", header=T, row.names=1)) #From Dyer et al. 2004
+lopnet
+```
