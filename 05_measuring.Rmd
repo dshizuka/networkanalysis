@@ -19,8 +19,11 @@ There are multiple levels at which we can measure and describe networks:
 Let's start by loading the sample social network we introduced in [section 4.1](04.1_socialnetworks.html). Here, we are going to be using both the `igraph` and `asnipe` packages.
 
 ```{r, message=F, results='hide'}
-library(igraph)
 library(asnipe)
+library(igraph)
+degree=igraph::degree
+betweenness=igraph::betweenness
+closeness=igraph::closeness
 assoc=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Sample_association.csv", header=T, row.names=1))
 gbi=t(assoc) 
 mat=get_network(t(assoc), association_index="SRI") 
@@ -49,7 +52,7 @@ Let’s visualize what this means by varying the node sizes proportional to degr
 
 ```{r}
 set.seed(10)
-de=degree(g)
+de=igraph::degree(g)
 plot(g, vertex.label="", vertex.color="gold", edge.color="slateblue", vertex.size=de*2, edge.width=E(g)$weight*5)
 ```
 
@@ -57,7 +60,7 @@ In weighted networks, we can also **node strength**, which is the sum of the wei
 
 ```{r}
 set.seed(10)
-st=strength(g)
+st=graph.strength(g)
 plot(g,  vertex.label="", vertex.color="gold", edge.color="slateblue", edge.width=E(g)$weight*5, vertex.size=st*5)
 ```
 
@@ -85,4 +88,36 @@ strength |`graph.strength()` |Sum of edge weights connected to a node (aka *weig
 betweenness | `betweenness()` | Number of geodesic paths that go through a given node |
 closeness | `closeness()` | Number of steps required to access every other node from a given node |
 eigenvector centrality | `eigen_centrality()` | Values of the first eigenvector of the graph adjacency matrix. The values are high for vertices that are connected to many other vertices that are, in turn, connected many others, etc.|
+
+
+### 5.1.3 Assembling a dataset of node-level measures
+So now we know the basics of how to get centrality measures. For data analysis, we will likely want to measure and compare measures of node centrality with other traits. This will require putting together a dataframe that combines vertex attributes and centrality measures.
+
+Let’s say we want to assemble a dataset of node centrality for our sparrow network. Let’s use the three centrality measures we already introduced:
+
+```{r}
+names=V(g)$name
+de=degree(g)
+st=graph.strength(g)
+be=betweenness(g, normalized=T)
+
+
+#assemble dataset
+d=data.frame(node.name=names, degree=de, strength=st, betweenness=be) 
+head(d) #display first 6 lines of data
+```
+
+Let's plot the relationship between degree and strength
+```{r}
+plot(strength~degree, data=d)
+```
+Obviously, these are correlated, since strength is simply the weighted version of degree. 
+
+How about the relationship between betweenness and strength?
+
+```{r}
+plot(betweenness~strength, data=d)
+```
+
+These are not well correlated, since they describe something different...
 
