@@ -207,6 +207,14 @@ $(document).ready(function () {
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#centrality-measures-i.e.-node-level-measures">5.1 Centrality Measures (i.e., node-level measures)</a><ul>
+<li><a href="#degree-and-strength">5.1.1 Degree and Strength</a></li>
+<li><a href="#betweenness">5.1.2 Betweenness</a></li>
+</ul></li>
+</ul>
+</div>
 
 <p>Now that we have a handle on visualizing a network and the basics of relevant types of networks, we will go about the task of quantitatively describing its characteristics. There are multiple levels at which we can measure and describe networks:</p>
 <ul>
@@ -224,8 +232,90 @@ g=graph_from_adjacency_matrix(mat, &quot;undirected&quot;, weighted=T) #create a
 <pre class="r"><code># plot the network
 set.seed(10)
 l=layout_with_fr(g)
-plot(g, layout=l, vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;slateblue&quot;, edge.width=E(g)$weight*10)</code></pre>
+plot(g, layout=l, vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;slateblue&quot;, edge.width=E(g)$weight*5)</code></pre>
 <p><img src="05_measuring_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<div id="centrality-measures-i.e.-node-level-measures" class="section level2">
+<h2>5.1 Centrality Measures (i.e., node-level measures)</h2>
+<p>Centrality is a general term that relates to measures of a node’s position in the network. There are many such centrality measures, and it can be a daunting task to wade through all of the different ways to measure a node’s importance in the network. Here, we will introduce just a few examples.</p>
+<div id="degree-and-strength" class="section level3">
+<h3>5.1.1 Degree and Strength</h3>
+<p>Let’s start with the most straight-forward centrality metric: <strong>degree centrality</strong>. Degree centrality is simply the <em>number of edges connected to a given node</em>. In a social network, this might mean the number of friends an individual has. We can calculate degree centrality with a simple function:</p>
+<pre class="r"><code>degree(g)</code></pre>
+<pre><code>## 23820 23726 23831 23763 23772 23770 23771 23777 23774 23860 23779 23773 
+##     4     4     4     4     6     8    10     7     8     9     4    11 
+## 23862 23857 23871 23853 23732 23734 23756 23759 23768 23758 23781 23815 
+##    11     2     3     4     3     1     6     6     6     7     4     4 
+## 23809 
+##     4</code></pre>
+<p>Let’s visualize what this means by varying the node sizes proportional to degree centrality.</p>
+<pre class="r"><code>set.seed(10)
+de=degree(g)
+plot(g, vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;slateblue&quot;, vertex.size=de*2, edge.width=E(g)$weight*5)</code></pre>
+<p><img src="05_measuring_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>In weighted networks, we can also <strong>node strength</strong>, which is the sum of the weights of edges connected to the node. Let’s calculate node strength and plot the node sizes as proportional to these values.</p>
+<pre class="r"><code>set.seed(10)
+st=strength(g)
+plot(g,  vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;slateblue&quot;, edge.width=E(g)$weight*5, vertex.size=st*5)</code></pre>
+<p><img src="05_measuring_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>Compare the relative node sizes when plotting by <strong>degree</strong> vs. <strong>strength</strong>. What differences do you notice?</p>
+</div>
+<div id="betweenness" class="section level3">
+<h3>5.1.2 Betweenness</h3>
+<p>Let’s now do the same for <strong>betweenness centrality</strong>, which is defined as <em>the number of geodesic paths (shortest paths) that go through a given node</em>. Nodes with high betweenness might be influential in a network if, for example, they capture the most amount of information flowing through the network because the information tends to flow through them. Here, we use the normalized version of betweenness.</p>
+<pre class="r"><code>be=betweenness(g, normalized=T)
+plot(g,  vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;slateblue&quot;, vertex.size=be*50, edge.width=E(g)$weight*5)</code></pre>
+<p><img src="05_measuring_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>You can see that there are three nodes that have qualitatively higher betweenness values than all other nodes in the network. One way to interpret this is that these are nodes that tend to act as “bridges” between different clusters of nodes in the network (but of course, this is only sample data).</p>
+<p>What does this say about the importance of these nodes? Well, that depends on the network and the questions–in particular how you might quantify ‘importance’ in your network.</p>
+<p>Here’s a short list of some commonly-used centrality measures:</p>
+<table style="width:86%;">
+<colgroup>
+<col width="20%" />
+<col width="15%" />
+<col width="50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Centrality Measure</th>
+<th>Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>degree</td>
+<td><code>degree()</code></td>
+<td>Number of edges connected to node</td>
+</tr>
+<tr class="even">
+<td>strength</td>
+<td><code>graph.strength()</code></td>
+<td>Sum of edge weights connected to a node (aka <em>weighted degree</em>)</td>
+</tr>
+<tr class="odd">
+<td>betweenness</td>
+<td><code>betweenness()</code></td>
+<td>Number of geodesic paths that go through a given node</td>
+</tr>
+<tr class="even">
+<td>closeness</td>
+<td><code>closeness()</code></td>
+<td>Number of steps required to access every other node from a given node</td>
+</tr>
+<tr class="odd">
+<td>eigenvector centrality</td>
+<td><code>eigen_centrality()</code></td>
+<td>Values of the first eigenvector of the graph adjacency matrix. The values are high for vertices that are connected to many other vertices that are, in turn, connected many others, etc.</td>
+</tr>
+<tr class="even">
+<td>————–</td>
+<td>———-</td>
+<td>———————————–</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 
 
 
