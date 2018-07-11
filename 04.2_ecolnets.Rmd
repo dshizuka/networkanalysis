@@ -108,3 +108,22 @@ plot(proj$proj2, edge.color="black", edge.width=E(proj$proj2)$weight^3)
 
 Although I’ve presented the bipartite projection using a canned function in igraph, so let’s explain it briefly here. Mathematically, the adjacency matrices of the bipartite projection is the matrix product of the interaction matrix and its transpose. That is:
 
+*Projection 1* = $\mathbf{A} \cdot \mathbf{A}^T$
+
+*Projection 2* = $\mathbf{A}^T \cdot \mathbf{A}$
+
+```{r}
+proj1=bmat%*%t(bmat) # %*% is matrix multiplication and t() is transpose of the matrix
+proj2=t(bmat)%*%bmat
+proj1
+proj2
+```
+
+Here, one thing to note is that the diagonal of the matrix represents the number of times each plant or pollinator interacts. We may want to ignore this when plotting the networks. These codes should produce the same as the plots above (outputs not shown):
+
+```{r}
+pg1=graph_from_adjacency_matrix(proj1, mode="undirected",diag=F, weighted=T)
+pg2=graph_from_adjacency_matrix(proj2, mode="undirected",diag=F, weighted=T)
+plot(pg1, vertex.color="tomato", vertex.shape="square", edge.color="black",edge.width=E(pg1)$weight^3)
+plot(pg2, vertex.color="lightblue", vertex.shape="circle", edge.color="black",edge.width=E(pg1)$weight^3)
+```
