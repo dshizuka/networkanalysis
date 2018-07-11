@@ -1,0 +1,14 @@
+---
+title: "Small World and Scale-Free Networks"
+author: "Dai Shizuka"
+date: "7/10/2018"
+output: html_document
+---
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
+set.seed(2)
+```
+
+-----
+

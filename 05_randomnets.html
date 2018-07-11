@@ -229,9 +229,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 g1=erdos.renyi.game(20,38,type=&quot;gnm&quot;) 
 g1</code></pre>
-<pre><code>## IGRAPH d5b2696 U--- 20 38 -- Erdos renyi (gnm) graph
+<pre><code>## IGRAPH 291bb51 U--- 20 38 -- Erdos renyi (gnm) graph
 ## + attr: name (g/c), type (g/c), loops (g/l), m (g/n)
-## + edges from d5b2696:
+## + edges from 291bb51:
 ##  [1]  1-- 3  2-- 4  4-- 6  5-- 6  1-- 7  5-- 8  6-- 8  3-- 9  6-- 9  1--10
 ## [11]  8--10  1--11 10--11  5--12  6--12  7--12  4--13  9--13 10--14 12--14
 ## [21]  4--15  5--15  1--16  7--16 11--16  6--17 11--17 12--17  6--18  7--19
@@ -325,8 +325,8 @@ head(paths)</code></pre>
 ## [4,] 2.855696 3.033208 2.944246
 ## [5,] 2.885427 2.947906 3.043434
 ## [6,] 2.841456 2.979624 3.082222</code></pre>
-<p>The next step is to plot the average value of the average path lengths for each network size n. That is, we want to take the mean value of each column of this matrix. The quickest way to do this is to use the <code>apply()</code> function. The <code>apply()</code> function is a really powerful way to apply the same function to multiple components of an array or matrix. The syntax is: <code>apply('the matrix or array', 'margin'—1 for rows and 2 for columns, 'function')</code>. In this case, we want to apply the function mean() to the columns of the matrix called paths.</p>
-<pre class="r"><code> paths.avg=apply(paths,2,mean) 
+<p>The next step is to plot the average value of the average path lengths for each network size n. That is, we want to take the mean value of each column of this matrix. The quickest way to do this is to use the <code>apply()</code> function. The <code>apply()</code> function is a really powerful way to apply the same function to multiple components of an array or matrix. The syntax is: <code>apply('the matrix or array', 'margin'—1 for rows and 2 for columns, 'function')</code>. In this case, we want to apply the function <code>mean()</code> to the columns of the matrix called paths.</p>
+<pre class="r"><code>paths.avg=apply(paths,2,mean) 
 paths.avg</code></pre>
 <pre><code>##  [1] 1.471033 1.941004 2.224986 2.417467 2.552701 2.680910 2.787075
 ##  [8] 2.867998 2.934962 3.012320</code></pre>
@@ -335,7 +335,7 @@ paths.avg</code></pre>
 plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;)</code></pre>
 <p><img src="05_randomnets_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
 <p>As you can see, the average path length does not increase as fast as network size: it has only doubled, while network size has increased 10-fold. Now, let’s plot make the x-axis a log-scale. To do this, we just add another argument: log=“x”).</p>
-<pre class="r"><code>plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;,log=&quot;x&quot;)</code></pre>
+<pre class="r"><code>plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;,log=&quot;x&quot;,las=1)</code></pre>
 <p><img src="05_randomnets_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
 <p>So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are <em>s</em> steps away scales exponentially with the average degree–if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc.</p>
 </div>

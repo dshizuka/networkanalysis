@@ -31,3 +31,4 @@ I'm posting two different types of tutorials. First, the "General Tutorials" are
 
 ##Worked Examples
 
+* ###[Small World and Scale-free Networks](example1_smallworld.html)

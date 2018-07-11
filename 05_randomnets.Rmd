@@ -123,10 +123,10 @@ for(i in 1:500){
 head(paths)
 ```
 
-The next step is to plot the average value of the average path lengths for each network size n. That is, we want to take the mean value of each column of this matrix. The quickest way to do this is to use the `apply()` function. The `apply()` function is a really powerful way to apply the same function to multiple components of an array or matrix. The syntax is: `apply('the matrix or array', 'margin'—1 for rows and 2 for columns, 'function')`. In this case, we want to apply the function mean() to the columns of the matrix called paths.
+The next step is to plot the average value of the average path lengths for each network size n. That is, we want to take the mean value of each column of this matrix. The quickest way to do this is to use the `apply()` function. The `apply()` function is a really powerful way to apply the same function to multiple components of an array or matrix. The syntax is: `apply('the matrix or array', 'margin'—1 for rows and 2 for columns, 'function')`. In this case, we want to apply the function `mean()` to the columns of the matrix called paths.
 
 ```{r}
- paths.avg=apply(paths,2,mean) 
+paths.avg=apply(paths,2,mean) 
 paths.avg
 ```
 
@@ -134,14 +134,16 @@ Now let's plot these results.
 
 ```{r}
 x=seq(10,100,10) #the x-axis is going to be 10, 20, 30,...100
-plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length")
+plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length", las=1)
 ```
 
 As you can see, the average path length does not increase as fast as network size: it has only doubled, while network size has increased 10-fold. Now, let's plot make the x-axis a log-scale. To do this, we just add another argument: log="x").
 
 ```{r}
-plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length",log="x")
+plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length",log="x",las=1)
 ```
 
-So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are *s* steps away scales exponentially with the average degree--if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc. 
+So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are *s* steps away scales exponentially with the average degree--if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc. This means that average path length increases more slowly than network size.
+
+
 
