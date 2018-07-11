@@ -98,6 +98,41 @@ Here are some basic properties of random graphs of size *n* and probability of l
 * mean degree = $(n-1)p$
 * clustering coefficient = $p$
 
+Let’s confirm this by creating a bunch of random graphs and calculate their average properties. Let's do this with a set of random graphs with n = 20 and p = 0.2
+
+```{r}
+#First, create a set of vectors in which you'll store the results of the simulations
+m=vector(length=100)
+mean.k=vector(length=100)
+C.loc=vector(length=100)
+C.glob=vector(length=100)
+#Now, use a For-loop to create 100 random graphs, each time calculating the m, mean degree and clustering coefficient
+n=20
+p=0.2
+for (i in 1:100){
+r=erdos.renyi.game(n,p=p)
+m[i]=ecount(r)
+mean.k[i]=mean(degree(r))
+C.loc[i]=transitivity(r,type="localaverage")
+C.glob[i]=transitivity(r,type="global")
+}
+```
+
+We can visualize the results with a histogram and a line representing the expected value. We can plot all four results at once using a `par()` function, which lets us set some graphical parameters:
+
+```{r, fig.width=8, fig.height=4}
+par(mfrow=c(1,3)) 
+hist(m)
+abline(v=(n*(n-1)/2)*p,lty=2,col="red") # expected number of edges, which is simply the number of dyads times p
+hist(mean.k)
+abline(v=(n-1)*p,lty=2,col="red") # expected mean degree, which is (n-1)*p
+hist(C.glob)
+abline(v=p,lty=2,col="red") #expected global clustering coefficient, which is simply p
+```
+
+We can see that the distribution of values fit our expectations.
+
+
 ##5.4 Simple exercise: path length and network size
 
 We can use the same scheme for creating ensembles of random graphs to explore how properties of these networks change with size. As an example, let’s explore how average path length of a network changes as we add more nodes.

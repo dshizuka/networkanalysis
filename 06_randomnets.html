@@ -230,9 +230,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 g1=erdos.renyi.game(20,38,type=&quot;gnm&quot;) 
 g1</code></pre>
-<pre><code>## IGRAPH 3611d57 U--- 20 38 -- Erdos renyi (gnm) graph
+<pre><code>## IGRAPH eb04e8d U--- 20 38 -- Erdos renyi (gnm) graph
 ## + attr: name (g/c), type (g/c), loops (g/l), m (g/n)
-## + edges from 3611d57:
+## + edges from eb04e8d:
 ##  [1]  1-- 3  2-- 4  4-- 6  5-- 6  1-- 7  5-- 8  6-- 8  3-- 9  6-- 9  1--10
 ## [11]  8--10  1--11 10--11  5--12  6--12  7--12  4--13  9--13 10--14 12--14
 ## [21]  4--15  5--15  1--16  7--16 11--16  6--17 11--17 12--17  6--18  7--19
@@ -300,6 +300,31 @@ plot(r,layout=layout.circle,edge.color=&quot;black&quot;,edge.width=2,vertex.col
 <li>mean degree = <span class="math inline">\((n-1)p\)</span></li>
 <li>clustering coefficient = <span class="math inline">\(p\)</span></li>
 </ul>
+<p>Let’s confirm this by creating a bunch of random graphs and calculate their average properties. Let’s do this with a set of random graphs with n = 20 and p = 0.2</p>
+<pre class="r"><code>#First, create a set of vectors in which you&#39;ll store the results of the simulations
+m=vector(length=100)
+mean.k=vector(length=100)
+C.loc=vector(length=100)
+C.glob=vector(length=100)
+#Now, use a For-loop to create 100 random graphs, each time calculating the m, mean degree and clustering coefficient
+n=20
+p=0.2
+for (i in 1:100){
+r=erdos.renyi.game(n,p=p)
+m[i]=ecount(r)
+mean.k[i]=mean(degree(r))
+C.loc[i]=transitivity(r,type=&quot;localaverage&quot;)
+C.glob[i]=transitivity(r,type=&quot;global&quot;)
+}</code></pre>
+<p>We can visualize the results with a histogram and a line representing the expected value. We can plot all four results at once using a <code>par()</code> function, which lets us set some graphical parameters:</p>
+<pre class="r"><code>par(mfrow=c(1,3)) 
+hist(m)
+abline(v=(n*(n-1)/2)*p,lty=2,col=&quot;red&quot;) # expected number of edges, which is simply the number of dyads times p
+hist(mean.k)
+abline(v=(n-1)*p,lty=2,col=&quot;red&quot;) # expected mean degree, which is (n-1)*p
+hist(C.glob)
+abline(v=p,lty=2,col=&quot;red&quot;) #expected global clustering coefficient, which is simply p</code></pre>
+<p><img src="06_randomnets_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
 </div>
 <div id="simple-exercise-path-length-and-network-size" class="section level2">
 <h2>5.4 Simple exercise: path length and network size</h2>
@@ -324,31 +349,31 @@ for(i in 1:500){
 }
 head(paths)</code></pre>
 <pre><code>##          [,1]     [,2]     [,3]     [,4]     [,5]     [,6]     [,7]
-## [1,] 1.511111 1.831579 2.005291 2.591026 2.656327 2.743503 2.859213
-## [2,] 1.577778 1.942105 2.119540 2.414103 2.315102 2.728814 2.910448
-## [3,] 1.466667 1.884211 2.390805 2.565385 2.681633 2.630508 2.872123
-## [4,] 1.488889 1.884211 2.222989 2.300000 2.706122 2.515254 2.831628
-## [5,] 1.444444 1.947368 2.078161 2.337179 2.569796 2.776836 2.991901
-## [6,] 1.644444 2.194737 2.328736 2.385897 2.565714 2.611923 2.976556
+## [1,] 1.466667 1.800000 2.229885 2.396154 2.490612 2.549718 2.696480
+## [2,] 1.555556 1.963158 2.103448 2.502564 2.577959 2.623729 2.929668
+## [3,] 1.333333 1.810526 2.471264 2.329285 2.559184 2.578025 2.696078
+## [4,] 1.488889 1.989474 2.296552 2.250000 2.521633 2.678531 2.861040
+## [5,] 1.488889 1.773684 2.280460 2.289744 2.733878 2.635028 2.867081
+## [6,] 1.466667 1.884211 2.229885 2.479487 2.677551 2.696610 2.694800
 ##          [,8]     [,9]    [,10]
-## [1,] 2.752996 2.813480 3.037172
-## [2,] 2.902532 2.801328 2.970707
-## [3,] 2.852321 3.012002 3.122424
-## [4,] 2.855696 3.033208 2.944246
-## [5,] 2.885427 2.947906 3.043434
-## [6,] 2.841456 2.979624 3.082222</code></pre>
+## [1,] 2.746186 2.987765 3.140332
+## [2,] 2.831873 2.802605 2.959802
+## [3,] 2.722785 2.837203 2.983302
+## [4,] 2.775461 2.881398 2.921616
+## [5,] 2.929568 2.710505 3.030909
+## [6,] 2.791875 3.103620 3.068233</code></pre>
 <p>The next step is to plot the average value of the average path lengths for each network size n. That is, we want to take the mean value of each column of this matrix. The quickest way to do this is to use the <code>apply()</code> function. The <code>apply()</code> function is a really powerful way to apply the same function to multiple components of an array or matrix. The syntax is: <code>apply('the matrix or array', 'margin'—1 for rows and 2 for columns, 'function')</code>. In this case, we want to apply the function <code>mean()</code> to the columns of the matrix called paths.</p>
 <pre class="r"><code>paths.avg=apply(paths,2,mean) 
 paths.avg</code></pre>
-<pre><code>##  [1] 1.471033 1.941004 2.224986 2.417467 2.552701 2.680910 2.787075
-##  [8] 2.867998 2.934962 3.012320</code></pre>
+<pre><code>##  [1] 1.471478 1.938675 2.225803 2.415370 2.556958 2.681328 2.786863
+##  [8] 2.867591 2.933754 3.010627</code></pre>
 <p>Now let’s plot these results.</p>
 <pre class="r"><code>x=seq(10,100,10) #the x-axis is going to be 10, 20, 30,...100
 plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;, las=1)</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
+<p><img src="06_randomnets_files/figure-html/unnamed-chunk-11-1.png" width="384" /></p>
 <p>As you can see, the average path length does not increase as fast as network size: it has only doubled, while network size has increased 10-fold. Now, let’s plot make the x-axis a log-scale. To do this, we just add another argument: log=“x”).</p>
 <pre class="r"><code>plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;,log=&quot;x&quot;,las=1)</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
+<p><img src="06_randomnets_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
 <p>So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are <em>s</em> steps away scales exponentially with the average degree–if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc. This means that average path length increases more slowly than network size.</p>
 </div>
 
