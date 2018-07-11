@@ -131,3 +131,26 @@ par(mfrow=c(1,2),mar=c(1,1,3,1))
 plot(g1,layout=layout.fruchterman.reingold,vertex.size=degree(g1),vertex.label="",vertex.color="black",main="Erdos-Renyi Random Graph")
 plot(b1,layout=layout.fruchterman.reingold,vertex.size=degree(b1),vertex.label="",vertex.color="black",main="Preferential Attachment")
 ```
+
+You can see already that the structure of these two random graph models have very different structure. Specifically, the Erdös-Renyí random graph has nodes that have fairly equal degrees, whereas the preferential attachment model has a couple of nodes with disproportionately large degree. That is the essence of the Barabási-Albert model.
+
+Let’s now try to express this idea by plotting the degree distributions. Here, we’re going to use much larger networks—say, 5,000 nodes.
+
+```{r}
+g=erdos.renyi.game(5000,p=0.002) 
+b=barabasi.game(5000,power=1,m=5,directed=FALSE) 
+summary(g)
+summary(b)
+```
+
+So we have two large graphs with about the same number of edges. Let’s now plot the degree distribution of these two graphs side-by-side, both on a log-log scale.
+
+```{r, fig.width=8, warning=F}
+deg.dist.g=degree.distribution(g)
+deg.dist.b=degree.distribution(b)
+par(mfrow=c(1,2))
+plot(deg.dist.g,pch=20,xlab="k",ylab="P(k)",las=1,main="Erdos-Renyi Random Graph",log="xy")
+plot(deg.dist.b,pch=20,xlab="k",ylab="P(k)",las=1,main="Preferential Attachment",log="xy")
+```
+
+Note the numbers on the x-axis. The Erdös-Renyí random graph shows a Poisson distribution of node degrees centered around (n-1)*p = 4999*0.002 = 9.998. In contrast, the preferential attachment model shows that there are a lot of nodes with very low degree, and very few (but existing) nodes with very large nodes. The plot looks a bit different from Figure 2A because those graphs are on the scale of hundreds of thousands of nodes.
