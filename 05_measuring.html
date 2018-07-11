@@ -16,7 +16,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -103,34 +103,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 </style>
 
@@ -217,7 +217,11 @@ $(document).ready(function () {
 <li><a href="#betweenness">5.1.2 Betweenness</a></li>
 <li><a href="#assembling-a-dataset-of-node-level-measures">5.1.3 Assembling a dataset of node-level measures</a></li>
 </ul></li>
-<li><a href="#network-level-measures">5.2 Network-level measures</a></li>
+<li><a href="#network-level-measures">5.2 Network-level measures</a><ul>
+<li><a href="#size-and-density">5.2.1 Size and density</a></li>
+<li><a href="#components">5.2.2 Components</a></li>
+<li><a href="#degree-distributions">5.2.3 Degree distributions</a></li>
+</ul></li>
 </ul>
 </div>
 
@@ -351,7 +355,9 @@ head(d) #display first 6 lines of data</code></pre>
 </div>
 <div id="network-level-measures" class="section level2">
 <h2>5.2 Network-level measures</h2>
-<p>Size and density Let’s start by getting some basic information for the network, such as the number of nodes and edges. There are a couple of functions to help you extract this information without having to look it up in the “object summary” (e.g., <code>summary(g)</code>). Using these functions, you can store this information as separate objects, e.g., <em>n</em> for # nodes and <em>m</em> for # edges.</p>
+<div id="size-and-density" class="section level3">
+<h3>5.2.1 Size and density</h3>
+<p>Let’s start by getting some basic information for the network, such as the number of nodes and edges. There are a couple of functions to help you extract this information without having to look it up in the “object summary” (e.g., <code>summary(g)</code>). Using these functions, you can store this information as separate objects, e.g., <em>n</em> for # nodes and <em>m</em> for # edges.</p>
 <pre class="r"><code>n=vcount(g)
 m=ecount(g)
 n</code></pre>
@@ -368,6 +374,87 @@ density</code></pre>
 <p>Of course, there is a pre-packaged function for calculating density, called <code>edge_density()</code>:</p>
 <pre class="r"><code>edge_density(g)</code></pre>
 <pre><code>## [1] 0.2333333</code></pre>
+</div>
+<div id="components" class="section level3">
+<h3>5.2.2 Components</h3>
+<p>When networks are ‘fully connected’, you can follow edges from any given vertex to all other vertices in the network. Alternatively, networks can be composed of multiple components that are not connected to each other, as with our sample network above. We can get this information with a simple function (output not shown).</p>
+<pre class="r"><code>components(g)</code></pre>
+<pre><code>## $membership
+## 23820 23726 23831 23763 23772 23770 23771 23777 23774 23860 23779 23773 
+##     1     1     1     1     2     2     2     2     2     2     2     2 
+## 23862 23857 23871 23853 23732 23734 23756 23759 23768 23758 23781 23815 
+##     2     2     2     1     2     2     2     2     2     2     2     2 
+## 23809 
+##     2 
+## 
+## $csize
+## [1]  5 20
+## 
+## $no
+## [1] 2</code></pre>
+<p>The output shows the node membership, component sizes, and number of components.</p>
+</div>
+<div id="degree-distributions" class="section level3">
+<h3>5.2.3 Degree distributions</h3>
+<p>Degree distribution—i.e., the statistical distribution of node degrees in a network—is a common and often powerful way to describe a network. We will play around with this more when we talk in depth about ‘random graphs’, but the specific degree distribution can help distinguish networks with specific properties (e.g., ‘scale-free networks’).</p>
+<p>We could simply look at the degree distribution as a histogram of degrees:</p>
+<pre class="r"><code>hist(degree(g), breaks=10, col=&quot;gray&quot;)</code></pre>
+<p><img src="05_measuring_files/figure-html/unnamed-chunk-15-1.png" width="384" /></p>
+<p>However, if we wanted to compare the degree distributions of different networks, it might be more useful to plot the probability densities of each degree: i.e., what proportion of nodes has degree = 1, degree = 2, etc. We can do this by using a pre-packaged function called <code>degree.distribution()</code>. Try this out:</p>
+<pre class="r"><code>pk=degree.distribution(g)
+plot(pk, pch=19)</code></pre>
+<p><img src="05_measuring_files/figure-html/unnamed-chunk-16-1.png" width="384" /></p>
+<p>Average path length &amp; Diameter In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “<em>degrees of separation</em>” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.</p>
+<p>You can calculate path lengths with or without the edge weights (if using edge weights, you often simply count up the weights as you go along the path). The igraph package includes a convenient function for finding the shortest paths between every dyad in a network. Here, makes sure you specify the algorithm = “unweighted” (output not shown):</p>
+<pre class="r"><code>paths=distances(g, algorithm=&quot;unweighted&quot;)</code></pre>
+<pre><code>## Warning in distances(g, algorithm = &quot;unweighted&quot;): Unweighted algorithm
+## chosen, weights ignored</code></pre>
+<pre class="r"><code>paths</code></pre>
+<p>This matrix gives us the geodesic path length between each pair of nodes in the network. We can describe the network using some characteristics of the paths that exist in that network. However, you will notice that this matrix contains a bunch of cells that are “Inf” (i.e., infinity). This is because the network is <strong>not connected</strong>, and you can’t calculate path lengths between nodes in different components.</p>
+<p>How should we measure the average path length &amp; diameter of a network with multiple components? There are two common solutions. First is to ignore pairs of nodes that are in different components and only measure average lengths of the paths that exist. This solution doesn’t really make sense for the diameter–the diameter of an unconnected network should be infinity. The second solution is to measure each component separately. Let’s do each of these in turn.</p>
+<p>Option 1: To calculate the average path length while ignoring pairs of nodes that are in different components, we can first replace the “Inf” with “NA” in the path length matrix. Next, we want just the “upper triangle” or “lower triangle” of this matrix, which is lists all the geodesic paths without duplicates.</p>
+<pre class="r"><code>paths[paths==&quot;Inf&quot;]=NA
+mean(paths[upper.tri(paths)], na.rm=T)</code></pre>
+<pre><code>## [1] 1.865</code></pre>
+<p>You can see that this is what the canned function mean_distances() does for unconnected networks because you will get the same value:</p>
+<pre class="r"><code>mean_distance(g)</code></pre>
+<pre><code>## [1] 1.865</code></pre>
+<p>Option 2: To calculate the average path lengths and diameter separately for each component, we will first ‘decompose’ the network into a list that contains each component as separate graph objects. We can then use the <code>lapply()</code> function to calculate separate path length matrices, and <code>sapply()</code> function to calculate the mean and max for each matrix.</p>
+<pre class="r"><code>comps=decompose(g)
+comps # a list object consisting of each component as graph object</code></pre>
+<pre><code>## [[1]]
+## IGRAPH 695d349 UNW- 5 10 -- 
+## + attr: name (v/c), weight (e/n)
+## + edges from 695d349 (vertex names):
+##  [1] 23820--23726 23820--23831 23726--23831 23820--23763 23726--23763
+##  [6] 23831--23763 23820--23853 23726--23853 23831--23853 23763--23853
+## 
+## [[2]]
+## IGRAPH 43e3daf UNW- 20 60 -- 
+## + attr: name (v/c), weight (e/n)
+## + edges from 43e3daf (vertex names):
+##  [1] 23772--23770 23772--23771 23772--23777 23772--23774 23772--23860
+##  [6] 23772--23734 23770--23771 23770--23777 23770--23774 23770--23860
+## [11] 23770--23781 23770--23815 23770--23809 23771--23777 23771--23774
+## [16] 23771--23773 23771--23862 23771--23756 23771--23759 23771--23768
+## [21] 23771--23758 23777--23774 23777--23779 23777--23773 23777--23862
+## [26] 23774--23779 23774--23773 23774--23862 23774--23732 23860--23773
+## [31] 23860--23862 23860--23857 23860--23871 23860--23781 23860--23815
+## [36] 23860--23809 23779--23773 23779--23862 23773--23862 23773--23732
+## + ... omitted several edges</code></pre>
+<pre class="r"><code>path.list=lapply(comps, function(x) distances(x, algorithm=&quot;unweighted&quot;)) #make list object with two path length matrices</code></pre>
+<pre><code>## Warning in distances(x, algorithm = &quot;unweighted&quot;): Unweighted algorithm
+## chosen, weights ignored
+
+## Warning in distances(x, algorithm = &quot;unweighted&quot;): Unweighted algorithm
+## chosen, weights ignored</code></pre>
+<pre class="r"><code>avg.paths=sapply(path.list, mean) #average path length of each component
+diams=sapply(path.list, max) #diameter of each component
+avg.paths</code></pre>
+<pre><code>## [1] 0.800 1.815</code></pre>
+<pre class="r"><code>diams</code></pre>
+<pre><code>## [1] 1 3</code></pre>
+</div>
 </div>
 
 

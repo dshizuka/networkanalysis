@@ -1,6 +1,8 @@
 ---
 title: "Tutorials"
-output: html_document
+output: 
+  html_document:
+    theme: flatly
 ---
 
 --------------

@@ -15,7 +15,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -90,6 +90,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -99,34 +102,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 </style>
 
@@ -319,27 +322,27 @@ E(g)$color=rainbow(7)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from cf22c94:
+## + 3/6 vertices, named, from 4973677:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from cf22c94:
+## + 2/6 vertices, named, from 4973677:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from cf22c94:
+## + 2/6 vertices, named, from 4973677:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from cf22c94:
+## + 2/6 vertices, named, from 4973677:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from cf22c94:
+## + 2/6 vertices, named, from 4973677:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from cf22c94:
+## + 3/6 vertices, named, from 4973677:
 ## [1] A D E</code></pre>
 </div>
 </div>
@@ -429,9 +432,9 @@ edge.dat</code></pre>
 <pre class="r"><code>set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg</code></pre>
-<pre><code>## IGRAPH e671695 UNW- 7 10 -- 
+<pre><code>## IGRAPH 7f2c86e UNW- 7 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from e671695 (vertex names):
+## + edges from 7f2c86e (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>

@@ -1,4 +1,7 @@
 name: "ShizukaLab_NetworkAnalysis"
+output: 
+  html_document:
+    theme: flatly
 navbar:
   title: "Network Analysis Tutorials"
   left:

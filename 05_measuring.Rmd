@@ -7,6 +7,7 @@ output:
     toc: yes
     toc_depth: 3
     toc_float: false
+    theme: flatly
 ---
 
 ```{r setup, include=FALSE}
@@ -135,7 +136,7 @@ These are not well correlated, since they describe something different...
 
 ##5.2 Network-level measures
 
-Size and density
+### 5.2.1 Size and density
 Let’s start by getting some basic information for the network, such as the number of nodes and edges. There are a couple of functions to help you extract this information without having to look it up in the "object summary" (e.g., `summary(g)`). Using these functions, you can store this information as separate objects, e.g., *n* for # nodes and *m* for # edges.
 
 ```{r}
@@ -162,4 +163,78 @@ Of course, there is a pre-packaged function for calculating density, called `edg
 
 ```{r}
 edge_density(g)
+```
+
+
+###5.2.2 Components
+When networks are ‘fully connected’, you can follow edges from any given vertex to all other vertices in the network. Alternatively, networks can be composed of multiple components that are not connected to each other, as with our sample network above. We can get this information with a simple function (output not shown).
+
+```{r}
+components(g)
+```
+
+The output shows the node membership, component sizes, and number of components.
+
+
+###5.2.3 Degree distributions
+
+Degree distribution—i.e., the statistical distribution of node degrees in a network—is a common and often powerful way to describe a network. We will play around with this more when we talk in depth about ‘random graphs’, but the specific degree distribution can help distinguish networks with specific properties (e.g., ‘scale-free networks’).
+
+
+We could simply look at the degree distribution as a histogram of degrees:
+```{r}
+hist(degree(g), breaks=10, col="gray")
+```
+
+However, if we wanted to compare the degree distributions of different networks, it might be more useful to plot the probability densities of each degree: i.e., what proportion of nodes has degree = 1, degree = 2, etc.
+We can do this by using a pre-packaged function called `degree.distribution()`. Try this out:
+
+
+```{r}
+pk=degree.distribution(g)
+plot(pk, pch=19)
+```
+
+Average path length & Diameter
+In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “*degrees of separation*” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.
+
+You can calculate path lengths with or without the edge weights (if using edge weights, you often simply count up the weights as you go along the path). The igraph package includes a convenient function for finding the shortest paths between every dyad in a network. Here, makes sure you specify the algorithm = “unweighted” (output not shown):
+
+```{r, results='hide'}
+paths=distances(g, algorithm="unweighted")
+paths
+```
+
+This matrix gives us the geodesic path length between each pair of nodes in the network. We can describe the network using some characteristics of the paths that exist in that network. However, you will notice that this matrix contains a bunch of cells that are “Inf” (i.e., infinity). This is because the network is **not connected**, and you can’t calculate path lengths between nodes in different components.
+
+How should we measure the average path length & diameter of a network with multiple components? There are two common solutions. First is to ignore pairs of nodes that are in different components and only measure average lengths of the paths that exist. This solution doesn’t really make sense for the diameter--the diameter of an unconnected network should be infinity. The second solution is to measure each component separately. Let’s do each of these in turn.
+
+Option 1:
+To calculate the average path length while ignoring pairs of nodes that are in different components, we can first replace the “Inf” with “NA” in the path length matrix. Next, we want just the “upper triangle” or “lower triangle” of this matrix, which is lists all the geodesic paths without duplicates.
+
+```{r}
+paths[paths=="Inf"]=NA
+mean(paths[upper.tri(paths)], na.rm=T)
+```
+
+You can see that this is what the canned function mean_distances() does for unconnected networks because you will get the same value:
+
+```{r}
+mean_distance(g)
+```
+
+Option 2:
+To calculate the average path lengths and diameter separately for each component, we will first ‘decompose’ the network into a list that contains each component as separate graph objects. We can then use the `lapply()` function to calculate separate path length matrices, and `sapply()` function to calculate the mean and max for each matrix.
+
+```{r}
+comps=decompose(g)
+comps # a list object consisting of each component as graph object
+```
+
+```{r, warnings=FALSE, message=FALSE}
+path.list=lapply(comps, function(x) distances(x, algorithm="unweighted")) #make list object with two path length matrices
+avg.paths=sapply(path.list, mean) #average path length of each component
+diams=sapply(path.list, max) #diameter of each component
+avg.paths
+diams
 ```

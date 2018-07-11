@@ -15,7 +15,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -90,6 +90,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -99,34 +102,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 </style>
 
@@ -214,17 +217,6 @@ $(document).ready(function () {
 <p>In addition, run this code to download and install the <code>popgraph</code> package from github</p>
 <pre class="r"><code>require(devtools)
 install_github(&quot;popgraph&quot;,&quot;dyerlab&quot;)</code></pre>
-<pre><code>## Warning: Username parameter is deprecated. Please use dyerlab/popgraph</code></pre>
-<pre><code>## Downloading GitHub repo dyerlab/popgraph@master
-## from URL https://api.github.com/repos/dyerlab/popgraph/zipball/master</code></pre>
-<pre><code>## Installing popgraph</code></pre>
-<pre><code>## &#39;/Library/Frameworks/R.framework/Resources/bin/R&#39; --no-site-file  \
-##   --no-environ --no-save --no-restore --quiet CMD INSTALL  \
-##   &#39;/private/var/folders/r7/pprw6tfd6hn8mjghj9_djv600000gn/T/RtmpgKjJDI/devtools5d5540d35a65/dyerlab-popgraph-b00ab49&#39;  \
-##   --library=&#39;/Library/Frameworks/R.framework/Versions/3.5/Resources/library&#39;  \
-##   --install-tests</code></pre>
-<pre><code>## </code></pre>
-<pre><code>## Reloading installed popgraph</code></pre>
 </div>
 <div id="download-data" class="section level3">
 <h3>3. Download data</h3>

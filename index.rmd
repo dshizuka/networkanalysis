@@ -1,5 +1,8 @@
 ---
 title: "Network Analysis Tutorials"
+output: 
+  html_document:
+    theme: flatly
 ---
 
 Hello to the my network analysis tutorials
