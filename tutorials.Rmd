@@ -25,9 +25,11 @@ I'm posting two different types of tutorials. First, the "General Tutorials" are
 
 * ####[4.3 Intro to Spatial Networks](04.3_spatialnets.html)
 
-###[5. Random Graphs](05_randomnets.html)
+###[5. Measuring Networks](05_measuring.html)
 
-###[6. Measuring Networks]
+###[6. Random Graphs](06_randomnets.html)
+
+
 --------
 
 ##Worked Examples
