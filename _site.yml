@@ -1,16 +1,11 @@
-name: ShizukaLab_NetworkAnalysis
+name: "ShizukaLab_NetworkAnalysis"
 navbar:
-  title: Network Analysis Tutorials
+  title: "Network Analysis Tutorials"
   left:
-  - text: Home
-    href: index.html
-  - text: About
-    href: about.html
-  - text: Tutorials
-    href: tutorials.html
-output_dir: '.'
-output:
-  html_document:
-    lib_dir: site_libs
-    self_contained: no
-
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+    - text: "Tutorials"
+      href: tutorials.html
+output_dir: "."
