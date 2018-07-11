@@ -211,6 +211,20 @@ $(document).ready(function () {
 <h3>2. Install Packages</h3>
 <p>Run this code:</p>
 <pre class="r"><code>install.packages(c(&quot;igraph&quot;, &quot;bipartite&quot;, &quot;asnipe&quot;, &quot;assortnet&quot;, &quot;ggplot2&quot;, &quot;ggmap&quot;, &quot;rnetcarto&quot;, &quot;ecodist&quot;, &quot;igraphdata&quot;, &quot;statnet&quot;, &quot;RColorBrewer&quot;))</code></pre>
+<p>In addition, run this code to download and install the <code>popgraph</code> package from github</p>
+<pre class="r"><code>require(devtools)
+install_github(&quot;popgraph&quot;,&quot;dyerlab&quot;)</code></pre>
+<pre><code>## Warning: Username parameter is deprecated. Please use dyerlab/popgraph</code></pre>
+<pre><code>## Downloading GitHub repo dyerlab/popgraph@master
+## from URL https://api.github.com/repos/dyerlab/popgraph/zipball/master</code></pre>
+<pre><code>## Installing popgraph</code></pre>
+<pre><code>## &#39;/Library/Frameworks/R.framework/Resources/bin/R&#39; --no-site-file  \
+##   --no-environ --no-save --no-restore --quiet CMD INSTALL  \
+##   &#39;/private/var/folders/r7/pprw6tfd6hn8mjghj9_djv600000gn/T/RtmpgKjJDI/devtools5d555d61b8e3/dyerlab-popgraph-b00ab49&#39;  \
+##   --library=&#39;/Library/Frameworks/R.framework/Versions/3.5/Resources/library&#39;  \
+##   --install-tests</code></pre>
+<pre><code>## </code></pre>
+<pre><code>## Reloading installed popgraph</code></pre>
 </div>
 <div id="download-data" class="section level3">
 <h3>3. Download data</h3>
