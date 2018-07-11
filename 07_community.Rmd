@@ -1,0 +1,11 @@
+---
+title: "6. Community Structure and Assortment"
+author: "Dai Shizuka"
+date: "7/11/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: false
+    theme: flatly
+---
