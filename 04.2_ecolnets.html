@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -289,9 +286,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH 57c37e2 UN-B 9 10 -- 
+<pre><code>## IGRAPH 2c40773 UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from 57c37e2 (vertex names):
+## + edges from 2c40773 (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -325,16 +322,16 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 8f1a10d UNW- 4 6 -- 
+## IGRAPH 5a6d890 UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 8f1a10d (vertex names):
+## + edges from 5a6d890 (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH 502b068 UNW- 5 6 -- 
+## IGRAPH a52cd1f UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 502b068 (vertex names):
+## + edges from a52cd1f (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>

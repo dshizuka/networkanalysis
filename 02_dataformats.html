@@ -90,9 +90,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -322,27 +319,27 @@ E(g)$color=rainbow(7)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from 4973677:
+## + 3/6 vertices, named, from 0e3a622:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from 4973677:
+## + 2/6 vertices, named, from 0e3a622:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from 4973677:
+## + 2/6 vertices, named, from 0e3a622:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from 4973677:
+## + 2/6 vertices, named, from 0e3a622:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from 4973677:
+## + 2/6 vertices, named, from 0e3a622:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from 4973677:
+## + 3/6 vertices, named, from 0e3a622:
 ## [1] A D E</code></pre>
 </div>
 </div>
@@ -432,9 +429,9 @@ edge.dat</code></pre>
 <pre class="r"><code>set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg</code></pre>
-<pre><code>## IGRAPH 7f2c86e UNW- 7 10 -- 
+<pre><code>## IGRAPH 78e63c2 UNW- 7 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 7f2c86e (vertex names):
+## + edges from 78e63c2 (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>

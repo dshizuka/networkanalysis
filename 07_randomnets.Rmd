@@ -1,5 +1,5 @@
 ---
-title: "6. Simulating Random Graphs and Simulations"
+title: "7. Simulating Random Graphs and Simulations"
 author: "Dai Shizuka"
 date: "7/10/2018"
 output: 
