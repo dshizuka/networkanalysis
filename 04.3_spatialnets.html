@@ -16,7 +16,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -100,34 +103,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 </style>
 
@@ -205,62 +208,8 @@ $(document).ready(function () {
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#spatial-network-of-lophocereus-schottii">4.3.1 Spatial network of <em>Lophocereus schottii</em></a></li>
-<li><a href="#using-spatial-data-to-plot-networks">4.3.2 Using spatial data to plot networks</a></li>
-</ul>
-</div>
 
-<p>Spatial networks</p>
-<p>With spatial networks, the nodes represent spatial locations and the edges represent connections between those locations, e.g., <em>habitat connectivity</em> (‘landscape connectivity networks’: Urban &amp; Keitt 2001, Urban et al. 2009), <em>movements of individuals</em> (‘movement networks’: Jacoby &amp; Freeman 2016), <em>genetic covariance among populations</em> (‘population graphs’: Dyer &amp; Nason 2004, Dyer 2015), <em>migration pathways</em> (‘migratory flow networks’: Taylor &amp; Norris 2010). Such networks of connectivity between populations are important in a variety of fields including conservation biology, population genetics, evolution and metapopulation ecology.</p>
-<div id="spatial-network-of-lophocereus-schottii" class="section level2">
-<h2>4.3.1 Spatial network of <em>Lophocereus schottii</em></h2>
-<div class="figure">
-<img src="https://www.dropbox.com/s/bvclexwgv2zktur/L.schottii.jpg?dl=1" alt="Lophocereus schottii" />
-<p class="caption"><em>Lophocereus schottii</em></p>
-</div>
-<p>To explore this type of data, we will be demonstrating the construction of space-based networks using a dataset on genetic connectivity (‘population graph’) of the cactus <em>Lophocereus schottii</em> from Dyer &amp; Nason (2004). We will be using an R package called ‘popgraph’, written by Rodney Dyer. A nice tutorial is available online (<a href="http://dyerlab.github.io/popgraph/" class="uri">http://dyerlab.github.io/popgraph/</a>), and the codes here are mostly adapted from this site.</p>
-<p>First, we will import an adjacency matrix of genetic connectivity among sites in L. schottii (Dyer &amp; Nason 2004). Nason et al. (2002) assayed 29 polymorphic allozyme loci from 948 individual cacti in 21 populations. This data was converted to a 21 x 21 genetic distance matrix. Then the pairs of populations that were (using a method called edge exclusion deviance; see Dyer and Nason 2004 for details). In the resulting network (i.e., ‘population graph’), sites are connected by an edge if they are genetically ‘significantly similar’ (i.e., there is gene flow).</p>
-<pre class="r"><code>library(igraph)
-library(popgraph)
-library(ggmap)</code></pre>
-<p>Let’s read the data and take a look (output not shown here):</p>
-<pre class="r"><code>lopnet=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/lopho_network.csv&quot;, header=T, row.names=1)) #From Dyer et al. 2004
-lopnet</code></pre>
-<p>Now, let’s convert this into a graph object and plot it:</p>
-<pre class="r"><code>g=graph_from_adjacency_matrix(lopnet, mode=&quot;undirected&quot;) 
-plot(g)</code></pre>
-<p><img src="04.3_spatialnets_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
-<p>Again, in this network, each node represents a population and the edges connect populations that are significantly similar genetically.</p>
-</div>
-<div id="using-spatial-data-to-plot-networks" class="section level2">
-<h2>4.3.2 Using spatial data to plot networks</h2>
-<p>Now, let’s now display this network using the actual locations of the nodes. To do this, we will read in a second dataset that includes the latitude/longitude coordinates of each node as well as a “region” variable indicating whether the population is in Sonora or Baja state of Mexico. This data is from Table 1 in Nason et al. (2002).</p>
-<pre class="r"><code>locations=read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/lopho_locations.csv&quot;) 
-head(locations)</code></pre>
-<pre><code>##   Population Region     Lat      Long
-## 1         CP Sonora 27.9461 -110.6594
-## 2         TS Sonora 28.4050 -111.3658
-## 3         SN Sonora 28.8211 -111.7992
-## 4       Seri Sonora 28.8761 -111.9550
-## 5         SG Sonora 29.3950 -112.0536
-## 6         SI Sonora 29.7539 -112.5050</code></pre>
-<p>We can use these coordinates to plot the spatial network. We won’t worry about specific projection methods for converting coordinates to 2D. We can do this by creating a 2-column matrix of x- and y-coordinates and using this as the ‘layout’, which we can specify when plotting the network. While we’re at it, we will also color-code the nodes based on region:</p>
-<pre class="r"><code>#create a two-column matrix of x- and y-coordinates
-V(g)$x=locations[match(V(g)$name, locations$Population),&quot;Long&quot;]
-V(g)$y=locations[match(V(g)$name, locations$Population),&quot;Lat&quot;]
-l=matrix(c(V(g)$x, V(g)$y), ncol=2)
-
-# color-code nodes by region
-regions=locations[match(V(g)$name, locations$Population),&quot;Region&quot;]
-V(g)$color=c(&quot;tomato&quot;, &quot;turquoise2&quot;)[as.numeric(regions)]</code></pre>
-<p>Now, let’s compare what the networks look like when using this ‘spatial layout’, compared to a force-directed layout (Fruchterman-Reingold), which is the default layout in igraph.</p>
-<pre class="r"><code>par(mfrow=c(1,2), mar=c(2,2,2,2))
-plot(g, layout=l, main=&quot;Spatial Layout&quot;)
-plot(g, layout=layout_with_fr(g), main=&quot;Force-directed layout&quot;)</code></pre>
-<p><img src="04.3_spatialnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
-</div>
+<p>This page is in progress.</p>
 
 
 
