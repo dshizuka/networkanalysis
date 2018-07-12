@@ -7,5 +7,11 @@ output:
     toc: yes
     toc_depth: 3
     toc_float: false
-    theme: flatly
 ---
+
+-----
+
+![Figure 1: An example of a network with community structure. From Newman 2006-PNAS](https://www.dropbox.com/s/zdwuurj6kujbkdb/Newman2006_figure.png?dl=1)
+
+##6.1 Community Detection
+One of the ubiquitous properties of networks is that they exhibit *community structure*, the presence of discrete clusters of nodes that are densely connected, which themselves are only loosely connected to other clusters (Figure 6.1). In ecological contexts, these may be clusters of individuals that form social groups, groups of populations that form cohesive genetic or ecological units, or sets of species that have intimate ecological and evolutionary interactions. The problem is, how do we detect the presence of such *clusters* or *communities*, and how can we quantify the degree of community structure?
