@@ -1,5 +1,5 @@
 ---
-title: "Network Analysis Tutorials"
+title: "Intro to Network Analysis (for ecologists)"
 output: 
   html_document:
     theme: flatly
