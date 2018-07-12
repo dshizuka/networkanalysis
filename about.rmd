@@ -5,7 +5,7 @@ output:
     theme: flatly
 ---
 
-![](https://www.dropbox.com/s/8kd22mvat8qf29s/Shizuka_small.jpg?dl=1)
+![](./assets/images/Shizuka_small.jpg)
 
 ##<u>About the author</u>  
 * **Dai Shizuka**
