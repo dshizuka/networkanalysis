@@ -10,6 +10,7 @@ output:
 I'm posting two different types of tutorials. First, the "Basic Tutorials" are general lessons for understanding the basics of network analysis. The "Worked Examples" section are exercises based on published studies--e.g., re-creating the analysis or simulations. 
 
 ##Basic Tutorials
+<br>
 
 ###[0. Before you start](00_before_you_start.html)
 
@@ -37,5 +38,8 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 --------
 
 ##Worked Examples
+<br>
 
-* ###[Small World and Scale-free Networks](example1_smallworld.html)
+###[Example: Going from data to networks](example_data_to_network.html)
+
+###[Example: Small World and Scale-free Networks](example1_smallworld.html)
