@@ -38,7 +38,7 @@ Let's try out a toy example of the first case:
 
 ```{r}
 n=20
-trait=sort(runif(min=0, max=1))
+trait=sort(runif(n,min=0, max=1))
 #gregariousness=sort(rpois())
 ```
 ```
