@@ -90,6 +90,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -228,8 +231,16 @@ $(document).ready(function () {
 <h3>2.1.1 Adjacency Matrix</h3>
 <p>An <strong><em>adjacency matrix</em></strong> is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).</p>
 <p>Let’s start by loading the <code>igraph</code> package and setting up a toy network (same as in <a href="01_intro.html">Lesson 1: Intro</a>)</p>
-<pre class="r"><code>library(igraph)
-g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
+<pre class="r"><code>library(igraph)</code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code>g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
 V(g)$color=c(&quot;white&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;orange&quot;, &quot;yellow&quot;)
 E(g)$width=1:7
 E(g)$color=rainbow(7)</code></pre>
@@ -319,28 +330,29 @@ E(g)$color=rainbow(7)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from dbb1f04:
+## + 3/6 vertices, named, from fceafe6:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from dbb1f04:
+## + 2/6 vertices, named, from fceafe6:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from dbb1f04:
+## + 2/6 vertices, named, from fceafe6:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from dbb1f04:
+## + 2/6 vertices, named, from fceafe6:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from dbb1f04:
+## + 2/6 vertices, named, from fceafe6:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from dbb1f04:
+## + 3/6 vertices, named, from fceafe6:
 ## [1] A D E</code></pre>
+<hr />
 </div>
 </div>
 <div id="data-formats-for-directed-and-weighted-networks" class="section level2">
@@ -405,10 +417,12 @@ plot(dir.g)</code></pre>
 ## 5    D  E     5
 ## 6    D  F     6
 ## 7    E  F     7</code></pre>
+<hr />
 </div>
 </div>
 <div id="going-from-data-to-networks" class="section level2">
 <h2>2.3 Going from Data to Networks</h2>
+<p><br></p>
 <div id="creating-a-network-from-your-edge-list" class="section level3">
 <h3>2.3.1 Creating a network from your edge list</h3>
 <p>Creating a network from an edgelist that you have created is easy. First, import the .csv file called “sample_edgelist.csv”.</p>
@@ -429,9 +443,9 @@ edge.dat</code></pre>
 <pre class="r"><code>set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg</code></pre>
-<pre><code>## IGRAPH b94c134 UNW- 7 10 -- 
+<pre><code>## IGRAPH ac80f65 UNW- 7 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from b94c134 (vertex names):
+## + edges from ac80f65 (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>

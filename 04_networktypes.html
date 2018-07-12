@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -200,7 +203,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore"><ol start="4" style="list-style-type: decimal">
-<li>Survey of Networks for Ecologists</li>
+<li>Survey of Networks for Behavioral Ecologists</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
 <h4 class="date"><em>7/10/2018</em></h4>
@@ -212,6 +215,7 @@ $(document).ready(function () {
 <li><a href="#social-networks">4.1. Social networks</a></li>
 <li><a href="#ecological-networks">4.2 Ecological Networks</a></li>
 <li><a href="#spatial-networks">4.3 Spatial Networks</a></li>
+<li><a href="#architecture-of-signals-in-animal-communication">4.4 Architecture of Signals in Animal Communication</a></li>
 </ul>
 </div>
 
@@ -222,7 +226,7 @@ $(document).ready(function () {
 <h3>4.1. Social networks</h3>
 <p>Social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). Examples of the types of interactions/associations involved include direct interactions (e.g., aggression, grooming), co-membership in groups such as herds and flocks, or co-use of spatial locations (e.g., roosts, refuges). The analysis of such social networks can be used to understand the structure of societies, the dynamics of social structure across time and space, and the flow of information/disease/etc through these connections.</p>
 <div class="figure">
-<img src="https://www.dropbox.com/s/jec9dgm7npwgh1i/ASN_fig1.png?dl=1" alt="Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from Flack et al. (2006)." />
+<img src="assets/images/ASN_fig1.png" alt="Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from Flack et al. (2006)." />
 <p class="caption"><em>Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from</em> <a href="https://www.nature.com/articles/nature04326"><em>Flack et al. (2006)</em></a>.</p>
 </div>
 <p>Social network analysis has a long history in fields such as sociology, where it dates back to at least the 1930s. Among ecologists, social networks have been used by primatologists for many decades. However, the study of animal social networks has undeniably exploded in the past decade. This is a field with many review articles (Krause et al. 2007, Wey et al. 2008, Sih et al. 2009, Pinter-Wollman et al. 2014) and books (Croft et al. 2008, Whitehead 2008, Krause et al. 2015) which are recommended for those who are interested in learning more.</p>
@@ -232,7 +236,7 @@ $(document).ready(function () {
 <h3>4.2 Ecological Networks</h3>
 <p>In many ecological networks, nodes represent species and edges represents some sort of species interaction. Two prominent examples include food webs and mutualism networks. * In <em>food webs</em>, the edges represent trophic interactions. * In <em>mutualism networks</em>, the edges may represent interactions such as plant-pollinator relations. In mutualism networks in particular, the network may be <em>bipartite</em>: that is, there are two types of nodes (e.g., plants and pollinators), and interactions only occur between two different types of nodes. * In <em>species co-occurrence networks</em>, edges represent the frequency or probability of two species co-occurring in a given space and/or time.</p>
 <div class="figure">
-<img src="https://www.dropbox.com/s/wzx0xxm4n2yjayt/PlantPollinator.png?dl=1" alt="Plant-pollinator network: photo by Sffubs via wikimedia, network from Burkle et al. 2013" />
+<img src="assets/images/PlantPollinator.png" alt="Plant-pollinator network: photo by Sffubs via wikimedia, network from Burkle et al. 2013" />
 <p class="caption"><em>Plant-pollinator network: photo by Sffubs via wikimedia, network from</em> <a href="http://science.sciencemag.org/content/339/6127/1611"><em>Burkle et al. 2013</em></a></p>
 </div>
 <p>The network view of ecology has a long history (e.g., May 1973), and many great reviews/perspective pieces (Montoya et al. 2006; Bascompte &amp; Jordano 2007; Ings et al. 2009) and books (e.g., Pacual &amp; Dunne 2006) now exist. We will not even scratch the surface of the advances in this area over the past couple of decades!</p>
@@ -242,11 +246,25 @@ $(document).ready(function () {
 <h3>4.3 Spatial Networks</h3>
 <p>Spatial networks are distinguished by the fact that nodes represent some point in space, e.g., habitats within a landscape, or populations across a region. The edges may represent connectivity of these sites or populations, e.g., predicted or actual movements of individuals or measures of genetic connectivity. Defining edges in these type of networks tend to be a challenge because of the inherent difficulties in observing movements, especially since rare dispersal events can have important impacts in ecological patterns and evolutionary processes.</p>
 <div class="figure">
-<img src="https://www.dropbox.com/s/64bycrkw6ll8arb/Fletcher2013.png?dl=1" alt="Examples of spatial networks for four different species, each displaying connectivity of populations using movement or genetic data. From Fletcher et al. (2013)." />
+<img src="assets/images/Fletcher2013.png" alt="Examples of spatial networks for four different species, each displaying connectivity of populations using movement or genetic data. From Fletcher et al. (2013)." />
 <p class="caption"><em>Examples of spatial networks for four different species, each displaying connectivity of populations using movement or genetic data. From</em> <a href="https://www.nature.com/articles/ncomms3572"><em>Fletcher et al. (2013).</em></a></p>
 </div>
 <p>Using network analysis to assess landscape connectivity was first proposed by Urban and Keitt (2001), and has since exploded in the context of conservation (reviews and perspectives by Bunn et al. 2000; McRae et al. 2008; Urban et al. 2008). Dyer &amp; Nelson (2004) and Dyer (2015) provide a good framework for using population genetics to define spatial networks of connectivity. Fall et al. (2007) and Dale &amp; Fortin (2010) are also great references for general challenges in considering spatial networks. Some empirical examples include Fletcher et al. (2011; 2013), Ribeiro et al. (2009).</p>
 <p>You will find introductory tutorial matrial for constructing spatial networks <a href="04.3_spatialnets.html">here</a></p>
+<hr />
+</div>
+<div id="architecture-of-signals-in-animal-communication" class="section level3">
+<h3>4.4 Architecture of Signals in Animal Communication</h3>
+<p>Recenly, there has been an increase in interest in using networks to describe the architecture of a complex suite of traits such as multicomponent signals in animals. This can be thought of as a <em>systems biology approach to animal communication</em> <a href="http://rspb.royalsocietypublishing.org/content/283/1826/20152889">see Hebets et al. (2016)</a>. For example, we can describe the architecture of the complex suite of plumage, acoustic and morphological traits involved in sexual signaling in barn swallows (Wilkins et al. 2015).</p>
+<div class="figure">
+<img src="assets/images/Wilkins2015.png" alt="An example of a phenotype network describing the traits involved in sexual signaling in barn swallows. From Wilkins et al. (2015)" />
+<p class="caption"><em>An example of a “phenotype network” describing the traits involved in sexual signaling in barn swallows.</em> From <a href="http://rspb.royalsocietypublishing.org/content/282/1816/20151574">Wilkins et al. (2015)</a></p>
+</div>
+<p>Similarly, we can describe the temporal sequence of notes in a complex bird song as a network.</p>
+<div class="figure">
+<img src="assets/images/sasahara2012.png" alt="Describing the song of California Thrashers as a network. From Sasahara et al. 2012" />
+<p class="caption">Describing the song of California Thrashers as a network. From <a href="http://journals.plos.org/plosone/article?id=10.1371/journal.pone.0044436">Sasahara et al. 2012</a></p>
+</div>
 </div>
 
 

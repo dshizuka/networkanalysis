@@ -70,6 +70,8 @@ In R, you can display an adjacency list as an actual ‘list object’, with eac
 as_adj_list(g)
 ```
 
+----
+
 ##2.2 Data formats for directed and weighted networks
 Let’s consider some important aspects of data formats that come with networks that are directed or weighted. I will keep this short by listing some important things to consider, and a line of code that will display this.
 
@@ -115,7 +117,11 @@ If you want to show an edge list as a three-column matrix with the two nodes and
 as_data_frame(g)[,c("from", "to", "width")]
 ```
 
+-----
+
 ##2.3 Going from Data to Networks
+
+<br>
 
 ###2.3.1 Creating a network from your edge list
 
