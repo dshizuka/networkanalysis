@@ -127,6 +127,8 @@ Now we are ready to convert this individual-by-group matrix into a network. We w
 ```{r}
 adj=get_network(t(m1), data_format="GBI","SRI") # the adjacency matrix
 g=graph_from_adjacency_matrix(adj, "undirected", weighted=T) #the igraph object
+
+set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5) #plot it
 ```
 
@@ -150,6 +152,7 @@ So we can simply remove the rows of the individuals that were seen less than 3 t
 m2=m1[which(rowSums(m1)>2),]
 adj=get_network(t(m2), data_format="GBI","SRI")
 g=graph_from_adjacency_matrix(adj, "undirected", weighted=T)
+set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5)
 ```
 
@@ -161,6 +164,7 @@ In the study, we used the 'fast greedy' modularity-optimization method for ident
 ```{r fig.width=6, fig.height=6}
 com=fastgreedy.community(g) #community detection method
 node.colors=membership(com) #assign node color based on community membership
+set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5, vertex.color=node.colors)
 ```
 
