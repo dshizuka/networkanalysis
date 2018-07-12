@@ -11,7 +11,45 @@ output:
 
 -----
 
+##6.1 Community Structure in Networks
+
 ![Figure 1: An example of a network with community structure. From Newman 2006-PNAS](https://www.dropbox.com/s/zdwuurj6kujbkdb/Newman2006_figure.png?dl=1)
 
-##6.1 Community Detection
+
 One of the ubiquitous properties of networks is that they exhibit *community structure*, the presence of discrete clusters of nodes that are densely connected, which themselves are only loosely connected to other clusters (Figure 6.1). In ecological contexts, these may be clusters of individuals that form social groups, groups of populations that form cohesive genetic or ecological units, or sets of species that have intimate ecological and evolutionary interactions. The problem is, how do we detect the presence of such *clusters* or *communities*, and how can we quantify the degree of community structure?
+
+###6.1.1 Modularity and Community Detection
+
+In a series of papers, Mark Newman and colleagues presented a quantitative measure called **modularity**, which quantify the degree to which such clusters are discrete (Girvan & Newman 2002; Newman & Girvan 2004; Newman 2006). The modularity index, *Q*, is a measure of the proportion of edges that occur within communities , relative to the expected proportion if all edges were placed randomly.
+
+$Q = \frac{1}{2m} \left(A_ij-\frac{k_i k_j}{2m}\right)\delta\left(c_i,c_j\right)$
+
+Where $m$ is the total number of edges in a network, $A_ij$ is the adjacency matrix, $k_i$ and $k_j$ are the degrees of node $i$ an $j$, $c_i$ and $c_j$ refer to the communities to which $i$ and $j$ belong, and $\delta\left(c_i,c_j)\right)$ is the Kroenecker delta function, which equals 1 when $c_i = c_j$ and 0 otherwise. This value theoretically ranges from 0 to 1.
+
+One class of methods for community detection (often called ‘modularity-optimization method’) to find the partitions in the network that assigns nodes into communities such that $Q$ is maximized. The problem, however, is that there are too many possible partitions that can exist in a given network (ranging from 1 to n number of communities, with every possible combination of nodes), and so an exhaustive search is usually not feasible. Thus, modularity-optimization techniques rely on search algorithms that use different approaches (e.g., agglomerative versus divisive methods) with different strengths and weaknesses (we will hight a few below).
+
+One should also be aware that modularity-based methods of community detection is not fool-proof. In particular, there is a well-studied resolution limit to modularity optimization: these methods tend to miss small, well-defined communities when there are other large communities. They also suffer from the basic assumption that each node belongs to just one community. While other community detection methods exist that can overcome some of these shortfalls, they too often have their weaknesses. In short, there is no perfect approach to community detection. Useful references to these debates include Palla et al. (2005), Fortunato (2010), Lancichinetti & Fortunato (2011), and countless others.
+
+###6.1.1 Community detection in igraph
+
+There are several functions available for community detection in `igraph` and other packages.
+
+Function | Basic Idea | Reference |
+---------------|------------------------------------|--------------|
+`edge.betweenness.community()`|One of the first in the class of “modularity optimization” algorithms. It is a “divisive” method. Cut the edge with highest edge betweenness, and recalculate. Eventually, you end up cutting the network into different groups.|Newman & Girvan 2004|
+`fastgreedy.community()`|Hierarchical agglomerative method that is designed to run well in large networks. Creates “multigraphs” where you lump groups of nodes together in the process of agglomeration in order to save time on sparse graphs.|Clauset et al. 2004|
+`walktrap.community()`|Uses random walks to calculate distances, and then use agglomerative method to optimize modularity|Pons & Latapy 2005|
+`spinglass.community()`|This method uses the analogy of the lowest-energy state of a collection of magnets (a so-called spin glass model).|Reichardt & Bornholdt 2006|
+`leading.eigenvector.community()`|This is a “spectral partitioning” method. You first define a ‘modularity matrix’, which sums to 0 when there is no community structure. The leading eigenvector of this matrix ends up being useful as a community membership vector.|Newman 2006|
+`label.propagation.community()`|I have not used this one...|Raghavan et al. 2007|
+`cluster_louvain()`|The "Louvain" method, so-called because it was created by a group of researchers at Louvain University in Belgium. Community aggregation|Blondel et al. 2008|
+`rnetcarto::netcarto()`|Simulated Annealing method. Thought to be useful for smaller networks. Available through ‘rnetcarto’ package (Doulcier 2015).|Guimera & Amaral 2005|
+
+###6.2 The Assortatment Coefficient
+One major pattern common to many social networks (and other types of networks) is *homophily* or *assortativity*—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).
+
+![Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity.](https://www.dropbox.com/s/uljzgbj62x1l5h6/assortment.png?dl=1)
+
+The assortativity coefficient has a general form,
+
+
