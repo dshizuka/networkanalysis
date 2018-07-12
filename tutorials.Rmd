@@ -22,12 +22,6 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[4. Survey of Networks for Ecologists](04_networktypes.html)
 
-* ####[4.1 Intro to Animal Social Networks](04.1_socialnetworks.html)
-
-* ####[4.2 Intro to Ecological Networks](04.2_ecolnets.html)
-
-* ####[4.3 Intro to Spatial Networks](04.3_spatialnets.html)
-
 ###[5. Measuring Networks Part 1: Centrality and Global Measures](05_measuring.html)
 
 ###[6. Measuring Networks Part 2: Community structure and Assortment](06_community.html)

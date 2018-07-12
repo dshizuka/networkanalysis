@@ -125,9 +125,20 @@ m1
 
 ##4. Make the network
 
-Now we are ready to convert this individual-by-group matrix into a network. We will use the `get_network()` function from the `asnipe` package. But recall that this function likes to take the data in the "group-by-individual" matrix format, so we need to transpose our matrix using the `t()` function: 
+###4.1 Association Indices
+
+A quick tutorial here on how to convert group membership to edges in a social network. There are many ways to calculate an index of association between pairs of individuals. The simplest case would be to just count the number of times a pair of individuals were seen together ($A \cap B$). However, we would often want to account for the fact that some birds are seen often while others are seen rarely. Thus, what we really want to know might be *how often a pair of birds are seen together, given the number of times they were seen at all*? This is the essence of an association index. These were presented in a now-classic paper by Cairns & Schwager (1987). 
+
+Here, we will use what is called the **Simple Ratio Index*
+
+Simple Ratio Index = $\displaystyle \frac{|A \cap B|}{|A \cup B|}$ = $\displaystyle \frac{|A \cap B|}{|A|+|B|-|A \cap B|}$
+
+Luckily, there is a function in the `asnipe` package that will calculate this for every pair of individual, given the affiliation matrix. We will use the `get_network()` function. 
+
+Note: this function likes to take the data in the "group-by-individual" matrix format, so we need to transpose our matrix using the `t()` function: 
+
 ```{r}
-adj=get_network(t(m1), data_format="GBI","SRI") # the adjacency matrix
+adj=get_network(t(m1), data_format="GBI", association_index = "SRI") # the adjacency matrix
 g=graph_from_adjacency_matrix(adj, "undirected", weighted=T) #the igraph object
 
 set.seed(2)
