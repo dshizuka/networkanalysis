@@ -1,0 +1,57 @@
+---
+title: 'Worked Example: Constructing Flock Network'
+author: "Dai Shizuka"
+date: "7/12/2018"
+output: html_document
+---
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=6, fig.height=4, message=F) 
+set.seed(2)
+```
+
+Here are the packages you will need to load for this exercise:
+```{r}
+library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
+library(asnipe)
+library(igraph)
+```
+
+-----
+
+It's one thing to learn the basics the theory, but it's a whole other thing to learn how to actually go from observed data to a network. Here is an exercise designed to get you from real data to networks. 
+
+##1. Constructing sparrow networks from observed data 
+<br>
+```{r}
+flockdat=read.csv('https://datadryad.org/bitstream/handle/10255/dryad.63925/Flock_Season2_Dryad.csv')
+```
+
+```{r}
+
+
+birdcols=grep("Bird",colnames(flockdat))
+bird.ids=unique(gather(flockdat[,birdcols])$value)
+bird.ids=bird.ids[is.na(bird.ids)==F]
+bird.ids
+
+
+m1=apply(flockdat[,birdcols], 1, function(x) match(bird.ids,x))
+m1[is.na(m1)]=0
+m1[m1>0]=1
+#m1
+row.names(m1)=bird.ids
+
+rowSums(m1)
+m2=m1[which(rowSums(m1)>2),]
+
+adj=get_network(t(m2), data_format="GBI","SRI")
+g=graph_from_adjacency_matrix(adj, "undirected", weighted=T)
+#plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5)
+
+com=cluster_louvain(g)
+```
+
+```{r fig.width=6, fig.height=6}
+plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5, vertex.color=membership(com))
+```
