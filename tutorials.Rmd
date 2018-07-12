@@ -40,6 +40,6 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 ##Worked Examples
 <br>
 
-###[Example: Going from data to networks](example_data_to_network.html)
+###[Example: Constructing a sparrow flock network](example_make_sparrow_network.html)
 
 ###[Example: Small World and Scale-free Networks](example1_smallworld.html)

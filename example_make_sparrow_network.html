@@ -326,7 +326,7 @@ m1</code></pre>
 
 set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5) #plot it</code></pre>
-<p><img src="example_data_to_network_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_make_sparrow_network_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>This is the sparrow social network!</p>
 <p><br></p>
 <div id="practical-matters-filtering-the-data" class="section level3">
@@ -350,7 +350,7 @@ adj=get_network(t(m2), data_format=&quot;GBI&quot;,&quot;SRI&quot;)</code></pre>
 <pre class="r"><code>g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)
 set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5)</code></pre>
-<p><img src="example_data_to_network_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_make_sparrow_network_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="color-the-network-based-on-community-membership" class="section level3">
 <h3>4.2 Color the network based on community membership</h3>
@@ -359,7 +359,7 @@ plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5)</co
 node.colors=membership(com) #assign node color based on community membership
 set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5, vertex.color=node.colors)</code></pre>
-<p><img src="example_data_to_network_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_make_sparrow_network_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Compare this network to the figure shown at the top of the page.</p>
 </div>
 </div>
