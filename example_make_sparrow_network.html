@@ -217,6 +217,7 @@ $(document).ready(function () {
 <li><a href="#get-the-individual-by-group-matrix-using-the-match-function">3.2 Get the individual-by-group matrix using the <code>match()</code> function</a></li>
 </ul></li>
 <li><a href="#make-the-network">4. Make the network</a><ul>
+<li><a href="#association-indices">4.1 Association Indices</a></li>
 <li><a href="#practical-matters-filtering-the-data">4.1 Practical matters: Filtering the data</a></li>
 <li><a href="#color-the-network-based-on-community-membership">4.2 Color the network based on community membership</a></li>
 </ul></li>
@@ -319,8 +320,20 @@ m1</code></pre>
 </div>
 <div id="make-the-network" class="section level2">
 <h2>4. Make the network</h2>
-<p>Now we are ready to convert this individual-by-group matrix into a network. We will use the <code>get_network()</code> function from the <code>asnipe</code> package. But recall that this function likes to take the data in the “group-by-individual” matrix format, so we need to transpose our matrix using the <code>t()</code> function:</p>
-<pre class="r"><code>adj=get_network(t(m1), data_format=&quot;GBI&quot;,&quot;SRI&quot;) # the adjacency matrix</code></pre>
+<div id="association-indices" class="section level3">
+<h3>4.1 Association Indices</h3>
+<p>A quick tutorial here on how to convert group membership to edges in a social network. There are many ways to calculate an index of association between pairs of individuals. The simplest case would be to just count the number of times a pair of individuals were seen together (<span class="math inline">\(A \cap B\)</span>). However, we would often want to account for the fact that some birds are seen often while others are seen rarely. Thus, what we really want to know might be <em>how often a pair of birds are seen together, given the number of times they were seen at all</em>? This is the essence of an association index. These were presented in a now-classic paper by Cairns &amp; Schwager (1987).</p>
+<p>Here, we will use what is called the **Simple Ratio Index*</p>
+<p>Simple Ratio Index = <span class="math inline">\(\displaystyle \frac{|A \cap B|}{|A \cup B|}\)</span> = <span class="math inline">\(\displaystyle \frac{|A \cap B|}{|A|+|B|-|A \cap B|}\)</span></p>
+<p>where</p>
+<ul>
+<li><span class="math inline">\(|A \cap B|\)</span> is the number of times A and B were seen together</li>
+<li><span class="math inline">\(|A|\)</span> is the total number of times A was seen (together or separate from B)</li>
+<li><span class="math inline">\(|B|\)</span> is the total number of times B was seen (together or separate from A)</li>
+</ul>
+<p>Luckily, there is a function in the <code>asnipe</code> package that will calculate this for every pair of individual, given the affiliation matrix. We will use the <code>get_network()</code> function.</p>
+<p>Note: this function likes to take the data in the “group-by-individual” matrix format, so we need to transpose our matrix using the <code>t()</code> function:</p>
+<pre class="r"><code>adj=get_network(t(m1), data_format=&quot;GBI&quot;, association_index = &quot;SRI&quot;) # the adjacency matrix</code></pre>
 <pre><code>## Generating  47  x  47  matrix</code></pre>
 <pre class="r"><code>g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T) #the igraph object
 
@@ -329,6 +342,7 @@ plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5) #pl
 <p><img src="example_make_sparrow_network_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>This is the sparrow social network!</p>
 <p><br></p>
+</div>
 <div id="practical-matters-filtering-the-data" class="section level3">
 <h3>4.1 Practical matters: Filtering the data</h3>
 <p>For the Shizuka et al. (2014) study, we employed a common method to eliminate ‘transient’ individuals that may have been seen only a few times in our observation. These individuals usually don’t affect our network structure much, but it does allow us to cut down on the noise in our data.</p>

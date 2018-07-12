@@ -133,6 +133,13 @@ Here, we will use what is called the **Simple Ratio Index*
 
 Simple Ratio Index = $\displaystyle \frac{|A \cap B|}{|A \cup B|}$ = $\displaystyle \frac{|A \cap B|}{|A|+|B|-|A \cap B|}$
 
+where
+
+* $|A \cap B|$ is the number of times A and B were seen together
+* $|A|$ is the total number of times A was seen (together or separate from B)
+* $|B|$ is the total number of times B was seen (together or separate from A)
+
+
 Luckily, there is a function in the `asnipe` package that will calculate this for every pair of individual, given the affiliation matrix. We will use the `get_network()` function. 
 
 Note: this function likes to take the data in the "group-by-individual" matrix format, so we need to transpose our matrix using the `t()` function: 
@@ -168,6 +175,8 @@ g=graph_from_adjacency_matrix(adj, "undirected", weighted=T)
 set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5)
 ```
+
+
 
 ###4.2 Color the network based on community membership
 
