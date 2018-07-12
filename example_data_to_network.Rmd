@@ -92,6 +92,7 @@ bird.ids
 ```
 
 <br>
+
 ####1.3.2 Get the individual-by-group matrix using the `match()` function
 
 Let's think through how we are going to make this individual-by-group matrix now. What we need to do, then, is to go through each observed flock--i.e., each row of the original flock data--and ask whether bird A is in it, bird B is in it, etc. etc.We can do that using the `apply()` and `match()` functions. 
@@ -119,6 +120,7 @@ m1
 ```
 
 <br>
+
 ####1.3.3 Make the network
 
 Now we are ready to convert this individual-by-group matrix into a network. We will use the `get_network()` function from the `asnipe` package. But recall that this function likes to take the data in the "group-by-individual" matrix format, so we need to transpose our matrix using the `t()` function: 
@@ -131,6 +133,7 @@ plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5) #plot it
 This is the sparrow social network!
 
 <br>
+
 ###1.3.4 Practical matters: Filtering the data
 
 For the Shizuka et al. (2014) study, we employed a common method to eliminate 'transient' individuals that may have been seen only a few times in our observation. These individuals usually don't affect our network structure much, but it does allow us to cut down on the noise in our data. 
@@ -142,16 +145,24 @@ We can get the number of times each individual was observed simply by taking the
 rowSums(m1)
 ```
 
+So we can simply remove the rows of the individuals that were seen less than 3 times (or rather, just keep the rows where the sums are >2). This will remove 4 individuals. We can then re-construct the network using this reduced matrix:
 ```{r}
 m2=m1[which(rowSums(m1)>2),]
-
 adj=get_network(t(m2), data_format="GBI","SRI")
 g=graph_from_adjacency_matrix(adj, "undirected", weighted=T)
-#plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5)
-
-com=fastgreedy.community(g)
+plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5)
 ```
+
+####1.3.5 Community structure
+
+In the study, we used the 'fast greedy' modularity-optimization method for identifying communities within the network and colored the nodes based on those assignments. Here is how we did that:
+
 
 ```{r fig.width=6, fig.height=6}
-plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5, vertex.color=membership(com))
+com=fastgreedy.community(g) #community detection method
+node.colors=membership(com) #assign node color based on community membership
+plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5, vertex.color=node.colors)
 ```
+
+Compare this network to the figure shown at the top of the page. 
+
