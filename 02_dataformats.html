@@ -210,7 +210,8 @@ $(document).ready(function () {
 <li><a href="#basic-data-formats-for-networks">2.1 Basic Data Formats For Networks</a><ul>
 <li><a href="#adjacency-matrix">2.1.1 Adjacency Matrix</a></li>
 <li><a href="#edge-list">2.1.2 Edge List</a></li>
-<li><a href="#adjacency-list">2.1.3 Adjacency List</a></li>
+<li><a href="#affiliation-matrix-aka-individual-by-group-matrix">2.1.3 Affiliation Matrix (aka individual-by-group matrix)</a></li>
+<li><a href="#adjacency-list">2.1.4 Adjacency List</a></li>
 </ul></li>
 <li><a href="#data-formats-for-directed-and-weighted-networks">2.2 Data formats for directed and weighted networks</a><ul>
 <li><a href="#directed-networks">2.2.1 Directed networks</a></li>
@@ -231,18 +232,10 @@ $(document).ready(function () {
 <h3>2.1.1 Adjacency Matrix</h3>
 <p>An <strong><em>adjacency matrix</em></strong> is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).</p>
 <p>Let’s start by loading the <code>igraph</code> package and setting up a toy network (same as in <a href="01_intro.html">Lesson 1: Intro</a>)</p>
-<pre class="r"><code>library(igraph)</code></pre>
-<pre><code>## 
-## Attaching package: &#39;igraph&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     decompose, spectrum</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     union</code></pre>
-<pre class="r"><code>g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
+<pre class="r"><code>library(igraph)
+g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
 V(g)$color=c(&quot;white&quot;, &quot;red&quot;, &quot;green&quot;, &quot;blue&quot;, &quot;orange&quot;, &quot;yellow&quot;)
-E(g)$width=1:7
+E(g)$weight=1:7
 E(g)$color=rainbow(7)</code></pre>
 <p>We can now extract the adjacency matrix of the network we created, called <code>g</code>:</p>
 <pre class="r"><code>as_adjacency_matrix(g, sparse=F)</code></pre>
@@ -270,8 +263,41 @@ E(g)$color=rainbow(7)</code></pre>
 ## [6,] &quot;D&quot;  &quot;F&quot; 
 ## [7,] &quot;E&quot;  &quot;F&quot;</code></pre>
 </div>
+<div id="affiliation-matrix-aka-individual-by-group-matrix" class="section level3">
+<h3>2.1.3 Affiliation Matrix (aka individual-by-group matrix)</h3>
+<p>In many cases, we will construct social networks from co-membership in groups. For example, we would draw edges between individuals based on their patterns of co-occurrence in a flock. Similarly, we could construct networks of species co-occurrences in populations, etc.</p>
+<p>To do this, we would first need data in a matrix in which rows represent individuals (or species) and columns represent groups (or populations). Note that you could flip the columns and rows–either way is fine. You just need to be aware of how you arranged it.</p>
+<p>Here’s a toy example in which individuals A through E occur in different combinations in 4 groups.</p>
+<pre class="r"><code>A=c(1,1,0,0) 
+B=c(1,0,1,0) 
+C=c(1,0,1,0) 
+D=c(0,1,0,1) 
+E=c(0,0,1,1) 
+aff=matrix(c(A,B,C,D,E),nrow=5,byrow=TRUE) 
+dimnames(aff)=list(c(&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;),c(&quot;Group1&quot;,&quot;Group2&quot;,&quot;Group3&quot;,&quot;Group4&quot;))
+aff #The individual-by-group matrix</code></pre>
+<pre><code>##   Group1 Group2 Group3 Group4
+## A      1      1      0      0
+## B      1      0      1      0
+## C      1      0      1      0
+## D      0      1      0      1
+## E      0      0      1      1</code></pre>
+<p>There are different ways to convert this data into a social network–i.e., a network that describes which individual co-occurs with which individual in groups. One simple way is to do what is called a <em>one-mode projection</em> of this data by <strong>multiplying this matrix with the transpose of itself</strong>. Note that matrix multiplication notation is <code>%*%</code> in R.</p>
+<pre class="r"><code>aff %*% t(aff)</code></pre>
+<pre><code>##   A B C D E
+## A 2 1 1 1 0
+## B 1 2 2 0 1
+## C 1 2 2 0 1
+## D 1 0 0 2 1
+## E 0 1 1 1 2</code></pre>
+<p>This resulting matrix is now an adjacency matrix in which the diagonal represents how many groups each individual participated in (2 for all of them), and the off-diagonals represent the number of times a pair of individuals were int he same group. You can use this as the adjacency matrix to convert this into a network:</p>
+<pre class="r"><code>m2=aff %*% t(aff)
+g2=graph_from_adjacency_matrix(m2, &quot;undirected&quot;, weighted=T, diag=F)
+plot(g2, edge.width=E(g2)$weight)</code></pre>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+</div>
 <div id="adjacency-list" class="section level3">
-<h3>2.1.3 Adjacency List</h3>
+<h3>2.1.4 Adjacency List</h3>
 <p>An <strong>adjacency list</strong>, also known as a node list, presents the ‘focal’ node on the first column, and then all the other nodes that are connected to it (i.e., adjacent to it) as columns to the right of it. In a spreadsheet, would be a table with rows with different number of columns, which is often very awkward to deal with, like this:</p>
 <table>
 <thead>
@@ -330,27 +356,27 @@ E(g)$color=rainbow(7)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from fceafe6:
+## + 3/6 vertices, named, from c37cac5:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from fceafe6:
+## + 2/6 vertices, named, from c37cac5:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from fceafe6:
+## + 2/6 vertices, named, from c37cac5:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from fceafe6:
+## + 2/6 vertices, named, from c37cac5:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from fceafe6:
+## + 2/6 vertices, named, from c37cac5:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from fceafe6:
+## + 3/6 vertices, named, from c37cac5:
 ## [1] A D E</code></pre>
 <hr />
 </div>
@@ -363,7 +389,7 @@ E(g)$color=rainbow(7)</code></pre>
 <p>Let’s create an igraph object for a <em>directed network</em> called <code>dir.g</code>. For directed networks, the adjacency matrix is not symmetrical. Rather, the cell value is 1 if the edge goes from the <em>row vertex</em> to the <em>column vertex</em>.</p>
 <pre class="r"><code>dir.g=make_graph(~A-+B-+C-+A, D-+E-+F-+D, A+-+F)
 plot(dir.g)</code></pre>
-<p><img src="02_dataformats_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
 <pre class="r"><code>as_adjacency_matrix(dir.g, sparse=F)</code></pre>
 <pre><code>##   A B C D E F
 ## A 0 1 0 0 0 1
@@ -388,7 +414,7 @@ plot(dir.g)</code></pre>
 <div id="weighted-networks" class="section level3">
 <h3>2.2.1 Weighted networks</h3>
 <p>Let’s now consider what the data formats would look like. To do this, let’s go back to our original network, <code>g</code>. Let’s say that the edge widths that we added represent edge weights or values. Then, the adjacency matrix for this network can be shown by using the <code>attr=</code> argument within the function to call the adjacency matrix to specify the edge weights:</p>
-<pre class="r"><code>as_adjacency_matrix(g, sparse=F, attr=&quot;width&quot;)</code></pre>
+<pre class="r"><code>as_adjacency_matrix(g, sparse=F, attr=&quot;weight&quot;)</code></pre>
 <pre><code>##   A B C D E F
 ## A 0 1 2 0 0 3
 ## B 1 0 4 0 0 0
@@ -398,25 +424,25 @@ plot(dir.g)</code></pre>
 ## F 3 0 0 6 7 0</code></pre>
 <p>You can display the edge weights as an edgelist as well. In fact, <code>igraph</code> has a convenient function that will display all of the edge attributes together as a data frame:</p>
 <pre class="r"><code>as_data_frame(g)</code></pre>
-<pre><code>##   from to width     color
-## 1    A  B     1 #FF0000FF
-## 2    A  C     2 #FFDB00FF
-## 3    A  F     3 #49FF00FF
-## 4    B  C     4 #00FF92FF
-## 5    D  E     5 #0092FFFF
-## 6    D  F     6 #4900FFFF
-## 7    E  F     7 #FF00DBFF</code></pre>
+<pre><code>##   from to weight     color
+## 1    A  B      1 #FF0000FF
+## 2    A  C      2 #FFDB00FF
+## 3    A  F      3 #49FF00FF
+## 4    B  C      4 #00FF92FF
+## 5    D  E      5 #0092FFFF
+## 6    D  F      6 #4900FFFF
+## 7    E  F      7 #FF00DBFF</code></pre>
 <p>Recall that in undirected networks, the “from” and “to” designation are arbitrary (it is simply organized in alphabetical order here).</p>
 <p>If you want to show an edge list as a three-column matrix with the two nodes and edge weights only, you can just specify which edge attribute you want to use as the edge weight, e.g.:</p>
-<pre class="r"><code>as_data_frame(g)[,c(&quot;from&quot;, &quot;to&quot;, &quot;width&quot;)]</code></pre>
-<pre><code>##   from to width
-## 1    A  B     1
-## 2    A  C     2
-## 3    A  F     3
-## 4    B  C     4
-## 5    D  E     5
-## 6    D  F     6
-## 7    E  F     7</code></pre>
+<pre class="r"><code>as_data_frame(g)[,c(&quot;from&quot;, &quot;to&quot;, &quot;weight&quot;)]</code></pre>
+<pre><code>##   from to weight
+## 1    A  B      1
+## 2    A  C      2
+## 3    A  F      3
+## 4    B  C      4
+## 5    D  E      5
+## 6    D  F      6
+## 7    E  F      7</code></pre>
 <hr />
 </div>
 </div>
@@ -443,14 +469,14 @@ edge.dat</code></pre>
 <pre class="r"><code>set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg</code></pre>
-<pre><code>## IGRAPH ac80f65 UNW- 7 10 -- 
+<pre><code>## IGRAPH d9c2dcf UNW- 7 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from ac80f65 (vertex names):
+## + edges from d9c2dcf (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>
 <pre class="r"><code>plot(eg, edge.width=E(eg)$weight)</code></pre>
-<p><img src="02_dataformats_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-15-1.png" width="576" /></p>
 </div>
 <div id="creating-a-network-from-your-adjacency-matrix" class="section level3">
 <h3>2.3.2 Creating a network from your adjacency matrix</h3>
@@ -468,7 +494,7 @@ am</code></pre>
 <p>Now we have our adjacency matrix, and we are ready to convert this into an igraph object! Note that this is a <em>weighted adjacency matrix</em>. Note that we are going to add an argument <code>weighted=T</code> to indicate that the edges have weights. The results from the code below should look the same as above. We’ll call this new network <code>g</code>, which will overwrite the previous graph object of the same name.</p>
 <pre class="r"><code>g=graph_from_adjacency_matrix(am, mode=&quot;undirected&quot;, weighted=T)
 plot(g, edge.width=E(g)$weight)</code></pre>
-<p><img src="02_dataformats_files/figure-html/unnamed-chunk-14-1.png" width="576" /></p>
+<p><img src="02_dataformats_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
 </div>
 </div>
 

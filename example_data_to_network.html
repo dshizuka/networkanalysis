@@ -214,27 +214,104 @@ $(document).ready(function () {
 library(asnipe)
 library(igraph)</code></pre>
 <hr />
-<p>It’s one thing to learn the basics the theory, but it’s a whole other thing to learn how to actually go from observed data to a network. Here is an exercise designed to get you from real data to networks.</p>
-<div id="constructing-sparrow-networks-from-observed-data" class="section level2">
-<h2>1. Constructing sparrow networks from observed data</h2>
+<p>It’s one thing to learn the basics the theory, but it’s a whole other thing to learn how to actually go from observed data to a network. Because let’s be real: we don’t often collect data in adjacency matrix, or even edge list format.</p>
+<p>Here are some exercises designed to get you from real data to networks.</p>
+<div id="constructing-sparrow-networks-from-observed-group-data-golden-crowned-sparrow-flock-network" class="section level2">
+<h2>1. Constructing sparrow networks from observed group data: Golden-crowned Sparrow flock network</h2>
 <p><br></p>
-<pre class="r"><code>flockdat=read.csv(&#39;https://datadryad.org/bitstream/handle/10255/dryad.63925/Flock_Season2_Dryad.csv&#39;)</code></pre>
-<pre class="r"><code>birdcols=grep(&quot;Bird&quot;,colnames(flockdat))
-bird.ids=unique(gather(flockdat[,birdcols])$value)
-bird.ids=bird.ids[is.na(bird.ids)==F]
+<p>One of the most common form of animal social networks is constructed from a series of observations of groups–i.e., herds, flocks, etc. The idea is to identify individuals within groups (and observe many groups), then use the pattern of co-membership in groups to define connections between individuals. In behavioral ecology, this method is often called “the gambit of the group”. When using this gambit of the group, it is important to acknowledge that we are making an assumption that group co-membership is biologically meaningful. This may or may not be the case–e.g., individuals may or may not be aware who they are flocking with. Group co-membership is a good place to start, but the onus is on the researcher to demonstrate that it is biologically meaningful.</p>
+<div id="golden-crowned-sparrows" class="section level3">
+<h3>1.1 Golden-crowned sparrows</h3>
+<p>In a series of publications (<a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.12304">Shizuka et al. 2014</a>; <a href="https://onlinelibrary.wiley.com/doi/abs/10.1111/mec.13366">Arnberg et al. 2015</a>), we presented the social network based on flock co-membership in a wintering population of Golden-crowned Sparrows (<em>Zonotrichia atricapilla</em>) in Santa Cruz, CA. We showed that these birds exhibit fission-fusion dynamics in which small foraging flocks form from larger ‘social communities’, or relatively discrete clusters of individuals that flock together often with each other (but not other members of the population).</p>
+<p>Here, we will walk through how to make these social networks, starting with the raw data.</p>
+<div class="figure">
+<img src="assets/images/sparrowflock_BEL.jpg" alt="Group of golden-crowned sparrows in winter. Photo by Bruce E. Lyon" />
+<p class="caption"><em>Group of golden-crowned sparrows in winter. Photo by Bruce E. Lyon</em></p>
+</div>
+<div class="figure">
+<img src="assets/images/Shizuka2014_season2.png" alt="The social network from flock co-membership in season 2, with associated community home ranges. From Shizuka et al. (2014)" />
+<p class="caption"><em>The social network from flock co-membership in season 2, with associated community home ranges. From Shizuka et al. (2014)</em></p>
+</div>
+<p><br></p>
+</div>
+<div id="accessing-the-raw-data" class="section level3">
+<h3>1.2 Accessing the raw data</h3>
+<p>The raw flocking data from the Shizuka et al. 2014 paper is available to download from Dryad (www.datadryad.org). You can actually just download the data directly into R without having to download it to your computer first. Here, we will download the flock data for season 2 (which is shown in the figure above.)</p>
+<pre class="r"><code>flockdat=read.csv(&#39;https://datadryad.org/bitstream/handle/10255/dryad.63925/Flock_Season2_Dryad.csv&#39;)
+head(flockdat)</code></pre>
+<pre><code>##         Date  Time Location Bird1 Bird2 Bird3 Bird4 Bird5 Bird6 Bird7
+## 1 10/12/2010 10:00      S29 23734    NA    NA    NA    NA    NA    NA
+## 2 10/12/2010 10:15      B19 23773 23862 23774    NA    NA    NA    NA
+## 3 10/12/2010 10:45      S29 23734    NA    NA    NA    NA    NA    NA
+## 4 10/12/2010 10:45      B19 23773 23862 23774    NA    NA    NA    NA
+## 5 10/13/2010  9:11      X28 23778 23809    NA    NA    NA    NA    NA
+## 6 10/13/2010  9:22      S23 23734    NA    NA    NA    NA    NA    NA
+##   Bird8 Bird9 Bird10
+## 1    NA    NA     NA
+## 2    NA    NA     NA
+## 3    NA    NA     NA
+## 4    NA    NA     NA
+## 5    NA    NA     NA
+## 6    NA    NA     NA</code></pre>
+<p>You can see that the raw data has the date &amp; time, and the location (in grid coordinates) for each observation. The rest of the columns are the list of birds seen in that flock (in 5-digit ID code). There are up to 10 birds seen in a flock, so there are 10 columns to accommodate the largest flocks. However, most flocks don’t have 10 individuals, so there are empty spaces, which are filled with “NA” here.</p>
+</div>
+<div id="converting-the-raw-data-into-an-individual-by-group-matrix-affiliation-matrix" class="section level3">
+<h3>1.3 Converting the raw data into an individual-by-group matrix (affiliation matrix)</h3>
+<p>So, what we want to do is convert this data into one of the three main data types we can work with. Here, I will convert this raw data into an <strong>individual-by-group matrix</strong> (aka affiliation matrix). In this matrix, each row will be an individual and each column will be an observed flock. If the individual is in the flock, the cell value will be 1. Otherwise, it will be 0.</p>
+<div id="get-the-bird-ids" class="section level4">
+<h4>1.3.1 Get the bird IDs:</h4>
+<p>First step, then, is to figure out all of the individuals that are in this dataset so that we can assign each of them a row. I will do this in two steps:</p>
+<p>We can extract the columns within the dataset that contain the bird IDs. These columns all share the word “Bird” in the column name.</p>
+<pre class="r"><code>#get the columns that contain the bird IDs.
+birdcols=grep(&quot;Bird&quot;,colnames(flockdat))
+birdcols</code></pre>
+<pre><code>##  [1]  4  5  6  7  8  9 10 11 12 13</code></pre>
+<p>With this, you can easily just get the bird ID data with this line of code (output not shown)</p>
+<pre class="r"><code>flockdat[,birdcols]</code></pre>
+<p>We can then collapse this data into one column that contains all bird IDs observed in any flock for the whole dataset. This is often called ‘long-format’ data (as opposed to the ‘wide-format’ that the data is currently in). There are different ways to do this, but here is one easy way using the <code>gather()</code> function from the package <code>tidyr</code> (output not shown).</p>
+<pre class="r"><code>gather(flockdat[,birdcols])</code></pre>
+<p>Since we can do that, all we need is to extract the unique IDs that show up in the column called ‘value’ within this long-format data. Here’s how you can do that in one line:</p>
+<pre class="r"><code>bird.ids=unique(gather(flockdat[,birdcols])$value)
+bird.ids</code></pre>
+<pre><code>##  [1] 23734 23773 23778 23732 23809 23774 23862  7615  7636  7638 23891
+## [12] 23772 23777  7627  7635 23854  7632 23781 23762  7608 23815 23726
+## [23] 23978  7623 23761 23770  7612  7614  7619  7640 23769 23853  7609
+## [34] 23771  7633  7606 23819  7637 23831 23735  7620 23780    NA  7641
+## [45] 23758  7630  7661  7617</code></pre>
+<p>Ok, so we have the IDs of all of the birds in this dataset. But notice that this also includes “NA”. So let’s get rid of that:</p>
+<pre class="r"><code>bird.ids=bird.ids[is.na(bird.ids)==F]
 bird.ids</code></pre>
 <pre><code>##  [1] 23734 23773 23778 23732 23809 23774 23862  7615  7636  7638 23891
 ## [12] 23772 23777  7627  7635 23854  7632 23781 23762  7608 23815 23726
 ## [23] 23978  7623 23761 23770  7612  7614  7619  7640 23769 23853  7609
 ## [34] 23771  7633  7606 23819  7637 23831 23735  7620 23780  7641 23758
 ## [45]  7630  7661  7617</code></pre>
+<p><br> ####1.3.2 Get the individual-by-group matrix using the <code>match()</code> function</p>
+<p>Let’s think through how we are going to make this individual-by-group matrix now. What we need to do, then, is to go through each observed flock–i.e., each row of the original flock data–and ask whether bird A is in it, bird B is in it, etc. etc.We can do that using the <code>apply()</code> and <code>match()</code> functions.</p>
+<p>What this line of code will do is to go through the rows of the flock data (just the columns containing the bird IDs), and ask to match the bird ID in our list with the bird IDs in that line (i.e., flock). Let’s try it (output not shown).</p>
 <pre class="r"><code>m1=apply(flockdat[,birdcols], 1, function(x) match(bird.ids,x))
-m1[is.na(m1)]=0
+m1</code></pre>
+<p>What this gives you is a matrix with 47 rows (for each bird) and 353 columns (for each flock) with a number if that bird was found in that flock, and “NA” if not. So, we can simply convert this to “0 if NA” and “1 if anything else” (result not shown):</p>
+<pre class="r"><code>m1[is.na(m1)]=0
 m1[m1&gt;0]=1
-#m1
-row.names(m1)=bird.ids
-
-rowSums(m1)</code></pre>
+m1</code></pre>
+<p>Great, now we have our individual-by-flock matrix. Let’s name the columns and rows:</p>
+<pre class="r"><code>rownames(m1)=bird.ids #rows are bird ids
+colnames(m1)=paste(&#39;flock&#39;, 1:ncol(m1), sep=&quot;_&quot;) #columns are flock IDs (just &quot;flock_#&quot;)
+m1</code></pre>
+<p><br> ####1.3.3 Make the network</p>
+<p>Now we are ready to convert this individual-by-group matrix into a network. We will use the <code>get_network()</code> function from the <code>asnipe</code> package. But recall that this function likes to take the data in the “group-by-individual” matrix format, so we need to transpose our matrix using the <code>t()</code> function:</p>
+<pre class="r"><code>adj=get_network(t(m1), data_format=&quot;GBI&quot;,&quot;SRI&quot;) # the adjacency matrix</code></pre>
+<pre><code>## Generating  47  x  47  matrix</code></pre>
+<pre class="r"><code>g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T) #the igraph object
+plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5) #plot it</code></pre>
+<p><img src="example_data_to_network_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>This is the sparrow social network!</p>
+<p><br> ###1.3.4 Practical matters: Filtering the data</p>
+<p>For the Shizuka et al. (2014) study, we employed a common method to eliminate ‘transient’ individuals that may have been seen only a few times in our observation. These individuals usually don’t affect our network structure much, but it does allow us to cut down on the noise in our data.</p>
+<p>So, let’s try constructing the network again after <strong>removing individuals that were seen less than 3 times</strong> in our flock observations.</p>
+<p>We can get the number of times each individual was observed simply by taking the row sums of the individual-by-flock matrix:</p>
+<pre class="r"><code>rowSums(m1)</code></pre>
 <pre><code>## 23734 23773 23778 23732 23809 23774 23862  7615  7636  7638 23891 23772 
 ##    18    37    25    25    21    35    48    36     9     5    20    29 
 ## 23777  7627  7635 23854  7632 23781 23762  7608 23815 23726 23978  7623 
@@ -250,9 +327,11 @@ adj=get_network(t(m2), data_format=&quot;GBI&quot;,&quot;SRI&quot;)</code></pre>
 <pre class="r"><code>g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)
 #plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5)
 
-com=cluster_louvain(g)</code></pre>
+com=fastgreedy.community(g)</code></pre>
 <pre class="r"><code>plot(g, edge.width=E(g)$weight*10, vertex.label=&quot;&quot;, vertex.size=5, vertex.color=membership(com))</code></pre>
-<p><img src="example_data_to_network_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="example_data_to_network_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
 </div>
 
 

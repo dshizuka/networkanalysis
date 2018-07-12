@@ -23,11 +23,11 @@ There are three basic data formats that can be used to describe networks: *adjac
 An ***adjacency matrix*** is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the  edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).
 
 Let's start by loading the `igraph` package and setting up a toy network (same as in [Lesson 1: Intro](01_intro.html))
-```{r}
+```{r message=FALSE}
 library(igraph)
 g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
 V(g)$color=c("white", "red", "green", "blue", "orange", "yellow")
-E(g)$width=1:7
+E(g)$weight=1:7
 E(g)$color=rainbow(7)
 ```
 
@@ -50,7 +50,39 @@ You can get the edgelist of any igraph object as well:
 as_edgelist(g)
 ```
 
-###2.1.3 Adjacency List
+###2.1.3 Affiliation Matrix (aka individual-by-group matrix)
+
+In many cases, we will construct social networks from co-membership in groups. For example, we would draw edges between individuals based on their patterns of co-occurrence in a flock. Similarly, we could construct networks of species co-occurrences in populations, etc. 
+
+To do this, we would first need data in a matrix in which rows represent individuals (or species) and columns represent groups (or populations). Note that you could flip the columns and rows--either way is fine. You just need to be aware of how you arranged it.
+
+Here's a toy example in which individuals A through E occur in different combinations in 4 groups. 
+```{r}
+A=c(1,1,0,0) 
+B=c(1,0,1,0) 
+C=c(1,0,1,0) 
+D=c(0,1,0,1) 
+E=c(0,0,1,1) 
+aff=matrix(c(A,B,C,D,E),nrow=5,byrow=TRUE) 
+dimnames(aff)=list(c("A","B","C","D","E"),c("Group1","Group2","Group3","Group4"))
+aff #The individual-by-group matrix
+```
+
+There are different ways to convert this data into a social network--i.e., a network that describes which individual co-occurs with which individual in groups. One simple way is to do what is called a *one-mode projection* of this data by **multiplying this matrix with the transpose of itself**. Note that matrix multiplication notation is `%*%` in R.
+
+```{r}
+aff %*% t(aff)
+```
+
+This resulting matrix is now an adjacency matrix in which the diagonal represents how many groups each individual participated in (2 for all of them), and the off-diagonals represent the number of times a pair of individuals were int he same group. You can use this as the adjacency matrix to convert this into a network:
+
+```{r}
+m2=aff %*% t(aff)
+g2=graph_from_adjacency_matrix(m2, "undirected", weighted=T, diag=F)
+plot(g2, edge.width=E(g2)$weight)
+```
+
+###2.1.4 Adjacency List
 
 An **adjacency list**, also known as a node list, presents the 'focal' node on the first column, and then all the other nodes that are connected to it (i.e., adjacent to it) as columns to the right of it. In a spreadsheet, would be a table with rows with different number of columns, which is often very awkward to deal with, like this:
 
@@ -101,7 +133,7 @@ You can see that, since the `dir.g` network object contains one mutual edge (A<-
 Let’s now consider what the data formats would look like. To do this, let’s go back to our original network, `g`. Let’s say that the edge widths that we added represent edge weights or values. Then, the adjacency matrix for this network can be shown by using the `attr=` argument within the function to call the adjacency matrix to specify the edge weights:
 
 ```{r}
-as_adjacency_matrix(g, sparse=F, attr="width")
+as_adjacency_matrix(g, sparse=F, attr="weight")
 ```
 
 You can display the edge weights as an edgelist as well. In fact, `igraph` has a convenient function that will display all of the edge attributes together as a data frame:
@@ -114,7 +146,7 @@ Recall that in undirected networks, the “from” and “to” designation are 
 
 If you want to show an edge list as a three-column matrix with the two nodes and edge weights only, you can just specify which edge attribute you want to use as the edge weight, e.g.:
 ```{r}
-as_data_frame(g)[,c("from", "to", "width")]
+as_data_frame(g)[,c("from", "to", "weight")]
 ```
 
 -----
