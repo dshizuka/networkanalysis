@@ -13,6 +13,10 @@ knitr::opts_chunk$set(fig.width=6, fig.height=4, message=F, fig.align="center")
 set.seed(2)
 ```
 
+-----
+
+It's one thing to learn the basics the theory, but it's a whole other thing to learn how to actually go from observed data to a network. Because let's be real: we don't often collect data in adjacency matrix, or even edge list format. In this worked example, we will go through how to construct a network from data on flock observations.
+
 Here are the packages you will need to load for this exercise:
 ```{r}
 library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
@@ -20,19 +24,12 @@ library(asnipe)
 library(igraph)
 ```
 
------
-
-It's one thing to learn the basics the theory, but it's a whole other thing to learn how to actually go from observed data to a network. Because let's be real: we don't often collect data in adjacency matrix, or even edge list format. 
-
-Here are some exercises designed to get you from real data to networks. 
-
-##1. Constructing sparrow networks from observed group data: Golden-crowned Sparrow flock network
 <br>
 
-One of the most common form of animal social networks is constructed from a series of observations of groups--i.e., herds, flocks, etc. The idea is to identify individuals within groups (and observe many groups), then use the pattern of co-membership in groups to define connections between individuals. In behavioral ecology, this method is often called "the gambit of the group". 
-When using this gambit of the group, it is important to acknowledge that we are making an assumption that group co-membership is biologically meaningful. This may or may not be the case--e.g., individuals may or may not be aware who they are flocking with. Group co-membership is a good place to start, but the onus is on the researcher to demonstrate that it is biologically meaningful.
+##1. Constructing sparrow networks from observed group data: Golden-crowned Sparrow flock network
 
-###1.1 Golden-crowned sparrows
+
+One of the most common form of animal social networks is constructed from a series of observations of groups--i.e., herds, flocks, etc. The idea is to identify individuals within groups (and observe many groups), then use the pattern of co-membership in groups to define connections between individuals. In behavioral ecology, this method is often called "the gambit of the group". 
 
 In a series of publications ([Shizuka et al. 2014](https://onlinelibrary.wiley.com/doi/abs/10.1111/ele.12304); [Arnberg et al. 2015](https://onlinelibrary.wiley.com/doi/abs/10.1111/mec.13366)), we presented the social network based on flock co-membership in a wintering population of Golden-crowned Sparrows (*Zonotrichia atricapilla*) in Santa Cruz, CA. We showed that these birds exhibit fission-fusion dynamics in which small foraging flocks form from larger 'social communities', or relatively discrete clusters of individuals that flock together often with each other (but not other members of the population).
 
@@ -44,7 +41,7 @@ Here, we will walk through how to make these social networks, starting with the 
 
 <br>
 
-###1.2 Accessing the raw data
+##2. Accessing the raw data
 
 The raw flocking data from the Shizuka et al. 2014 paper is available to download from Dryad (www.datadryad.org). You can actually just download the data directly into R without having to download it to your computer first. Here, we will download the flock data for season 2 (which is shown in the figure above.)
 
@@ -55,11 +52,13 @@ head(flockdat)
 
 You can see that the raw data has the date & time, and the location (in grid coordinates) for each observation. The rest of the columns are the list of birds seen in that flock (in 5-digit ID code). There are up to 10 birds seen in a flock, so there are 10 columns to accommodate the largest flocks. However, most flocks don't have 10 individuals, so there are empty spaces, which are filled with "NA" here. 
 
-###1.3 Converting the raw data into an individual-by-group matrix (affiliation matrix)
+<br>
+
+##3 Converting the raw data into an individual-by-group matrix (affiliation matrix)
 
 So, what we want to do is convert this data into one of the three main data types we can work with. Here, I will convert this raw data into an **individual-by-group matrix** (aka affiliation matrix). In this matrix, each row will be an individual and each column will be an observed flock. If the individual is in the flock, the cell value will be 1. Otherwise, it will be 0. 
 
-####1.3.1 Get the bird IDs:
+###3.1 Get the bird IDs:
 
 First step, then, is to figure out all of the individuals that are in this dataset so that we can assign each of them a row. I will do this in two steps:
 
@@ -96,7 +95,7 @@ bird.ids
 
 <br>
 
-####1.3.2 Get the individual-by-group matrix using the `match()` function
+###3.2 Get the individual-by-group matrix using the `match()` function
 
 Let's think through how we are going to make this individual-by-group matrix now. What we need to do, then, is to go through each observed flock--i.e., each row of the original flock data--and ask whether bird A is in it, bird B is in it, etc. etc.We can do that using the `apply()` and `match()` functions. 
 
@@ -124,7 +123,7 @@ m1
 
 <br>
 
-####1.3.3 Make the network
+##4. Make the network
 
 Now we are ready to convert this individual-by-group matrix into a network. We will use the `get_network()` function from the `asnipe` package. But recall that this function likes to take the data in the "group-by-individual" matrix format, so we need to transpose our matrix using the `t()` function: 
 ```{r}
@@ -139,7 +138,7 @@ This is the sparrow social network!
 
 <br>
 
-###1.3.4 Practical matters: Filtering the data
+###4.1 Practical matters: Filtering the data
 
 For the Shizuka et al. (2014) study, we employed a common method to eliminate 'transient' individuals that may have been seen only a few times in our observation. These individuals usually don't affect our network structure much, but it does allow us to cut down on the noise in our data. 
 
@@ -159,7 +158,7 @@ set.seed(2)
 plot(g, edge.width=E(g)$weight*10, vertex.label="", vertex.size=5)
 ```
 
-####1.3.5 Community structure
+###4.2 Color the network based on community membership
 
 In the study, we used the 'fast greedy' modularity-optimization method for identifying communities within the network and colored the nodes based on those assignments. Here is how we did that:
 
