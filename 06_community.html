@@ -211,8 +211,12 @@ $(document).ready(function () {
 <ul>
 <li><a href="#community-structure-in-networks">6.1 Community Structure in Networks</a><ul>
 <li><a href="#modularity-and-community-detection">6.1.1 Modularity and Community Detection</a></li>
-<li><a href="#community-detection-in-igraph">6.1.1 Community detection in igraph</a></li>
-<li><a href="#the-assortatment-coefficient">6.2 The Assortatment Coefficient</a></li>
+<li><a href="#community-detection-in-igraph">6.1.2 Community detection in <code>igraph</code></a></li>
+<li><a href="#example-community-detection-with-sample-sparrow-network">6.1.4 Example: Community detection with sample sparrow network</a></li>
+</ul></li>
+<li><a href="#assortativity">6.2 Assortativity</a><ul>
+<li><a href="#the-assortment-coefficient">6.2.1 The Assortment Coefficient</a></li>
+<li><a href="#assortment-a-simple-example">6.2.2 Assortment: a simple example</a></li>
 </ul></li>
 </ul>
 </div>
@@ -228,13 +232,13 @@ $(document).ready(function () {
 <div id="modularity-and-community-detection" class="section level3">
 <h3>6.1.1 Modularity and Community Detection</h3>
 <p>In a series of papers, Mark Newman and colleagues presented a quantitative measure called <strong>modularity</strong>, which quantify the degree to which such clusters are discrete (Girvan &amp; Newman 2002; Newman &amp; Girvan 2004; Newman 2006). The modularity index, <em>Q</em>, is a measure of the proportion of edges that occur within communities , relative to the expected proportion if all edges were placed randomly.</p>
-<p><span class="math inline">\(Q = \frac{1}{2m} \left(A_ij-\frac{k_i k_j}{2m}\right)\delta\left(c_i,c_j\right)\)</span></p>
+<p><span class="math inline">\(Q = \frac{1}{2m} \left(A_{ij}-\frac{k_i k_j}{2m}\right)\delta\left(c_i,c_j\right)\)</span></p>
 <p>Where <span class="math inline">\(m\)</span> is the total number of edges in a network, <span class="math inline">\(A_ij\)</span> is the adjacency matrix, <span class="math inline">\(k_i\)</span> and <span class="math inline">\(k_j\)</span> are the degrees of node <span class="math inline">\(i\)</span> an <span class="math inline">\(j\)</span>, <span class="math inline">\(c_i\)</span> and <span class="math inline">\(c_j\)</span> refer to the communities to which <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> belong, and <span class="math inline">\(\delta\left(c_i,c_j)\right)\)</span> is the Kroenecker delta function, which equals 1 when <span class="math inline">\(c_i = c_j\)</span> and 0 otherwise. This value theoretically ranges from 0 to 1.</p>
 <p>One class of methods for community detection (often called ‘modularity-optimization method’) to find the partitions in the network that assigns nodes into communities such that <span class="math inline">\(Q\)</span> is maximized. The problem, however, is that there are too many possible partitions that can exist in a given network (ranging from 1 to n number of communities, with every possible combination of nodes), and so an exhaustive search is usually not feasible. Thus, modularity-optimization techniques rely on search algorithms that use different approaches (e.g., agglomerative versus divisive methods) with different strengths and weaknesses (we will hight a few below).</p>
 <p>One should also be aware that modularity-based methods of community detection is not fool-proof. In particular, there is a well-studied resolution limit to modularity optimization: these methods tend to miss small, well-defined communities when there are other large communities. They also suffer from the basic assumption that each node belongs to just one community. While other community detection methods exist that can overcome some of these shortfalls, they too often have their weaknesses. In short, there is no perfect approach to community detection. Useful references to these debates include Palla et al. (2005), Fortunato (2010), Lancichinetti &amp; Fortunato (2011), and countless others.</p>
 </div>
 <div id="community-detection-in-igraph" class="section level3">
-<h3>6.1.1 Community detection in igraph</h3>
+<h3>6.1.2 Community detection in <code>igraph</code></h3>
 <p>There are several functions available for community detection in <code>igraph</code> and other packages.</p>
 <table style="width:94%;">
 <colgroup>
@@ -292,14 +296,118 @@ $(document).ready(function () {
 </tr>
 </tbody>
 </table>
+<div id="modularity-community-detection-a-simple-example" class="section level4">
+<h4>6.1.3 Modularity &amp; Community Detection: A Simple Example</h4>
+<p>To illustrate how to measure modularity and assortativity using igraph, let’s start by creating a simple graph with clear community structure. First, we’ll create a network consisting of two clusters that are completely connected, which themselves are loosely connected.</p>
+<pre class="r"><code>library(igraph)
+
+g=make_graph(~A:B:C:D:E-A:B:C:D:E, F:G:H:I:J-F:G:H:I:J, A-F, B-G)
+
+set.seed(7)
+l=layout_with_fr(g)
+plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-1-1.png" width="384" /></p>
+<p>Let’s now apply a community detection algorithm to figure out the optimal division of this network into communities. Because the community division in this example is very clear, we can choose any of the community detection method in the table above and we are likely to come up with the same answer. Let’s use one called the edge betweenness method:</p>
+<pre class="r"><code>eb=edge.betweenness.community(g) 
+eb</code></pre>
+<pre><code>## IGRAPH clustering edge betweenness, groups: 2, mod: 0.41
+## + groups:
+##   $`1`
+##   [1] &quot;A&quot; &quot;B&quot; &quot;C&quot; &quot;D&quot; &quot;E&quot;
+##   
+##   $`2`
+##   [1] &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot;
+## </code></pre>
+<p>The resulting object is a ‘communities object’, which includes a few pieces of information-the number of communities (groups), the modularity value based on the node assignments, and the membership of nodes to each community. We can call each of these values separately (outputs not shown):</p>
+<pre class="r"><code>length(eb) #number of communities</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>modularity(eb) #modularity</code></pre>
+<pre><code>## [1] 0.4090909</code></pre>
+<pre class="r"><code>membership(eb) #assignment of nodes to communities</code></pre>
+<pre><code>## A B C D E F G H I J 
+## 1 1 1 1 1 2 2 2 2 2</code></pre>
+<p>You can also use this communities object to produce a pretty network figure that shows the community structure by incorporating it into the <code>plot()</code> function.</p>
+<pre class="r"><code>plot(eb, g, layout=l)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
 </div>
-<div id="the-assortatment-coefficient" class="section level3">
-<h3>6.2 The Assortatment Coefficient</h3>
+</div>
+<div id="example-community-detection-with-sample-sparrow-network" class="section level3">
+<h3>6.1.4 Example: Community detection with sample sparrow network</h3>
+<p>Let’s try another example, this time with a more complex network. We can use the sample sparrow network that we’ve used in some other tutorials. Let’s import the association data (individual-by-group matrix) and use <code>asnipe</code> and <code>igraph</code> to create a network.</p>
+<pre class="r"><code>library(asnipe)
+library(igraph)
+assoc=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_association.csv&quot;, header=T, row.names=1)) #import individual-by-group data
+gbi=t(assoc) #transpose the data into group-by-individual
+mat=get_network(t(assoc), association_index=&quot;SRI&quot;) #create adjacency matrix with &quot;simple ratio index&quot;
+g.sparrow=graph_from_adjacency_matrix(mat, &quot;undirected&quot;, weighted=T) #make into igrpah object</code></pre>
+<p>Plot the network to see:</p>
+<pre class="r"><code>plot(g.sparrow, edge.width=E(g.sparrow)$weight*5, vertex.label=&quot;&quot;)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
+<p>Use one of the community detection algorithms. Here’s an example with the Louvain method:</p>
+<pre class="r"><code>com=cluster_louvain(g.sparrow)
+com</code></pre>
+<pre><code>## IGRAPH clustering multi level, groups: 4, mod: 0.61
+## + groups:
+##   $`1`
+##   [1] &quot;23820&quot; &quot;23726&quot; &quot;23831&quot; &quot;23763&quot; &quot;23853&quot;
+##   
+##   $`2`
+##   [1] &quot;23777&quot; &quot;23774&quot; &quot;23779&quot; &quot;23773&quot; &quot;23862&quot; &quot;23732&quot;
+##   
+##   $`3`
+##   [1] &quot;23771&quot; &quot;23756&quot; &quot;23759&quot; &quot;23768&quot; &quot;23758&quot;
+##   
+##   $`4`
+##   + ... omitted several groups/vertices</code></pre>
+<p>Plot the network with the communities assigned.</p>
+<pre class="r"><code>set.seed(2)
+plot(com, g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
+<p>… or if you don’t like the coloring scheme, you can customize it. Let’s get fancy and use RColorBrewer to assign colors.</p>
+<pre class="r"><code>library(RColorBrewer)
+colors=brewer.pal(length(com),&#39;Accent&#39;) #make a color palette
+V(g.sparrow)$color=colors[membership(com)] #assign each vertex a color based on the community assignment
+
+set.seed(2)
+plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
+</div>
+</div>
+<div id="assortativity" class="section level2">
+<h2>6.2 Assortativity</h2>
 <p>One major pattern common to many social networks (and other types of networks) is <em>homophily</em> or <em>assortativity</em>—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).</p>
 <div class="figure">
 <img src="https://www.dropbox.com/s/uljzgbj62x1l5h6/assortment.png?dl=1" alt="Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity." />
 <p class="caption">Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity.</p>
 </div>
+<div id="the-assortment-coefficient" class="section level3">
+<h3>6.2.1 The Assortment Coefficient</h3>
+<p>The assortment coefficient has a general form,</p>
+<p><span class="math inline">\(r = \frac{\sum_{ij} \left(A_{ij}-k_ik_j/2m\right)x_ix_j}{\sum_{ij} \left(k_i\delta_{ij}-k_ik_j/2m\right)x_ix_j}\)</span></p>
+<p>where <span class="math inline">\(k_i\delta_{ij}\)</span> is the degree of <span class="math inline">\(i\)</span> excluding its connection with <span class="math inline">\(j\)</span>. This is actually a form of the Pearson correlation coefficient. The coefficient is large (approaches 1) if nodes with similar values are more connected and small (approaches 1) when similar nodes are less connected. The value is 0 when edges are random with respect to node values.</p>
+<p>For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014).</p>
+</div>
+<div id="assortment-a-simple-example" class="section level3">
+<h3>6.2.2 Assortment: a simple example</h3>
+<p>Let’s use the same example network to demonstrate how to calculate assortativity, and to compare the difference between modularity and assortativity.</p>
+<p>Let’s start by assigning each node a value–let’s say nodes vary in size.</p>
+<pre class="r"><code>V(g)$size=c(rnorm(5, mean=20), rnorm(5, mean=40)) #assign sizes to nodes using two normal distributions with different means
+
+plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
+<p>Now, we can measure the degree to which this network exhibits assortment by node size.</p>
+<pre class="r"><code>assortativity(g, V(g)$size, directed=F)</code></pre>
+<pre><code>## [1] 0.7887182</code></pre>
+<p>As you can see, this network exhibits high levels of assortativity by node size (r = 0.79). As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.</p>
+<pre class="r"><code>set.seed(3)
+V(g)$random=rnorm(10, mean=20, sd=3) #create a node trait that varies randomly for all nodes 
+assortativity(g, V(g)$random, directed=F)</code></pre>
+<pre><code>## [1] -0.06392816</code></pre>
+<pre class="r"><code>plot(g, layout=l, edge.color=&quot;black&quot;, vertex.size=V(g)$random)</code></pre>
+<p><img src="06_community_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
+<p>You can see that there is little assortment based on this trait.</p>
+<p>Just to be extra clear, this network is still exhibits community structure (A through E and F through J), but the trait we are measuring does not exhibit assortativity.</p>
+<p><strong><em>Note</em></strong>: The igraph function for <code>assortativity()</code> can only handle unweighted networks. To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014).</p>
 </div>
 </div>
 
