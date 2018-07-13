@@ -15,7 +15,11 @@ knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F)
 set.seed(2)
 ```
 
-##... The answer is probably "no"
+Packages you'll need:
+```{r message=F}
+library(asnipe)
+library(igraph)
+```
 
 -----
 
@@ -35,16 +39,39 @@ Node-label permutations involve shuffling the node type or node values (e.g., se
 (b) using as null model for assortativity
 
 
-#8.1.1 Simulation
-Let's try out a toy example of the first case with a simple simulated network.
+###8.1.1 Example with flock simulation
 
-```{r}
-n=20
-f=50
-trait=sort(runif(n,min=0, max=1))
-n.flocks=sort(rpois(n, lambda=10))
-ibg=matrix(nrow=n, ncol=f)
-ibg
+Let's re-create the flock simulation from [section 8](08_simulations.html). In this simulation, we set up 50 individuals with variation in a trait as well as variation in gregariousness (probability of joining a given flock). Based on these parameters, we simulate observations of 100 flocks, then create a network. 
 
+```{r fig.height=6}
+set.seed(2)
+n=50 #populatoin
+trait=sort(rnorm(n,mean=20, sd=5), decreasing = T) #trait
+p=sort(runif(n, min=0.01, max=0.1)) #gregariousness
+f=100 #number of flock observations
+
+#Now set up and construct simulated flock observations
+ibg=matrix(0,nrow=n, ncol=f)
+
+for(i in 1:n){
+  for (j in 1:f){
+  ibg[i,j]=sample(c(1,0), 1, prob=c(p[i], 1-p[i]))
+  }
+}
+
+#calculate association index (simple ratio index) from this individual-by-group matrix.
+adj=get_network(t(ibg), data_format="GBI", association_index="SRI")
+
+#create and plot network, with vertex size proportional to trait value
+g=graph_from_adjacency_matrix(adj, "undirected", weighted=T)
+plot(g,vertex.size=trait/2, vertex.label="", edge.width=E(g)$weight*5)
 ```
+
+We showed in this simulation that degree centrality is correlated to the trait:
+```{r}
+plot(trait, degree(g), pch=19)
+cor.test(trait, degree(g))
+```
+
+
 
