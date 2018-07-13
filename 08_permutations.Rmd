@@ -1,5 +1,5 @@
 ---
-title: "8. Is your network random?: Permutations and Randomizations"
+title: "9. Comparing against the Null Hypothesis: Permutations and Randomizations"
 author: "Dai Shizuka"
 date: "7/12/2018"
 output: 
@@ -34,11 +34,22 @@ Node-label permutations involve shuffling the node type or node values (e.g., se
 (a) testing correlations between node attribute and network position 
 (b) using as null model for assortativity
 
-Let's try out a toy example of the first case:
+
+#8.1.1 Simulation
+Let's try out a toy example of the first case with a simple simulated network.
 
 ```{r}
 n=20
+<<<<<<< HEAD
 trait=sort(runif(n,min=0, max=1))
 #gregariousness=sort(rpois())
+=======
+f=50
+trait=sort(runif(n,min=0, max=1))
+n.flocks=sort(rpois(n, lambda=10))
+ibg=matrix(nrow=n, ncol=f)
+ibg
+
+>>>>>>> bc1db20b012d92cb9a2662411fbdf3ada4dabcc9
 ```
 ```

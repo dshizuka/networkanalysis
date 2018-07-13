@@ -9,9 +9,10 @@
 <meta name="generator" content="pandoc" />
 
 
+<meta name="author" content="Dai Shizuka" />
 
 
-<title>Tutorials</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -198,57 +199,72 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Tutorials</h1>
+<h1 class="title toc-ignore"><ol start="8" style="list-style-type: decimal">
+<li>Simulating Networks</li>
+</ol></h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>7/12/2018</em></h4>
 
 </div>
 
+<div id="TOC">
+<ul>
+<li><a href="#flock-network-with-size-related-variation-in-gregariousness">1. Flock network with size-related variation in gregariousness</a></li>
+</ul>
+</div>
 
 <hr />
-<p>I’m posting two different types of tutorials. First, the “Basic Tutorials” are general lessons for understanding the basics of network analysis. The “Worked Examples” section are exercises based on published studies–e.g., re-creating the analysis or simulations.</p>
-<div id="basic-tutorials" class="section level2">
-<h2>Basic Tutorials</h2>
+<p>Here, we will simulate some social networks just to get a feel for how to create networks based on simple rules.</p>
+<pre class="r"><code>library(asnipe)
+library(igraph)</code></pre>
 <p><br></p>
-<div id="before-you-start" class="section level3">
-<h3><a href="00_before_you_start.html">0. Before you start</a></h3>
-</div>
-<div id="introduction-to-networks" class="section level3">
-<h3><a href="01_intro.html">1. Introduction to Networks</a></h3>
-</div>
-<div id="data-formats-for-networks" class="section level3">
-<h3><a href="02_dataformats.html">2. Data Formats for Networks</a></h3>
-</div>
-<div id="plotting-basics" class="section level3">
-<h3><a href="03_plots.html">3. Plotting Basics</a></h3>
-</div>
-<div id="survey-of-networks-for-ecologists" class="section level3">
-<h3><a href="04_networktypes.html">4. Survey of Networks for Ecologists</a></h3>
-</div>
-<div id="measuring-networks-part-1-centrality-and-global-measures" class="section level3">
-<h3><a href="05_measuring.html">5. Measuring Networks Part 1: Centrality and Global Measures</a></h3>
-</div>
-<div id="measuring-networks-part-2-community-structure-and-assortment" class="section level3">
-<h3><a href="06_community.html">6. Measuring Networks Part 2: Community structure and Assortment</a></h3>
-</div>
-<div id="random-graphs" class="section level3">
-<h3><a href="07_randomnets.html">7. Random Graphs</a></h3>
-</div>
-<div id="simulating-networks" class="section level3">
-<h3><a href="08_simulations.html">8. Simulating Networks</a></h3>
-</div>
-<div id="testing-your-network-permuations-and-randomizations" class="section level3">
-<h3><a href="09_permutations.html">9. Testing Your Network: Permuations and Randomizations</a></h3>
-<hr />
-</div>
-</div>
-<div id="worked-examples" class="section level2">
-<h2>Worked Examples</h2>
-<p><br></p>
-<div id="example-constructing-a-sparrow-flock-network" class="section level3">
-<h3><a href="example_make_sparrow_network.html">Example: Constructing a sparrow flock network</a></h3>
-</div>
-<div id="example-small-world-and-scale-free-networks" class="section level3">
-<h3><a href="example1_smallworld.html">Example: Small World and Scale-free Networks</a></h3>
-</div>
+<div id="flock-network-with-size-related-variation-in-gregariousness" class="section level2">
+<h2>1. Flock network with size-related variation in gregariousness</h2>
+<p>Let’s imagine a scenario in which individuals vary in how often they join groups (e.g., flocks). In addition, let’s imagine that individuals also vary in a trait (e.g., body size) that correlates with gregariousness–the tendency to join flocks. In this fictitious scenario, will we find correlation between the trait and centrality?</p>
+<p>Let’s start by setting up a population of 50 individuals with a trait distributed normally (i.e., mean of 20 and standard deviation of 5). We can use the <code>rnorm()</code> function to generate these random values</p>
+<p>Note that we are going to sort the sizes so that the largest individual is listed first.</p>
+<pre class="r"><code>set.seed(2)
+n=50
+trait=sort(rnorm(n,mean=20, sd=5), decreasing = T) </code></pre>
+<p>Now, we’ll assign gregariousness to individuals. This will be defined as an individual’s probability of joining any given flock. This value, <span class="math inline">\(p\)</span>, will range from 0.01 to 0.2, and will follow a uniform distribution. Again, we will sort this vector. Then, the trait and gregariousness will be correlated</p>
+<pre class="r"><code>p=sort(runif(n, min=0.01, max=0.1)) #gregariousness
+
+plot(trait, p, ylab=&quot;Gregariousness&quot;, xlab=&quot;Trait Value&quot;) #see that gregariousness and trait are correlated</code></pre>
+<p><img src="08_simulations_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
+<p>Ok, now let’s simulate some flock observations. First, we’ll choose how many flocks to observe. Totally arbitrarily, let’s just say we’ll observe 100 flocks.</p>
+<pre class="r"><code>f=100</code></pre>
+<p>Then, we’ll implement a simulation that will ultimately generate an individual-by-group matrix, whose dimensions will be 50 rows x 100 columns. The simulation will go as follows: For each cell, the probability that the individual (rows) is found in that flock (column) depends on that individual’s gregariousness value, <span class="math inline">\(p\)</span></p>
+<p>We will first create a matrix of 0s, then fill in 1s using a loop:</p>
+<pre class="r"><code>ibg=matrix(0,nrow=n, ncol=f)
+
+for(i in 1:n){
+  for (j in 1:f){
+  ibg[i,j]=sample(c(1,0), 1, prob=c(p[i], 1-p[i]))
+  }
+}</code></pre>
+<p>We will then make the network using the <code>get_network()</code> function from <code>asnipe</code> to create the adjacency matrix and the <code>graph_from_adjacency_matrix()</code> function from <code>igraph</code>.</p>
+<pre class="r"><code>adj=get_network(t(ibg), data_format=&quot;GBI&quot;, association_index=&quot;SRI&quot;)
+
+g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)</code></pre>
+<p>Let’s plot the resulting network, with node size proportional to the individual’s trait value.</p>
+<pre class="r"><code>plot(g,vertex.size=trait/2, vertex.label=&quot;&quot;, edge.width=E(g)$weight*5)</code></pre>
+<p><img src="08_simulations_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
+<p>Now, let’s plot the relationship between trait value and the individual’s degree centrality.</p>
+<pre class="r"><code>plot(trait, degree(g), pch=19, col=&quot;tomato&quot;)</code></pre>
+<p><img src="08_simulations_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p>As you can see, there is quite a strong correlation between trait and social position of the individual.</p>
+<pre class="r"><code>cor.test(trait, degree(g))</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  trait and degree(g)
+## t = -8.0451, df = 48, p-value = 1.883e-10
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.8556276 -0.6075387
+## sample estimates:
+##        cor 
+## -0.7577462</code></pre>
 </div>
 
 

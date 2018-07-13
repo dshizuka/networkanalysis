@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="tutorials.html">Tutorials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="9" style="list-style-type: decimal">
+<li>Comparing against the Null Hypothesis: Permutations and Randomizations</li>
+</ol></h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>7/12/2018</em></h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#node-label-permutations">8.1 Node-label Permutations</a></li>
+<li><a href="#simulation">8.1.1 Simulation</a></li>
+</ul>
+</div>
+
+<p>##… The answer is probably “no”</p>
+<hr />
+<p>Thus far, we have learned how to measure empirical networks in a variety of ways. However, we are often not satisfied with simply constructing and measuring networks. What we really want to know is: does our empirical network show some patterns that deviates from a random process?</p>
+<p>This brings us to hypothesis testing–that is, we want to compare the properties of our networks against some baseline, i.e., a null hypothesis/model. That is, we can ask the question: is our network non-random?</p>
+<p>The problem with this simplistic question, however, is that no real network is ever random. There are a multitude of factors that make networks deviate from an idealized Erdös-Renyí random graph (see [7. Random Graphs)(07_randomnets.html))</p>
+<p>Because most networks are complex and relational data do not conform to the requirement of non-independence of data, we often use randomizations/permutations to generate null models against which we can compare the empirical data. Here, we focus narrowly on some classic forms of null model hypothesis testing using randomizations. In the context of animal social networks, there have been a couple of good review and tutorial of this method (Croft et al. 2011; Farine &amp; Whitehead 2015). We will provide a quick overview here.</p>
+<div id="node-label-permutations" class="section level2">
+<h2>8.1 Node-label Permutations</h2>
+<p>Node-label permutations involve shuffling the node type or node values (e.g., sex, size, etc.) randomly across all nodes in a network, while keeping the edges the same. This ensures that the inherent structural pattern of the network remains the same, but the node values are randomized. This type of randomization scheme may be appropriate when you are interested in understanding how node attributes affect connectivity of nodes, e.g.:</p>
+<ol style="list-style-type: lower-alpha">
+<li>testing correlations between node attribute and network position</li>
+<li>using as null model for assortativity</li>
+</ol>
+</div>
+<div id="simulation" class="section level1">
+<h1>8.1.1 Simulation</h1>
+<p>Let’s try out a toy example of the first case with a simple simulated network.</p>
+<pre class="r"><code>n=20
+f=50
+trait=sort(runif(n,min=0, max=1))
+n.flocks=sort(rpois(n, lambda=10))
+ibg=matrix(nrow=n, ncol=f)
+ibg</code></pre>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13]
+##  [1,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [2,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [3,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [4,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [5,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [6,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [7,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [8,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##  [9,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [10,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [11,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [12,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [13,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [14,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [15,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [16,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [17,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [18,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [19,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+## [20,]   NA   NA   NA   NA   NA   NA   NA   NA   NA    NA    NA    NA    NA
+##       [,14] [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]
+##  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [20,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##       [,25] [,26] [,27] [,28] [,29] [,30] [,31] [,32] [,33] [,34] [,35]
+##  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [20,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##       [,36] [,37] [,38] [,39] [,40] [,41] [,42] [,43] [,44] [,45] [,46]
+##  [1,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [2,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [3,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [4,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [5,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [6,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [7,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [8,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##  [9,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [10,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [11,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [12,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [13,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [14,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [15,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [16,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [17,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [18,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [19,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+## [20,]    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA    NA
+##       [,47] [,48] [,49] [,50]
+##  [1,]    NA    NA    NA    NA
+##  [2,]    NA    NA    NA    NA
+##  [3,]    NA    NA    NA    NA
+##  [4,]    NA    NA    NA    NA
+##  [5,]    NA    NA    NA    NA
+##  [6,]    NA    NA    NA    NA
+##  [7,]    NA    NA    NA    NA
+##  [8,]    NA    NA    NA    NA
+##  [9,]    NA    NA    NA    NA
+## [10,]    NA    NA    NA    NA
+## [11,]    NA    NA    NA    NA
+## [12,]    NA    NA    NA    NA
+## [13,]    NA    NA    NA    NA
+## [14,]    NA    NA    NA    NA
+## [15,]    NA    NA    NA    NA
+## [16,]    NA    NA    NA    NA
+## [17,]    NA    NA    NA    NA
+## [18,]    NA    NA    NA    NA
+## [19,]    NA    NA    NA    NA
+## [20,]    NA    NA    NA    NA</code></pre>
+<p>```</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

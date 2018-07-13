@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="tutorials.html">Tutorials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="9" style="list-style-type: decimal">
+<li>Comparing against the Null Hypothesis: Permutations and Randomizations</li>
+</ol></h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>7/12/2018</em></h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#node-label-permutations">8.1 Node-label Permutations</a><ul>
+<li><a href="#example-with-flock-simulation">8.1.1 Example with flock simulation</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>Packages you’ll need:</p>
+<pre class="r"><code>library(asnipe)
+library(igraph)</code></pre>
+<hr />
+<p>Thus far, we have learned how to measure empirical networks in a variety of ways. However, we are often not satisfied with simply constructing and measuring networks. What we really want to know is: does our empirical network show some patterns that deviates from a random process?</p>
+<p>This brings us to hypothesis testing–that is, we want to compare the properties of our networks against some baseline, i.e., a null hypothesis/model. That is, we can ask the question: is our network non-random?</p>
+<p>The problem with this simplistic question, however, is that no real network is ever random. There are a multitude of factors that make networks deviate from an idealized Erdös-Renyí random graph (see [7. Random Graphs)(07_randomnets.html))</p>
+<p>Because most networks are complex and relational data do not conform to the requirement of non-independence of data, we often use randomizations/permutations to generate null models against which we can compare the empirical data. Here, we focus narrowly on some classic forms of null model hypothesis testing using randomizations. In the context of animal social networks, there have been a couple of good review and tutorial of this method (Croft et al. 2011; Farine &amp; Whitehead 2015). We will provide a quick overview here.</p>
+<div id="node-label-permutations" class="section level2">
+<h2>8.1 Node-label Permutations</h2>
+<p>Node-label permutations involve shuffling the node type or node values (e.g., sex, size, etc.) randomly across all nodes in a network, while keeping the edges the same. This ensures that the inherent structural pattern of the network remains the same, but the node values are randomized. This type of randomization scheme may be appropriate when you are interested in understanding how node attributes affect connectivity of nodes, e.g.:</p>
+<ol style="list-style-type: lower-alpha">
+<li>testing correlations between node attribute and network position</li>
+<li>using as null model for assortativity</li>
+</ol>
+<div id="example-with-flock-simulation" class="section level3">
+<h3>8.1.1 Example with flock simulation</h3>
+<p>Let’s re-create the flock simulation from <a href="08_simulations.html">section 8</a>. In this simulation, we set up 50 individuals with variation in a trait as well as variation in gregariousness (probability of joining a given flock). Based on these parameters, we simulate observations of 100 flocks, then create a network.</p>
+<pre class="r"><code>set.seed(2)
+n=50 #populatoin
+trait=sort(rnorm(n,mean=20, sd=5), decreasing = T) #trait
+p=sort(runif(n, min=0.01, max=0.1)) #gregariousness
+f=100 #number of flock observations
+
+#Now set up and construct simulated flock observations
+ibg=matrix(0,nrow=n, ncol=f)
+
+for(i in 1:n){
+  for (j in 1:f){
+  ibg[i,j]=sample(c(1,0), 1, prob=c(p[i], 1-p[i]))
+  }
+}
+
+#calculate association index (simple ratio index) from this individual-by-group matrix.
+adj=get_network(t(ibg), data_format=&quot;GBI&quot;, association_index=&quot;SRI&quot;)</code></pre>
+<pre><code>## Generating  50  x  50  matrix</code></pre>
+<pre class="r"><code>#create and plot network, with vertex size proportional to trait value
+g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)
+plot(g,vertex.size=trait/2, vertex.label=&quot;&quot;, edge.width=E(g)$weight*5)</code></pre>
+<p><img src="09_permutations_files/figure-html/unnamed-chunk-2-1.png" width="384" /></p>
+<p>We showed in this simulation that degree centrality is correlated to the trait:</p>
+<pre class="r"><code>plot(trait, degree(g), pch=19)</code></pre>
+<p><img src="09_permutations_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
+<pre class="r"><code>cor.test(trait, degree(g))</code></pre>
+<pre><code>## 
+##  Pearson&#39;s product-moment correlation
+## 
+## data:  trait and degree(g)
+## t = -8.0451, df = 48, p-value = 1.883e-10
+## alternative hypothesis: true correlation is not equal to 0
+## 95 percent confidence interval:
+##  -0.8556276 -0.6075387
+## sample estimates:
+##        cor 
+## -0.7577462</code></pre>
+<p>Now, let’s test whether this pattern is statistically significant. That is, what is the probability that one would get this level of correlation between trait and degree by chance?</p>
+<p>First, let’s store the correlation coefficient from our observed (simulated) network:</p>
+<pre class="r"><code>obs.cor=cor(trait, degree(g))
+obs.cor</code></pre>
+<pre><code>## [1] -0.7577462</code></pre>
+<p>Now, what we want to do is figure out what would be the correlation coefficient between trait and node degree if the trait value was randomized across individuals. This is what is called node label permutation.</p>
+<p>What we need to do is randomize the trait value across individuals.</p>
+<p>Here is one way:</p>
+<pre class="r"><code>V(g)$trait=trait
+
+V(g)$trait.random=sample(V(g)$trait, length(V(g)$trait), replace=F)
+
+plot(V(g)$trait.random, degree(g))</code></pre>
+<p><img src="09_permutations_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
+<pre class="r"><code>cor(V(g)$trait.random, degree(g))</code></pre>
+<pre><code>## [1] 0.1578334</code></pre>
+<p>Now, we will conduct this randomization a large number of times (say 1000 times) and measure the correlation coefficient each time. This will generate a null distribution of the correlation coefficient.</p>
+<pre class="r"><code>times=1000
+cor.random=vector(length=times)
+for(i in 1:times){
+  V(g)$trait.random=sample(V(g)$trait, length(V(g)$trait), replace=F)
+  cor.random[i]=cor(V(g)$trait.random, degree(g))
+}
+hist(cor.random, xlim=c(-1,1))
+abline(v=obs.cor, lty=2, col=&quot;red&quot;)</code></pre>
+<p><img src="09_permutations_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
+<pre class="r"><code>p.value=length(which(cor.random&lt;=obs.cor))/(times+1)
+p.value</code></pre>
+<pre><code>## [1] 0</code></pre>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
