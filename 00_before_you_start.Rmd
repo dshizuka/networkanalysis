@@ -14,7 +14,7 @@ This workshop will use R as the base language for all computer exercises. I have
 
 Run this code:
 ```{r, eval=F}
-install.packages(c("igraph", "bipartite", "asnipe", "assortnet", "ggplot2", "ggmap", "rnetcarto", "ecodist", "igraphdata", "statnet", "RColorBrewer"))
+install.packages(c("igraph", "bipartite", "asnipe", "assortnet", "ggplot2", "ggmap", "rnetcarto", "ecodist", "igraphdata", "statnet", "RColorBrewer", "tidyverse"))
 ```
 
 In addition, run this code to download and install the `popgraph` package from github
