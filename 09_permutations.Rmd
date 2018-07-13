@@ -47,4 +47,4 @@ ibg=matrix(nrow=n, ncol=f)
 ibg
 
 ```
-```
+
