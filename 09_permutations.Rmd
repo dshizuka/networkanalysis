@@ -28,7 +28,7 @@ Thus far, we have learned how to measure empirical networks in a variety of ways
 
 This brings us to hypothesis testing--that is, we want to compare the properties of our networks against some baseline, i.e., a null hypothesis/model. That is, we can ask the question: is our network non-random? 
 
-The problem with this simplistic question, however, is that no real network is ever random. There are a multitude of factors that make networks deviate from an idealized Erdös-Renyí random graph (see [7. Random Graphs)](07_randomnets.html)) 
+The problem with this simplistic question, however, is that no real network is ever random. There are a multitude of factors that make networks deviate from an idealized Erdös-Renyí random graph (see [7. Random Graphs](07_randomnets.html)) 
 
 Because most networks are complex and relational data do not conform to the requirement of non-independence of data, we often use randomizations/permutations to generate null models against which we can compare the empirical data. Here, we focus narrowly on some classic forms of null model hypothesis testing using randomizations. In the context of animal social networks, there have been a couple of good review and tutorial of this method (Croft et al. 2011; Farine & Whitehead 2015). We will provide a quick overview here.
 
@@ -39,6 +39,34 @@ Node-label permutations involve shuffling the node type or node values (e.g., se
 (a) testing correlations between node attribute and network position 
 (b) using as null model for assortativity
 
+```{r, echo=F, fig.width=6}
+##figures
+set.seed(2)
+n=20
+p=0.1
+g1=erdos.renyi.game(n, p=0.4)
+V(g1)$trait=sample(c(1,2), n, prob=c(p, 1-p), replace=T)
+g2=erdos.renyi.game(n, p=0.4)
+V(g2)$trait=sample(c(1,2), n, prob=c(1-p, p), replace=T)
+g3=g1+g2
+
+for(i in 1:20){
+  g3=add_edges(g3,c(sample(1:n, 1), sample((n+1):(n*2),1)))
+}
+
+#plot(g3, vertex.color=c("tomato", "gold")[V(g3)$trait], vertex.label="", layout=layout_in_circle(g3), edge.color="black")
+
+V(g3)$trait.random1=sample(V(g3)$trait, length(V(g3)$trait), replace=F)
+V(g3)$trait.random2=sample(V(g3)$trait, length(V(g3)$trait), replace=F)
+V(g3)$trait.random3=sample(V(g3)$trait, length(V(g3)$trait), replace=F)
+
+layout(matrix(c(1,1,1,2,3,4), byrow=F, nrow=3))
+par(mar=c(1,1,1,1))
+plot(g3, vertex.color=c("red", "gold")[V(g3)$trait], vertex.label="", layout=layout_in_circle(g3), edge.color="black")
+plot(g3, vertex.color=c("red", "gold")[V(g3)$trait.random1], vertex.label="", layout=layout_in_circle(g3), edge.color="black")
+plot(g3, vertex.color=c("red", "gold")[V(g3)$trait.random2], vertex.label="", layout=layout_in_circle(g3), edge.color="black")
+plot(g3, vertex.color=c("red", "gold")[V(g3)$trait.random3], vertex.label="", layout=layout_in_circle(g3), edge.color="black")
+```
 
 
 ###8.1.1 Example with...
