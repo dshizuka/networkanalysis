@@ -287,7 +287,7 @@ plot(V(g)$trait.random, degree(g))</code></pre>
 <pre class="r"><code>cor(V(g)$trait.random, degree(g))</code></pre>
 <pre><code>## [1] 0.1578334</code></pre>
 <p>Now, we will conduct this randomization a large number of times (say 1000 times) and measure the correlation coefficient each time. This will generate a null distribution of the correlation coefficient.</p>
-<pre class="r"><code>times=10000
+<pre class="r"><code>times=1000
 cor.random=vector(length=times)
 for(i in 1:times){
   V(g)$trait.random=sample(V(g)$trait, length(V(g)$trait), replace=F)
