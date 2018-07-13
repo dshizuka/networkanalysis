@@ -39,7 +39,7 @@ Node-label permutations involve shuffling the node type or node values (e.g., se
 (a) testing correlations between node attribute and network position 
 (b) using as null model for assortativity
 
-```{r, echo=F, fig.width=6}
+```{r, echo=F}
 ##figures
 set.seed(2)
 n=20
@@ -59,7 +59,8 @@ for(i in 1:20){
 V(g3)$trait.random1=sample(V(g3)$trait, length(V(g3)$trait), replace=F)
 V(g3)$trait.random2=sample(V(g3)$trait, length(V(g3)$trait), replace=F)
 V(g3)$trait.random3=sample(V(g3)$trait, length(V(g3)$trait), replace=F)
-
+```
+```{r, echo=F, fig.width=6, fig.cap="Illustration of node label permutation: The node labels in the large graph has been permuted in three different versions." }
 layout(matrix(c(1,1,1,2,3,4), byrow=F, nrow=3))
 par(mar=c(1,1,1,1))
 plot(g3, vertex.color=c("red", "gold")[V(g3)$trait], vertex.label="", layout=layout_in_circle(g3), edge.color="black")
@@ -69,7 +70,7 @@ plot(g3, vertex.color=c("red", "gold")[V(g3)$trait.random3], vertex.label="", la
 ```
 
 
-###8.1.1 Example with...
+<br>
 
 
 ##8.2 Edge Permutations
