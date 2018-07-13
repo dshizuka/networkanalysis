@@ -73,5 +73,43 @@ plot(trait, degree(g), pch=19)
 cor.test(trait, degree(g))
 ```
 
+Now, let's test whether this pattern is statistically significant. That is, what is the probability that one would get this level of correlation between trait and degree by chance?
 
+First, let's store the correlation coefficient from our observed (simulated) network:
 
+```{r}
+obs.cor=cor(trait, degree(g))
+obs.cor
+```
+
+Now, what we want to do is figure out what would be the correlation coefficient between trait and node degree if the trait value was randomized across individuals. This is what is called node label permutation. 
+
+What we need to do is randomize the trait value across individuals. 
+
+Here is one way:
+```{r}
+V(g)$trait=trait
+
+V(g)$trait.random=sample(V(g)$trait, length(V(g)$trait), replace=F)
+
+plot(V(g)$trait.random, degree(g))
+cor(V(g)$trait.random, degree(g))
+```
+
+Now, we will conduct this randomization a large number of times (say 1000 times) and measure the correlation coefficient each time. This will generate a null distribution of the correlation coefficient.
+
+```{r}
+times=1000
+cor.random=vector(length=times)
+for(i in 1:times){
+  V(g)$trait.random=sample(V(g)$trait, length(V(g)$trait), replace=F)
+  cor.random[i]=cor(V(g)$trait.random, degree(g))
+}
+hist(cor.random, xlim=c(-1,1))
+abline(v=obs.cor, lty=2, col="red")
+```
+
+```{r}
+p.value=length(which(cor.random<=obs.cor))/(times+1)
+p.value
+```
