@@ -199,7 +199,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><ol start="9" style="list-style-type: decimal">
+<h1 class="title toc-ignore"><ol start="8" style="list-style-type: decimal">
 <li>Simulating Networks</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
@@ -230,7 +230,7 @@ trait=sort(rnorm(n,mean=20, sd=5), decreasing = T) </code></pre>
 <pre class="r"><code>p=sort(runif(n, min=0.01, max=0.1)) #gregariousness
 
 plot(trait, p, ylab=&quot;Gregariousness&quot;, xlab=&quot;Trait Value&quot;) #see that gregariousness and trait are correlated</code></pre>
-<p><img src="09_simulations_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
+<p><img src="08_simulations_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
 <p>Ok, now let’s simulate some flock observations. First, we’ll choose how many flocks to observe. Totally arbitrarily, let’s just say we’ll observe 100 flocks.</p>
 <pre class="r"><code>f=100</code></pre>
 <p>Then, we’ll implement a simulation that will ultimately generate an individual-by-group matrix, whose dimensions will be 50 rows x 100 columns. The simulation will go as follows: For each cell, the probability that the individual (rows) is found in that flock (column) depends on that individual’s gregariousness value, <span class="math inline">\(p\)</span></p>
@@ -248,10 +248,11 @@ for(i in 1:n){
 g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)</code></pre>
 <p>Let’s plot the resulting network, with node size proportional to the individual’s trait value.</p>
 <pre class="r"><code>plot(g,vertex.size=trait/2, vertex.label=&quot;&quot;, edge.width=E(g)$weight*5)</code></pre>
-<p><img src="09_simulations_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
+<p><img src="08_simulations_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
 <p>Now, let’s plot the relationship between trait value and the individual’s degree centrality.</p>
 <pre class="r"><code>plot(trait, degree(g), pch=19, col=&quot;tomato&quot;)</code></pre>
-<p><img src="09_simulations_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p><img src="08_simulations_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p>As you can see, there is quite a strong correlation between trait and social position of the individual.</p>
 <pre class="r"><code>cor.test(trait, degree(g))</code></pre>
 <pre><code>## 
 ##  Pearson&#39;s product-moment correlation

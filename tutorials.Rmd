@@ -28,6 +28,9 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[7. Random Graphs](07_randomnets.html)
 
+###[8. Simulating Networks](08_simulations.html)
+
+###[9. Testing Your Network: Permuations and Randomizations](09_permuations.html)
 
 --------
 

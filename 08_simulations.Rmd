@@ -1,5 +1,5 @@
 ---
-title: "9. Simulating Networks"
+title: "8. Simulating Networks"
 author: "Dai Shizuka"
 date: "7/12/2018"
 output: 
