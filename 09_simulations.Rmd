@@ -1,0 +1,65 @@
+---
+title: "9. Simulating Networks"
+author: "Dai Shizuka"
+date: "7/12/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: false
+---
+
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
+set.seed(2)
+```
+
+----
+
+Here, we will simulate some social networks just to get a feel for how to create networks based on simple rules. 
+
+
+```{r message=F}
+library(asnipe)
+library(igraph)
+```
+
+##1. Flock network with size-related variation in gregariousness
+
+Let's imagine a scenario in which individuals vary in how often they join groups (e.g., flocks). 
+
+In addition, let's imagine that smaller individuals tend to join flocks more often than larger individuals. 
+
+In this fictitious scenario, will we find correlation between size and centrality?
+
+Let's start by setting up a population of 50 individuals with a normalized measure of size (i.e., size is going to be an index with a mean of 0 and standard deviation of 1).
+```{r}
+n=50
+trait=sort(rnorm(n,mean=0))
+hist(trait)
+```
+
+```{r}
+n.flocks=sort(rpois(n, lambda=5))
+f=length(n.flocks*2)
+```
+
+```{r}
+ibg=matrix(nrow=n, ncol=f)
+
+for(i in 1:n){
+  ibg[i,sample(1:f, n.flocks[i], replace=F)]=1
+}
+ibg[is.na(ibg)]=0
+
+
+adj=get_network(t(ibg), data_format="GBI", association_index="SRI")
+g=graph_from_adjacency_matrix(adj, "undirected", weighted=T)
+plot(g,vertex.size=trait+abs(min(trait))*5, vertex.label="")
+```
+
+```{r}
+plot(trait, degree(g))
+```
