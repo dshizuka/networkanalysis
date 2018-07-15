@@ -1,0 +1,45 @@
+---
+title: "10. Intro to Network Regression (MRQAP)"
+author: "Dai Shizuka"
+date: "7/12/2018"
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+    toc_float: false
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
+set.seed(2)
+```
+
+Perhaps the most common class of statistical models ecologists employ is the linear model. Linear models can be easily applied to predict the effect of one individual attribute on another (e.g., effect of node trait on node position in a network). However, the task is much more difficult when we want to predict the effect of some relational variable on network relations--e.g., how the similarity between two nodes affects the probability of an edge, or how network relations predict the transmission of pathogens. This is because relational data are not independent, so we require methods that can account for this non-independence.
+
+The Mantel Test (Mantel 1967) has long been a useful approach for this type of data. The Mantel Test is a nonparametric matrix correlation test that uses permutations (node-permutations in this case) to get around the problem of non-independence. This test is widely available in several different R packages, for example those focused on community ecology (e.g., ‘ecodist’).
+
+The Quadratic Assignment Procedure (QAP) is an extension of the Mantel Test in a regression framework, developed in the field of psychometrics. The Multiple Regression Quadratic Assignment Procedure (MRQAP) is an extension of this approach to allow for multiple covariate matrices (Krackhardt 1988). Essentially, MRQAP allows you to determine the influence of one matrix on another, controlling for the effects of one or more covariate matrices. There are several forms of MRQAP, but the most popular method is called the Double Semipartialling (DSP) method, developed by Dekker et al. (2007). This method permutes the matrix of residuals from the ordinary least regression of the dependent matrix on the independent matrices, to estimate error and calculate the effects.
+
+MRQAP can be implemented in the R packages ‘sna’ (which is bundled inside ‘statnet’) and ‘asnipe’. There are slight differences between the outputs for the two functions, but the results are nearly the same. Here is a simple code just to illustrate how to implement these:
+
+```{r message=F}
+library(sna) 
+library(asnipe)
+```
+
+```{r}
+#generate 3 random adjacency matrices using the rgraph() function within sna
+set.seed(2)
+m1=rgraph(10, m=1, tprob=0.5, mode="graph")
+m2=rgraph(10, m=1, tprob=0.5, mode="graph") 
+m3=rgraph(10, m=1, tprob=0.5, mode="graph")
+#test the effect of m2 on m1, controlling for m3. sna package function.
+
+netlm(m1, m2+m3, mode="graph", nullhyp="qap", test.statistic="t-value")
+
+#test the effect of m2 on m1 controlling for m3, and effect of m3 on m1, controlling for m2. asnipe package function.
+
+mrqap.dsp(m1~m2+m3, directed="undirected")
+```
+

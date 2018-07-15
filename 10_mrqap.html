@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="tutorials.html">Tutorials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="10" style="list-style-type: decimal">
+<li>Intro to Network Regression (MRQAP)</li>
+</ol></h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>7/12/2018</em></h4>
+
+</div>
+
+
+<p>Perhaps the most common class of statistical models ecologists employ is the linear model. Linear models can be easily applied to predict the effect of one individual attribute on another (e.g., effect of node trait on node position in a network). However, the task is much more difficult when we want to predict the effect of some relational variable on network relations–e.g., how the similarity between two nodes affects the probability of an edge, or how network relations predict the transmission of pathogens. This is because relational data are not independent, so we require methods that can account for this non-independence.</p>
+<p>The Mantel Test (Mantel 1967) has long been a useful approach for this type of data. The Mantel Test is a nonparametric matrix correlation test that uses permutations (node-permutations in this case) to get around the problem of non-independence. This test is widely available in several different R packages, for example those focused on community ecology (e.g., ‘ecodist’).</p>
+<p>The Quadratic Assignment Procedure (QAP) is an extension of the Mantel Test in a regression framework, developed in the field of psychometrics. The Multiple Regression Quadratic Assignment Procedure (MRQAP) is an extension of this approach to allow for multiple covariate matrices (Krackhardt 1988). Essentially, MRQAP allows you to determine the influence of one matrix on another, controlling for the effects of one or more covariate matrices. There are several forms of MRQAP, but the most popular method is called the Double Semipartialling (DSP) method, developed by Dekker et al. (2007). This method permutes the matrix of residuals from the ordinary least regression of the dependent matrix on the independent matrices, to estimate error and calculate the effects.</p>
+<p>MRQAP can be implemented in the R packages ‘sna’ (which is bundled inside ‘statnet’) and ‘asnipe’. There are slight differences between the outputs for the two functions, but the results are nearly the same. Here is a simple code just to illustrate how to implement these:</p>
+<pre class="r"><code>library(sna) 
+library(asnipe)</code></pre>
+<pre class="r"><code>#generate 3 random adjacency matrices using the rgraph() function within sna
+set.seed(2)
+m1=rgraph(10, m=1, tprob=0.5, mode=&quot;graph&quot;)
+m2=rgraph(10, m=1, tprob=0.5, mode=&quot;graph&quot;) 
+m3=rgraph(10, m=1, tprob=0.5, mode=&quot;graph&quot;)
+#test the effect of m2 on m1, controlling for m3. sna package function.
+
+netlm(m1, m2+m3, mode=&quot;graph&quot;, nullhyp=&quot;qap&quot;, test.statistic=&quot;t-value&quot;)</code></pre>
+<pre><code>## 
+## OLS Network Model
+## 
+## Coefficients:
+##             Estimate   Pr(&lt;=b) Pr(&gt;=b) Pr(&gt;=|b|)
+## (intercept)  0.6245211 0.998   0.002   0.002    
+## x1          -0.0862069 0.177   0.828   0.365    
+## 
+## Residual standard error: 0.5044 on 43 degrees of freedom
+## F-statistic: 0.6778 on 1 and 43 degrees of freedom, p-value: 0.4149 
+## Multiple R-squared: 0.01552  Adjusted R-squared: -0.007378</code></pre>
+<pre class="r"><code>#test the effect of m2 on m1 controlling for m3, and effect of m3 on m1, controlling for m2. asnipe package function.
+
+mrqap.dsp(m1~m2+m3, directed=&quot;undirected&quot;)</code></pre>
+<pre><code>## MRQAP with Double-Semi-Partialing (DSP)
+## 
+## Formula:  m1 ~ m2 + m3 
+## 
+## Coefficients:
+##           Estimate    P(β&gt;=r) P(β&lt;=r) P(|β|&lt;=|r|)
+## intercept  0.62001925 1.000   0.000   0.000      
+## m2         0.05813282 0.678   0.322   0.664      
+## m3        -0.23561116 0.064   0.936   0.123      
+## 
+## Residual standard error: 0.5002 on 42 degrees of freedom
+## F-statistic: 1.202 on 2 and 42 degrees of freedom, p-value: 0.3106 
+## Multiple R-squared: 0.05416  Adjusted R-squared: 0.00912 
+## AIC: -40.77726</code></pre>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
