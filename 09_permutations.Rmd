@@ -109,60 +109,20 @@ $\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ \end{bmatrix}$
 
 There are generally two ways to generate a P-value using the group membership swapping algorithm. First, one could repeat the swaps until the test statistic of interest (modularity in this case) stabilizes to a range of values corresponding to a randomized matrix, and then repeat this procedure a large number of times, say 1,000 times, to calculate a distribution of the test statistic under the null model (let’s call it the ‘global test’). Alternatively, one can run a large number of swaps from a single initial matrix, calculating a test statistic after each ‘swap’ of the matrix, and compare this distribution against the empirical test statistic (‘serial test’). Manly (1995) discusses why the serial method is a valid method for testing whether the empirical matrix is non-random as long as we conduct a very large number of swaps. I will not get into the logic behind this: I highly recommend reading the Manly (1995) and references therein. The ‘serial test’ method is much more computationally efficient than the ‘global test’.
 
-##8.4 Which randomization is right for you?
+##8.4 Using Randomizations for Hypothesis Testing
+
+These randomization procedures can be used as a null model--i.e., a model to generate a distribution of the value of interest (e.g., node-level or global measure) that is expected under the null hypothesis. Then, what we can do is to compare the empirical value against this null distribution.
 
 The choice of permutation strategy depends fundamentally on the question you want to ask. 
+
 Is your question about the role of node attributes in the structure of the network? If so, then you might consider a node label permutation method. 
-Is your question about 
+
+Is your question about the structural properties of the network that is NOT dependent on node attributes (e.g., community structure, degree distribution, etc.)? Then edge permutations are likely to be most appropriate.
+
+If your question is about the structural property of the network, but your network is based on group co-membership, then you will want to conduct the group membership permutation method. 
+
+I highly recommend [Farine (2017)](https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12772) for a guide to randomization procedures.
+
+I recommend going through some of the worked examples to get practice using these different types of randomization procedures. 
 
 
-```{r}
-#use UK faculty
-library(igraphdata)
-data(UKfaculty)
-ukf=simplify(UKfaculty)
-ukf=as.undirected(ukf)
-ukf
-```
-Node-label permutation
-```{r}
-setup=layout(matrix(c(1,1,1,2,3,4), 2,3, byrow=T))
-par(mar=c(1,1,2,1))
-l=layout_with_fr(ukf)
-plot(ukf,layout=l, vertex.color=c("tomato", "slateblue", "yellow", "green")[V(ukf)$Group], vertex.label="", vertex.size=10, main=list("original", cex=2))
-
-for (i in 1:3){
-  V(ukf)$color=c("tomato", "slateblue", "yellow", "green")[sample(V(ukf)$Group, vcount(ukf),  replace=F)]
-  plot(ukf,layout=l, vertex.label="", vertex.size=10, main=paste("Permutation ", i, sep=""))
-}
-
-hist(degree(ukf))
-
-```
-Edge permutation (unconstrained)
-```{r}
-#
-setup=layout(matrix(c(1,1,1,2,3,4), 2,3, byrow=T))
-par(mar=c(1,1,2,1))
-l=layout_with_fr(ukf, weights=E(ukf)$weight)
-plot(ukf,layout=l, vertex.color=c("tomato", "slateblue", "yellow", "green")[V(ukf)$Group], vertex.label="", vertex.size=10, main=list("original", cex=2), edge.width=E(ukf)$weight/5)
-
-for (i in 1:3){
-  ukf2=rewire(ukf, each_edge(prob=1))
-  plot(ukf2,vertex.label="", vertex.size=10, main=paste("Permutation ", i, sep=""))
-}
-```
-
-Edge rewiring
-```{r}
-
-setup=layout(matrix(c(1,1,1,2,3,4), 2,3, byrow=T))
-par(mar=c(1,1,2,1))
-l=layout_with_fr(ukf, weights=E(ukf)$weight)
-plot(ukf,layout=l, vertex.color=c("tomato", "slateblue", "yellow", "green")[V(ukf)$Group], vertex.label="", vertex.size=10, main=list("original", cex=2), edge.width=E(ukf)$weight/5)
-
-for (i in 1:3){
-  ukf3=rewire(ukf, keeping_degseq(niter=vcount(ukf)))
-  plot(ukf3,vertex.label="", vertex.size=10, main=paste("Permutation ", i, sep=""))
-}
-```

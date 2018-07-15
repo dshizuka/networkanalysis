@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -218,7 +215,7 @@ $(document).ready(function () {
 <li><a href="#edge-rewiring-while-keeping-the-degree-distribution-constant">8.2.2. Edge rewiring while keeping the degree distribution constant</a></li>
 <li><a href="#group-membership-permutation">8.3 Group membership permutation</a></li>
 </ul></li>
-<li><a href="#which-randomization-is-right-for-you">8.4 Which randomization is right for you?</a></li>
+<li><a href="#using-randomizations-for-hypothesis-testing">8.4 Using Randomizations for Hypothesis Testing</a></li>
 </ul>
 </div>
 
@@ -279,62 +276,15 @@ Illustration of node label permutation: The node labels in the large graph has b
 <p>There are generally two ways to generate a P-value using the group membership swapping algorithm. First, one could repeat the swaps until the test statistic of interest (modularity in this case) stabilizes to a range of values corresponding to a randomized matrix, and then repeat this procedure a large number of times, say 1,000 times, to calculate a distribution of the test statistic under the null model (let’s call it the ‘global test’). Alternatively, one can run a large number of swaps from a single initial matrix, calculating a test statistic after each ‘swap’ of the matrix, and compare this distribution against the empirical test statistic (‘serial test’). Manly (1995) discusses why the serial method is a valid method for testing whether the empirical matrix is non-random as long as we conduct a very large number of swaps. I will not get into the logic behind this: I highly recommend reading the Manly (1995) and references therein. The ‘serial test’ method is much more computationally efficient than the ‘global test’.</p>
 </div>
 </div>
-<div id="which-randomization-is-right-for-you" class="section level2">
-<h2>8.4 Which randomization is right for you?</h2>
-<p>The choice of permutation strategy depends fundamentally on the question you want to ask. Is your question about the role of node attributes in the structure of the network? If so, then you might consider a node label permutation method. Is your question about</p>
-<pre class="r"><code>#use UK faculty
-library(igraphdata)
-data(UKfaculty)
-ukf=simplify(UKfaculty)
-ukf=as.undirected(ukf)
-ukf</code></pre>
-<pre><code>## IGRAPH 4baa0c3 U-W- 81 577 -- 
-## + attr: Type (g/c), Date (g/c), Citation (g/c), Author (g/c),
-## | Group (v/n), weight (e/n)
-## + edges from 4baa0c3:
-##  [1]  1-- 4  3-- 4  5-- 6  5-- 7  6-- 7  3-- 9  4-- 9  5-- 9  5--10  7--10
-## [11]  5--12  7--12  5--13  7--13 10--13 12--13  2--15 14--15  5--16  7--16
-## [21] 12--16 13--16  3--17  4--17  9--17  2--18  7--18 15--18 15--19 18--19
-## [31]  2--20  6--20  8--20 14--20 15--20 18--20 19--20  2--21  8--21 10--21
-## [41] 13--21 15--21 19--21  5--22  7--22 10--22 12--22 21--22  5--23  7--23
-## [51] 10--23 12--23 13--23 22--23  2--25 15--25 20--25 21--25  2--26 14--26
-## [61] 20--26 21--26  5--27  7--27 10--27 13--27 16--27 19--27 22--27 23--27
-## + ... omitted several edges</code></pre>
-<pre class="r"><code>setup=layout(matrix(c(1,1,1,2,3,4), 2,3, byrow=T))
-par(mar=c(1,1,2,1))
-l=layout_with_fr(ukf)
-plot(ukf,layout=l, vertex.color=c(&quot;tomato&quot;, &quot;slateblue&quot;, &quot;yellow&quot;, &quot;green&quot;)[V(ukf)$Group], vertex.label=&quot;&quot;, vertex.size=10, main=list(&quot;original&quot;, cex=2))
-
-for (i in 1:3){
-  V(ukf)$color=c(&quot;tomato&quot;, &quot;slateblue&quot;, &quot;yellow&quot;, &quot;green&quot;)[sample(V(ukf)$Group, vcount(ukf),  replace=F)]
-  plot(ukf,layout=l, vertex.label=&quot;&quot;, vertex.size=10, main=paste(&quot;Permutation &quot;, i, sep=&quot;&quot;))
-}</code></pre>
-<p><img src="09_permutations_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
-<pre class="r"><code>hist(degree(ukf))
-
-#
-setup=layout(matrix(c(1,1,1,2,3,4), 2,3, byrow=T))</code></pre>
-<p><img src="09_permutations_files/figure-html/unnamed-chunk-4-2.png" width="384" /></p>
-<pre class="r"><code>par(mar=c(1,1,2,1))
-l=layout_with_fr(ukf, weights=E(ukf)$weight)
-plot(ukf,layout=l, vertex.color=c(&quot;tomato&quot;, &quot;slateblue&quot;, &quot;yellow&quot;, &quot;green&quot;)[V(ukf)$Group], vertex.label=&quot;&quot;, vertex.size=10, main=list(&quot;original&quot;, cex=2), edge.width=E(ukf)$weight/5)
-
-for (i in 1:3){
-  ukf2=rewire(ukf, each_edge(prob=1))
-  plot(ukf2,vertex.label=&quot;&quot;, vertex.size=10, main=paste(&quot;Permutation &quot;, i, sep=&quot;&quot;))
-}</code></pre>
-<p><img src="09_permutations_files/figure-html/unnamed-chunk-4-3.png" width="384" /></p>
-<pre class="r"><code>#
-setup=layout(matrix(c(1,1,1,2,3,4), 2,3, byrow=T))
-par(mar=c(1,1,2,1))
-l=layout_with_fr(ukf, weights=E(ukf)$weight)
-plot(ukf,layout=l, vertex.color=c(&quot;tomato&quot;, &quot;slateblue&quot;, &quot;yellow&quot;, &quot;green&quot;)[V(ukf)$Group], vertex.label=&quot;&quot;, vertex.size=10, main=list(&quot;original&quot;, cex=2), edge.width=E(ukf)$weight/5)
-
-for (i in 1:3){
-  ukf3=rewire(ukf, keeping_degseq(niter=vcount(ukf)))
-  plot(ukf3,vertex.label=&quot;&quot;, vertex.size=10, main=paste(&quot;Permutation &quot;, i, sep=&quot;&quot;))
-}</code></pre>
-<p><img src="09_permutations_files/figure-html/unnamed-chunk-4-4.png" width="384" /></p>
+<div id="using-randomizations-for-hypothesis-testing" class="section level2">
+<h2>8.4 Using Randomizations for Hypothesis Testing</h2>
+<p>These randomization procedures can be used as a null model–i.e., a model to generate a distribution of the value of interest (e.g., node-level or global measure) that is expected under the null hypothesis. Then, what we can do is to compare the empirical value against this null distribution.</p>
+<p>The choice of permutation strategy depends fundamentally on the question you want to ask.</p>
+<p>Is your question about the role of node attributes in the structure of the network? If so, then you might consider a node label permutation method.</p>
+<p>Is your question about the structural properties of the network that is NOT dependent on node attributes (e.g., community structure, degree distribution, etc.)? Then edge permutations are likely to be most appropriate.</p>
+<p>If your question is about the structural property of the network, but your network is based on group co-membership, then you will want to conduct the group membership permutation method.</p>
+<p>I highly recommend <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12772">Farine (2017)</a> for a guide to randomization procedures.</p>
+<p>I recommend going through some of the worked examples to get practice using these different types of randomization procedures.</p>
 </div>
 
 
