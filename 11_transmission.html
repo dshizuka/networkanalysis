@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title></title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="tutorials.html">Tutorials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore"><ol start="11" style="list-style-type: decimal">
+<li>Intro to Transmission on Networks</li>
+</ol></h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>7/12/2018</em></h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#diffusionflowtransmission-through-a-network">11.1 Diffusion/Flow/Transmission through a network</a><ul>
+<li><a href="#simulation-of-asocial-changes-in-state-e.g.-asocial-learning">11.2 Simulation of asocial changes in state (e.g., asocial learning)</a></li>
+<li><a href="#simulation-the-social-transmission-of-whatever-state-in-a-random-graph">11.3 Simulation the social transmission of <em>whatever</em> state in a random graph</a></li>
+</ul></li>
+</ul>
+</div>
+
+<p>Packages you will need for this tutorial:</p>
+<pre class="r"><code>library(igraph)</code></pre>
+<hr />
+<div id="diffusionflowtransmission-through-a-network" class="section level1">
+<h1>11.1 Diffusion/Flow/Transmission through a network</h1>
+<p>One of the assumptions of network theory is that the connections between elements in a system matter to the function/property of the system and/or the individual elements within the system. One way in which such connections matters is that they can facilitate the flow of <em>something</em> through this system. Some examples include:</p>
+<ul>
+<li>Electricity through an electric grid</li>
+<li>Bits of information through the internet</li>
+<li>Vehicles/individuals moving through a transportation network</li>
+<li>Information through social networks</li>
+<li>Disease through contact networks</li>
+<li>Modification of social strategies through competition networks</li>
+</ul>
+<p><br></p>
+<div id="simulation-of-asocial-changes-in-state-e.g.-asocial-learning" class="section level2">
+<h2>11.2 Simulation of asocial changes in state (e.g., asocial learning)</h2>
+<p>Let’s first consider a situation where each individual in a social network has an inherent probability to adopt the innovation at any given time.</p>
+<p>Now, we will set the initial ‘innovation adoption’ status for all individuals (all initially 0) and also create an empty list where we will store the identities of individuals that adopt at each time step. We then start a for loop that has several steps:</p>
+<p>Step 1: Set the probability of adoption to 0 if the individual has already adopted (can’t re-adopt the innovation).</p>
+<p>Step 2: Flip a coin based on the probabilities established above and determine if the individual adopts the innovation or not.</p>
+<p>Step 3: Change the status of the individuals that did adopt.</p>
+<p>Step 4: Save the identities of the new adopters.</p>
+<p>Repeat Steps 1 though 4 x20 timess</p>
+<pre class="r"><code>set.seed(4)
+n=100
+x=0.1
+g=erdos.renyi.game(n, p=0.05)
+V(g)$status=0 #the &#39;innovation adoption status&#39; for each individual. All initially 0.
+
+adopters=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
+
+V(g)$status[which(adopters==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
+
+plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$status+1], vertex.size=8)</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-2-1.png" width="480" /></p>
+<pre class="r"><code>t=20
+new.adopt.list=list(0) #empty list t=20
+for(j in 1:t){
+  adopters=sample(c(1,0), n, prob=c(x, 1-x), replace=T)
+  new.adopt.list[[j]]=which(V(g)$status==0&amp;adopters==1) #save the identities of adopters for that timestep
+  V(g)$status[which(adopters==1)]=1
+  
+}
+new.adopt.list</code></pre>
+<pre><code>## [[1]]
+##  [1] 20 22 25 33 41 44 46 48 67 96 99
+## 
+## [[2]]
+##  [1]  1  5  6 34 39 54 66 69 80 84
+## 
+## [[3]]
+## [1]  29  38  51  65  76  82  97 100
+## 
+## [[4]]
+## [1] 10 24 35 56 88 93
+## 
+## [[5]]
+## [1] 14 19 26 36 40 77
+## 
+## [[6]]
+## [1]  2  8 17 31
+## 
+## [[7]]
+## [1] 28 57 60 62 71 83 85 89 91
+## 
+## [[8]]
+## [1] 7
+## 
+## [[9]]
+## [1] 21
+## 
+## [[10]]
+## [1] 52
+## 
+## [[11]]
+## [1] 15 23 27 49 73 95
+## 
+## [[12]]
+## [1] 30 70 86 94
+## 
+## [[13]]
+## [1] 13 61
+## 
+## [[14]]
+## [1] 16 59 74 90 92
+## 
+## [[15]]
+## [1]  4 47 63 68
+## 
+## [[16]]
+## [1] 53
+## 
+## [[17]]
+## [1]  9 42 43
+## 
+## [[18]]
+## [1] 3
+## 
+## [[19]]
+## integer(0)
+## 
+## [[20]]
+## integer(0)</code></pre>
+<pre class="r"><code>adopt.cumulative=list()
+for(i in 1:t){
+  adopt.cumulative[[i]]=unlist(new.adopt.list[1:i])
+}
+adopt.cumulative</code></pre>
+<pre><code>## [[1]]
+##  [1] 20 22 25 33 41 44 46 48 67 96 99
+## 
+## [[2]]
+##  [1] 20 22 25 33 41 44 46 48 67 96 99  1  5  6 34 39 54 66 69 80 84
+## 
+## [[3]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100
+## 
+## [[4]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93
+## 
+## [[5]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77
+## 
+## [[6]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31
+## 
+## [[7]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91
+## 
+## [[8]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7
+## 
+## [[9]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21
+## 
+## [[10]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52
+## 
+## [[11]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95
+## 
+## [[12]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94
+## 
+## [[13]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61
+## 
+## [[14]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92
+## 
+## [[15]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92   4  47  63  68
+## 
+## [[16]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92   4  47  63  68  53
+## 
+## [[17]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43
+## 
+## [[18]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43   3
+## 
+## [[19]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43   3
+## 
+## [[20]]
+##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
+## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
+## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
+## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
+## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43   3</code></pre>
+<pre class="r"><code>layout(matrix(1:20, byrow=T, nrow=5))
+par(mar=c(1,1,1,1))
+for(i in 1:t){
+  v.col=1:n %in% adopt.cumulative[[i]]+1
+  plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], main=paste(&quot;Time&quot;,i))
+}</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-5-1.png" width="480" /></p>
+<pre class="r"><code>n.adopt.asocial=sapply(new.adopt.list, length) #for each time step, count the number of adopters.
+cumulative.asocial=cumsum(n.adopt.asocial)
+plot(cumulative.asocial, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;)</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-6-1.png" width="480" /></p>
+</div>
+<div id="simulation-the-social-transmission-of-whatever-state-in-a-random-graph" class="section level2">
+<h2>11.3 Simulation the social transmission of <em>whatever</em> state in a random graph</h2>
+<p>First, we will create an Erdös-Renyí Random Graph with 100 nodes and p = 0.1</p>
+<pre class="r"><code>library(igraph)
+set.seed(4)
+n=100
+g=erdos.renyi.game(n, p=0.05) #create a Erdos-Renyi Random Graph with uniform edge probability = 0.1
+l = layout_with_fr(g)
+plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=&quot;darkgray&quot;, layout=l)</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
+<p>Next, we will create a vertex attribute called “state”. Everyone will start with state = 1. Then, we will randomly pick 2 nodes who will have state = 2</p>
+<pre class="r"><code>V(g)$state=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
+seed=sample(V(g),2) #select 2 innovators
+V(g)$state[seed]=1 #These &#39;seed&#39; individuals get a status of 1 at the beginning.
+plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$state+1], layout=l)</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p>Now, we will set a “social transmission” parameter, <span class="math inline">\(s\)</span>. You can think of this as the linear increase in the probability that an individual will take on a new “state” (e.g., learn a new foraging strategy or get infected by a disease) when it has a ‘neighbor’ that has that state. Since it’s a probabilty 0 ≤ <span class="math inline">\(s\)</span> ≤ 1.</p>
+<p>Let’s set s = 0.1 for now:</p>
+<pre class="r"><code>s = 0.1</code></pre>
+<p>Now we will simulate 20 time steps of the spread of this “state”.</p>
+<pre class="r"><code>t=20 #time steps to run the simulation
+adopt.list=list(0) #empty list 
+
+for (j in 1:t){
+nei.adopt=sapply(V(g), function(x) sum(V(g)$state[neighbors(g,x)]))
+p=(1-exp(-s*nei.adopt))*abs(V(g)$state-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
+adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
+V(g)$state[which(adopters==1)]=1
+adopt.list[[j]]=which(adopters==1)
+}</code></pre>
+<pre class="r"><code>n.adopt.social=sapply(adopt.list, length) #for each time step, count the number of adopters.
+cumulative.social=cumsum(n.adopt.social)
+plot(cumulative.social, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;)</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-11-1.png" width="480" /></p>
+<pre class="r"><code>adopt.list</code></pre>
+<pre><code>## [[1]]
+## [1] 8
+## 
+## [[2]]
+## [1] 18 77
+## 
+## [[3]]
+## [1] 4
+## 
+## [[4]]
+## [1] 35 80
+## 
+## [[5]]
+## [1] 23
+## 
+## [[6]]
+## [1] 52 96
+## 
+## [[7]]
+## [1] 29
+## 
+## [[8]]
+## [1] 26 69 87
+## 
+## [[9]]
+## [1] 93 99
+## 
+## [[10]]
+## [1] 19
+## 
+## [[11]]
+## [1] 44 50 67
+## 
+## [[12]]
+## [1] 21 47
+## 
+## [[13]]
+## [1]  37  88 100
+## 
+## [[14]]
+## [1] 16 55 59 74 97
+## 
+## [[15]]
+## [1] 13 14 27 57 72 90
+## 
+## [[16]]
+## [1]  2 32 53 64 66 79 94
+## 
+## [[17]]
+##  [1] 17 25 33 39 42 43 46 51 58 82 91
+## 
+## [[18]]
+##  [1]  7 28 31 36 40 41 48 54 56 61 63 73 78 83 84
+## 
+## [[19]]
+## [1]  1  3 65
+## 
+## [[20]]
+## [1]  9 20 68 85</code></pre>
+<pre class="r"><code>adopt.cumulative=list()
+for(i in 1:t){
+  adopt.cumulative[[i]]=unlist(adopt.list[1:i])
+}</code></pre>
+<pre class="r"><code>layout(matrix(1:20, byrow=T, nrow=5))
+par(mar=c(1,1,1,1))
+for(i in 1:t){
+  v.col=1:n %in% adopt.cumulative[[i]]+1
+  plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], main=paste(&quot;Time&quot;,i))
+}</code></pre>
+<p><img src="11_transmission_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

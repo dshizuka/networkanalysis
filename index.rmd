@@ -19,13 +19,13 @@ These and other questions involve understanding how the *interactions* or *conne
 
 Network theory (and the related fields of graph theory and complexity theory) is an approach to understanding how the processes that govern how elements--e.g., molecules, individuals, and species--connect together to create patterns inherent in the larger system such as an organism, a population, or ecological community. 
 
-Thus, networks allow us to ask questions about:
+Thus, network analysis allow us to ask questions about:
 
 * The processes that build systems
 * The architecture of systems
 * The roles of individual elements within a system
 * The dynamics of flow (e.g., of information, disease, energy, etc.) within a system
 
-... and many other questions. 
+... where "Systems" can be anything from social networks of humans & animals, ecological communities, complex traits, connections between populations, gene regulation systems, metabolic systems, etc. etc. --Basically, anything that is more than just a sum of individual elements is a complex system. 
 
 
