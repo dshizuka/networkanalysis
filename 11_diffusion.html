@@ -231,227 +231,260 @@ $(document).ready(function () {
 <li>Modification of social strategies through competition networks</li>
 </ul>
 <p><br></p>
+<p>One of the classical theories on social spread is that the accumulation of individuals (nodes) that take on a new state (e.g., an innovation) takes on different pattern when the spread is due to asocial processes (e.g., everyone innovates on their own) versus social processes (e.g., innovation spreads through social transmission).</p>
+<div class="figure">
+<img src="assets/images/FranzNunn2009.png" alt="Figure showing classical predictions of asocial versus social spread of innovations. From Franz &amp; Nunn (2009)." />
+<p class="caption">Figure showing classical predictions of asocial versus social spread of innovations. From <a href="http://rspb.royalsocietypublishing.org/content/276/1663/1829">Franz &amp; Nunn (2009)</a>.</p>
+</div>
+<p>Here, let’s explore this paradigm by actually simulating the spread of innovation due to asocial or social processes.</p>
 <div id="simulation-of-asocial-changes-in-state-e.g.-asocial-learning" class="section level2">
 <h2>11.2 Simulation of asocial changes in state (e.g., asocial learning)</h2>
 <p>Let’s first consider a situation where each individual in a social network has an inherent probability to adopt the innovation at any given time.</p>
-<p>Now, we will set the initial ‘innovation adoption’ status for all individuals (all initially 0) and also create an empty list where we will store the identities of individuals that adopt at each time step. We then start a for loop that has several steps:</p>
-<p>Step 1: Set the probability of adoption to 0 if the individual has already adopted (can’t re-adopt the innovation).</p>
-<p>Step 2: Flip a coin based on the probabilities established above and determine if the individual adopts the innovation or not.</p>
-<p>Step 3: Change the status of the individuals that did adopt.</p>
-<p>Step 4: Save the identities of the new adopters.</p>
-<p>Repeat Steps 1 though 4 x20 timess</p>
+<p>First, we will make a random graph consisting of 100 nodes. We will set the initial ‘innovation adoption’ status for all individuals (all initially 0).</p>
 <pre class="r"><code>set.seed(4)
 n=100
-x=0.1
 g=erdos.renyi.game(n, p=0.05)
-V(g)$status=0 #the &#39;innovation adoption status&#39; for each individual. All initially 0.
+V(g)$status=0 #the &#39;innovation adoption status&#39; for each individual. All initially 0.</code></pre>
+<p>Let’s plot this random graph. While we’re at it, we will save the layout so that we can use it for all the plots of this network later.</p>
+<pre class="r"><code>l=layout_with_fr(g)
+plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=&quot;darkgray&quot;, layout=l)</code></pre>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-3-1.png" width="480" /></p>
+<p>Now, we will set the ‘asocial learning’ parameter, <span class="math inline">\(x\)</span> to be 0.1. This is the probability that any given individual will come up with the innovation–e.g., how to forage for a new prey item.</p>
+<pre class="r"><code>x=0.1</code></pre>
+<p>Let’s run one practice run of how this will work. In one time step, we flip a coin for each individual whether or not they will adopt the innovation. Based on the coin flip, we will convert the status of the individual to 1 if they learned the innovation in that time step:</p>
+<pre class="r"><code>adopt=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
 
-adopters=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
+V(g)$status[which(adopt==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
 
-V(g)$status[which(adopters==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
-
-plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$status+1], vertex.size=8)</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-2-1.png" width="480" /></p>
+plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$status+1], vertex.size=8, layout=l)</code></pre>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-5-1.png" width="480" /></p>
+<p>Now, we will repeat this simulation for 20 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can’t go back). If you’re thinking about this in terms of disease, it’s like an ‘SI model’ in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.</p>
 <pre class="r"><code>t=20
-new.adopt.list=list(0) #empty list t=20
+adopt.list=list(0) #empty list t=20
+g.time=list()
 for(j in 1:t){
-  adopters=sample(c(1,0), n, prob=c(x, 1-x), replace=T)
-  new.adopt.list[[j]]=which(V(g)$status==0&amp;adopters==1) #save the identities of adopters for that timestep
-  V(g)$status[which(adopters==1)]=1
-  
-}
-new.adopt.list</code></pre>
-<pre><code>## [[1]]
-##  [1] 20 22 25 33 41 44 46 48 67 96 99
-## 
-## [[2]]
-##  [1]  1  5  6 34 39 54 66 69 80 84
-## 
-## [[3]]
-## [1]  29  38  51  65  76  82  97 100
-## 
-## [[4]]
-## [1] 10 24 35 56 88 93
-## 
-## [[5]]
-## [1] 14 19 26 36 40 77
-## 
-## [[6]]
-## [1]  2  8 17 31
-## 
-## [[7]]
-## [1] 28 57 60 62 71 83 85 89 91
-## 
-## [[8]]
-## [1] 7
-## 
-## [[9]]
-## [1] 21
-## 
-## [[10]]
-## [1] 52
-## 
-## [[11]]
-## [1] 15 23 27 49 73 95
-## 
-## [[12]]
-## [1] 30 70 86 94
-## 
-## [[13]]
-## [1] 13 61
-## 
-## [[14]]
-## [1] 16 59 74 90 92
-## 
-## [[15]]
-## [1]  4 47 63 68
-## 
-## [[16]]
-## [1] 53
-## 
-## [[17]]
-## [1]  9 42 43
-## 
-## [[18]]
-## [1] 3
-## 
-## [[19]]
-## integer(0)
-## 
-## [[20]]
-## integer(0)</code></pre>
+  adopt=sample(c(1,0), n, prob=c(x, 1-x), replace=T) #coin flip
+  V(g)$status[which(adopt==1)]=1
+  g.time[[j]]=g
+}</code></pre>
+<pre class="r"><code>sapply(g.time, function(x) V(x)$status)</code></pre>
+<pre><code>##        [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
+##   [1,]    0    1    1    1    1    1    1    1    1     1     1     1
+##   [2,]    0    0    0    0    0    1    1    1    1     1     1     1
+##   [3,]    1    1    1    1    1    1    1    1    1     1     1     1
+##   [4,]    0    0    0    0    0    0    0    0    0     0     0     0
+##   [5,]    0    1    1    1    1    1    1    1    1     1     1     1
+##   [6,]    0    1    1    1    1    1    1    1    1     1     1     1
+##   [7,]    0    0    0    0    0    0    0    1    1     1     1     1
+##   [8,]    0    0    0    0    0    1    1    1    1     1     1     1
+##   [9,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [10,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [11,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [12,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [13,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [14,]    0    0    0    0    1    1    1    1    1     1     1     1
+##  [15,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [16,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [17,]    0    0    0    0    0    1    1    1    1     1     1     1
+##  [18,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [19,]    0    0    0    0    1    1    1    1    1     1     1     1
+##  [20,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [21,]    0    0    0    0    0    0    0    0    1     1     1     1
+##  [22,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [23,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [24,]    0    0    0    1    1    1    1    1    1     1     1     1
+##  [25,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [26,]    0    0    0    0    1    1    1    1    1     1     1     1
+##  [27,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [28,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [29,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [30,]    0    0    0    0    0    0    0    0    0     0     0     1
+##  [31,]    0    0    0    0    0    1    1    1    1     1     1     1
+##  [32,]    0    0    0    0    0    1    1    1    1     1     1     1
+##  [33,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [34,]    0    1    1    1    1    1    1    1    1     1     1     1
+##  [35,]    0    0    0    1    1    1    1    1    1     1     1     1
+##  [36,]    0    0    0    0    1    1    1    1    1     1     1     1
+##  [37,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [38,]    0    0    1    1    1    1    1    1    1     1     1     1
+##  [39,]    0    1    1    1    1    1    1    1    1     1     1     1
+##  [40,]    0    0    0    0    1    1    1    1    1     1     1     1
+##  [41,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [42,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [43,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [44,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [45,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [46,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [47,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [48,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [49,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [50,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [51,]    0    0    1    1    1    1    1    1    1     1     1     1
+##  [52,]    0    0    0    0    0    0    0    0    0     1     1     1
+##  [53,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [54,]    0    1    1    1    1    1    1    1    1     1     1     1
+##  [55,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [56,]    0    0    0    1    1    1    1    1    1     1     1     1
+##  [57,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [58,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [59,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [60,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [61,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [62,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [63,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [64,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [65,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [66,]    0    1    1    1    1    1    1    1    1     1     1     1
+##  [67,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [68,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [69,]    0    1    1    1    1    1    1    1    1     1     1     1
+##  [70,]    0    0    0    0    0    0    0    0    0     0     0     1
+##  [71,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [72,]    0    0    0    0    0    0    0    0    1     1     1     1
+##  [73,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [74,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [75,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [76,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [77,]    0    0    0    0    1    1    1    1    1     1     1     1
+##  [78,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [79,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [80,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [81,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [82,]    0    0    1    1    1    1    1    1    1     1     1     1
+##  [83,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [84,]    0    1    1    1    1    1    1    1    1     1     1     1
+##  [85,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [86,]    0    0    0    0    0    0    0    0    0     0     0     1
+##  [87,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [88,]    0    0    0    1    1    1    1    1    1     1     1     1
+##  [89,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [90,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [91,]    0    0    0    0    0    0    1    1    1     1     1     1
+##  [92,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [93,]    0    0    0    1    1    1    1    1    1     1     1     1
+##  [94,]    0    0    0    0    0    0    0    0    0     0     0     1
+##  [95,]    0    0    0    0    0    0    0    0    0     0     1     1
+##  [96,]    1    1    1    1    1    1    1    1    1     1     1     1
+##  [97,]    0    0    1    1    1    1    1    1    1     1     1     1
+##  [98,]    0    0    0    0    0    0    0    0    0     0     0     0
+##  [99,]    1    1    1    1    1    1    1    1    1     1     1     1
+## [100,]    0    0    1    1    1    1    1    1    1     1     1     1
+##        [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20]
+##   [1,]     1     1     1     1     1     1     1     1
+##   [2,]     1     1     1     1     1     1     1     1
+##   [3,]     1     1     1     1     1     1     1     1
+##   [4,]     0     0     1     1     1     1     1     1
+##   [5,]     1     1     1     1     1     1     1     1
+##   [6,]     1     1     1     1     1     1     1     1
+##   [7,]     1     1     1     1     1     1     1     1
+##   [8,]     1     1     1     1     1     1     1     1
+##   [9,]     0     0     0     0     1     1     1     1
+##  [10,]     1     1     1     1     1     1     1     1
+##  [11,]     0     0     0     0     0     0     0     0
+##  [12,]     0     0     0     0     0     0     0     0
+##  [13,]     1     1     1     1     1     1     1     1
+##  [14,]     1     1     1     1     1     1     1     1
+##  [15,]     1     1     1     1     1     1     1     1
+##  [16,]     0     1     1     1     1     1     1     1
+##  [17,]     1     1     1     1     1     1     1     1
+##  [18,]     0     0     0     0     0     0     0     0
+##  [19,]     1     1     1     1     1     1     1     1
+##  [20,]     1     1     1     1     1     1     1     1
+##  [21,]     1     1     1     1     1     1     1     1
+##  [22,]     1     1     1     1     1     1     1     1
+##  [23,]     1     1     1     1     1     1     1     1
+##  [24,]     1     1     1     1     1     1     1     1
+##  [25,]     1     1     1     1     1     1     1     1
+##  [26,]     1     1     1     1     1     1     1     1
+##  [27,]     1     1     1     1     1     1     1     1
+##  [28,]     1     1     1     1     1     1     1     1
+##  [29,]     1     1     1     1     1     1     1     1
+##  [30,]     1     1     1     1     1     1     1     1
+##  [31,]     1     1     1     1     1     1     1     1
+##  [32,]     1     1     1     1     1     1     1     1
+##  [33,]     1     1     1     1     1     1     1     1
+##  [34,]     1     1     1     1     1     1     1     1
+##  [35,]     1     1     1     1     1     1     1     1
+##  [36,]     1     1     1     1     1     1     1     1
+##  [37,]     1     1     1     1     1     1     1     1
+##  [38,]     1     1     1     1     1     1     1     1
+##  [39,]     1     1     1     1     1     1     1     1
+##  [40,]     1     1     1     1     1     1     1     1
+##  [41,]     1     1     1     1     1     1     1     1
+##  [42,]     0     0     0     0     1     1     1     1
+##  [43,]     0     0     0     0     1     1     1     1
+##  [44,]     1     1     1     1     1     1     1     1
+##  [45,]     0     0     0     0     0     0     0     0
+##  [46,]     1     1     1     1     1     1     1     1
+##  [47,]     0     0     1     1     1     1     1     1
+##  [48,]     1     1     1     1     1     1     1     1
+##  [49,]     1     1     1     1     1     1     1     1
+##  [50,]     0     0     0     0     0     0     0     0
+##  [51,]     1     1     1     1     1     1     1     1
+##  [52,]     1     1     1     1     1     1     1     1
+##  [53,]     1     1     1     1     1     1     1     1
+##  [54,]     1     1     1     1     1     1     1     1
+##  [55,]     0     0     0     0     0     0     0     0
+##  [56,]     1     1     1     1     1     1     1     1
+##  [57,]     1     1     1     1     1     1     1     1
+##  [58,]     1     1     1     1     1     1     1     1
+##  [59,]     0     1     1     1     1     1     1     1
+##  [60,]     1     1     1     1     1     1     1     1
+##  [61,]     1     1     1     1     1     1     1     1
+##  [62,]     1     1     1     1     1     1     1     1
+##  [63,]     0     0     1     1     1     1     1     1
+##  [64,]     0     0     0     0     0     0     0     0
+##  [65,]     1     1     1     1     1     1     1     1
+##  [66,]     1     1     1     1     1     1     1     1
+##  [67,]     1     1     1     1     1     1     1     1
+##  [68,]     0     0     1     1     1     1     1     1
+##  [69,]     1     1     1     1     1     1     1     1
+##  [70,]     1     1     1     1     1     1     1     1
+##  [71,]     1     1     1     1     1     1     1     1
+##  [72,]     1     1     1     1     1     1     1     1
+##  [73,]     1     1     1     1     1     1     1     1
+##  [74,]     0     1     1     1     1     1     1     1
+##  [75,]     0     0     0     0     0     0     0     0
+##  [76,]     1     1     1     1     1     1     1     1
+##  [77,]     1     1     1     1     1     1     1     1
+##  [78,]     0     0     0     0     0     0     0     0
+##  [79,]     1     1     1     1     1     1     1     1
+##  [80,]     1     1     1     1     1     1     1     1
+##  [81,]     1     1     1     1     1     1     1     1
+##  [82,]     1     1     1     1     1     1     1     1
+##  [83,]     1     1     1     1     1     1     1     1
+##  [84,]     1     1     1     1     1     1     1     1
+##  [85,]     1     1     1     1     1     1     1     1
+##  [86,]     1     1     1     1     1     1     1     1
+##  [87,]     0     0     0     0     0     0     1     1
+##  [88,]     1     1     1     1     1     1     1     1
+##  [89,]     1     1     1     1     1     1     1     1
+##  [90,]     0     1     1     1     1     1     1     1
+##  [91,]     1     1     1     1     1     1     1     1
+##  [92,]     0     1     1     1     1     1     1     1
+##  [93,]     1     1     1     1     1     1     1     1
+##  [94,]     1     1     1     1     1     1     1     1
+##  [95,]     1     1     1     1     1     1     1     1
+##  [96,]     1     1     1     1     1     1     1     1
+##  [97,]     1     1     1     1     1     1     1     1
+##  [98,]     0     0     0     0     0     0     0     0
+##  [99,]     1     1     1     1     1     1     1     1
+## [100,]     1     1     1     1     1     1     1     1</code></pre>
+<p>Ok, now let’s make a cumulative list of who</p>
 <pre class="r"><code>adopt.cumulative=list()
 for(i in 1:t){
-  adopt.cumulative[[i]]=unlist(new.adopt.list[1:i])
-}
-adopt.cumulative</code></pre>
-<pre><code>## [[1]]
-##  [1] 20 22 25 33 41 44 46 48 67 96 99
-## 
-## [[2]]
-##  [1] 20 22 25 33 41 44 46 48 67 96 99  1  5  6 34 39 54 66 69 80 84
-## 
-## [[3]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100
-## 
-## [[4]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93
-## 
-## [[5]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77
-## 
-## [[6]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31
-## 
-## [[7]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91
-## 
-## [[8]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7
-## 
-## [[9]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21
-## 
-## [[10]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52
-## 
-## [[11]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95
-## 
-## [[12]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94
-## 
-## [[13]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61
-## 
-## [[14]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92
-## 
-## [[15]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92   4  47  63  68
-## 
-## [[16]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92   4  47  63  68  53
-## 
-## [[17]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43
-## 
-## [[18]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43   3
-## 
-## [[19]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43   3
-## 
-## [[20]]
-##  [1]  20  22  25  33  41  44  46  48  67  96  99   1   5   6  34  39  54
-## [18]  66  69  80  84  29  38  51  65  76  82  97 100  10  24  35  56  88
-## [35]  93  14  19  26  36  40  77   2   8  17  31  28  57  60  62  71  83
-## [52]  85  89  91   7  21  52  15  23  27  49  73  95  30  70  86  94  13
-## [69]  61  16  59  74  90  92   4  47  63  68  53   9  42  43   3</code></pre>
+  adopt.cumulative[[i]]=unlist(adopt.list[1:i])
+}</code></pre>
 <pre class="r"><code>layout(matrix(1:20, byrow=T, nrow=5))
 par(mar=c(1,1,1,1))
 for(i in 1:t){
-  v.col=1:n %in% adopt.cumulative[[i]]+1
-  plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], main=paste(&quot;Time&quot;,i))
+  v.col=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g.time[[i]])$status+1]
+  plot(g.time[[i]], vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], layout=l, main=paste(&quot;Time&quot;,i))
 }</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-5-1.png" width="480" /></p>
-<pre class="r"><code>n.adopt.asocial=sapply(new.adopt.list, length) #for each time step, count the number of adopters.
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-9-1.png" width="480" /></p>
+<pre class="r"><code>n.adopt.asocial=sapply(adopt.list, length) #for each time step, count the number of adopters.
 cumulative.asocial=cumsum(n.adopt.asocial)
 plot(cumulative.asocial, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;)</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-6-1.png" width="480" /></p>
 </div>
 <div id="simulation-the-social-transmission-of-whatever-state-in-a-random-graph" class="section level2">
 <h2>11.3 Simulation the social transmission of <em>whatever</em> state in a random graph</h2>
@@ -460,15 +493,14 @@ plot(cumulative.asocial, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number
 set.seed(4)
 n=100
 g=erdos.renyi.game(n, p=0.05) #create a Erdos-Renyi Random Graph with uniform edge probability = 0.1
-l = layout_with_fr(g)
 plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=&quot;darkgray&quot;, layout=l)</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-11-1.png" width="480" /></p>
 <p>Next, we will create a vertex attribute called “state”. Everyone will start with state = 1. Then, we will randomly pick 2 nodes who will have state = 2</p>
 <pre class="r"><code>V(g)$state=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
 seed=sample(V(g),2) #select 2 innovators
 V(g)$state[seed]=1 #These &#39;seed&#39; individuals get a status of 1 at the beginning.
 plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$state+1], layout=l)</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-12-1.png" width="480" /></p>
 <p>Now, we will set a “social transmission” parameter, <span class="math inline">\(s\)</span>. You can think of this as the linear increase in the probability that an individual will take on a new “state” (e.g., learn a new foraging strategy or get infected by a disease) when it has a ‘neighbor’ that has that state. Since it’s a probabilty 0 ≤ <span class="math inline">\(s\)</span> ≤ 1.</p>
 <p>Let’s set s = 0.1 for now:</p>
 <pre class="r"><code>s = 0.1</code></pre>
@@ -486,67 +518,67 @@ adopt.list[[j]]=which(adopters==1)
 <pre class="r"><code>n.adopt.social=sapply(adopt.list, length) #for each time step, count the number of adopters.
 cumulative.social=cumsum(n.adopt.social)
 plot(cumulative.social, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;)</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-11-1.png" width="480" /></p>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-15-1.png" width="480" /></p>
 <pre class="r"><code>adopt.list</code></pre>
 <pre><code>## [[1]]
-## [1] 8
+## integer(0)
 ## 
 ## [[2]]
-## [1] 18 77
+## [1] 1
 ## 
 ## [[3]]
-## [1] 4
+## [1] 32
 ## 
 ## [[4]]
-## [1] 35 80
+## [1] 25 87
 ## 
 ## [[5]]
-## [1] 23
+## integer(0)
 ## 
 ## [[6]]
-## [1] 52 96
+## [1] 43
 ## 
 ## [[7]]
-## [1] 29
+## [1] 75 93 97
 ## 
 ## [[8]]
-## [1] 26 69 87
+## [1]  2  9 23
 ## 
 ## [[9]]
-## [1] 93 99
+## [1] 70
 ## 
 ## [[10]]
-## [1] 19
+## [1] 62 69 88
 ## 
 ## [[11]]
-## [1] 44 50 67
+## [1] 20 40 53
 ## 
 ## [[12]]
-## [1] 21 47
+## [1] 30 38 74 82 84
 ## 
 ## [[13]]
-## [1]  37  88 100
+## [1] 15 18 36 44 72 81 90 94
 ## 
 ## [[14]]
-## [1] 16 55 59 74 97
+## [1] 12 13 14 22 42 57 58 65
 ## 
 ## [[15]]
-## [1] 13 14 27 57 72 90
+## [1] 28 56 73
 ## 
 ## [[16]]
-## [1]  2 32 53 64 66 79 94
+## [1]  19  33  68  76  80  96 100
 ## 
 ## [[17]]
-##  [1] 17 25 33 39 42 43 46 51 58 82 91
+## [1]  4 21 41 59 66
 ## 
 ## [[18]]
-##  [1]  7 28 31 36 40 41 48 54 56 61 63 73 78 83 84
+##  [1]  8 11 16 17 24 26 35 55 67 78
 ## 
 ## [[19]]
-## [1]  1  3 65
+## [1]  3 10 27 60 85 99
 ## 
 ## [[20]]
-## [1]  9 20 68 85</code></pre>
+## [1]  5 34 37 47 83</code></pre>
 <pre class="r"><code>adopt.cumulative=list()
 for(i in 1:t){
   adopt.cumulative[[i]]=unlist(adopt.list[1:i])
@@ -555,9 +587,9 @@ for(i in 1:t){
 par(mar=c(1,1,1,1))
 for(i in 1:t){
   v.col=1:n %in% adopt.cumulative[[i]]+1
-  plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], main=paste(&quot;Time&quot;,i))
+  plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], layout=l, main=paste(&quot;Time&quot;,i))
 }</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
 </div>
 </div>
 

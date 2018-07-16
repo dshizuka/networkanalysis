@@ -36,68 +36,84 @@ One of the assumptions of network theory is that the connections between element
 
 <br>
 
+One of the classical theories on social spread is that the accumulation of individuals (nodes) that take on a new state (e.g., an innovation) takes on different pattern when the spread is due to asocial processes (e.g., everyone innovates on their own) versus social processes (e.g., innovation spreads through social transmission).
+
+![Figure showing classical predictions of asocial versus social spread of innovations. From [Franz & Nunn (2009)](http://rspb.royalsocietypublishing.org/content/276/1663/1829).](./assets/images/FranzNunn2009.png)
+
+Here, let's explore this paradigm by actually simulating the spread of innovation due to asocial or social processes. 
+
 ##11.2 Simulation of asocial changes in state (e.g., asocial learning)
 
-Let’s first consider a situation where each individual in a social network has an inherent probability to adopt the innovation at any given time.
+Let’s first consider a situation where each individual in a social network has an inherent probability to adopt the innovation at any given time. 
 
-
-Now, we will set the initial ‘innovation adoption’ status for all individuals (all initially 0) and also create an empty list where we will store the identities of individuals that adopt at each time step. We then start a for loop that has several steps:
-
-Step 1: Set the probability of adoption to 0 if the individual has already adopted (can’t re-adopt the innovation).
-
-Step 2: Flip a coin based on the probabilities established above and determine if the individual adopts the innovation or not.
-
-Step 3: Change the status of the individuals that did adopt.
-
-Step 4: Save the identities of the new adopters.
-
-Repeat Steps 1 though 4 x20 timess
+First, we will make a random graph consisting of 100 nodes. We will set the initial ‘innovation adoption’ status for all individuals (all initially 0). 
 
 ```{r}
 set.seed(4)
 n=100
-x=0.1
 g=erdos.renyi.game(n, p=0.05)
 V(g)$status=0 #the 'innovation adoption status' for each individual. All initially 0.
-
-adopters=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
-
-V(g)$status[which(adopters==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
-
-plot(g, vertex.label="", vertex.color=c("darkgray", "red")[V(g)$status+1], vertex.size=8)
 ```
+
+Let's plot this random graph. While we're at it, we will save the layout so that we can use it for all the plots of this network later.
+```{r}
+l=layout_with_fr(g)
+plot(g, vertex.label="", vertex.size=8, vertex.color="darkgray", layout=l)
+```
+
+Now, we will set the 'asocial learning' parameter, $x$ to be 0.1. This is the probability that any given individual will come up with the innovation--e.g., how to forage for a new prey item. 
+
+```{r}
+x=0.1
+```
+
+Let's run one practice run of how this will work. In one time step, we flip a coin for each individual whether or not they will adopt the innovation. 
+Based on the coin flip, we will convert the status of the individual to 1 if they learned the innovation in that time step:
+
+```{r}
+adopt=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
+
+V(g)$status[which(adopt==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
+
+plot(g, vertex.label="", vertex.color=c("darkgray", "red")[V(g)$status+1], vertex.size=8, layout=l)
+```
+
+Now, we will repeat this simulation for 20 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can't go back). If you're thinking about this in terms of disease, it's like an 'SI model' in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.
 
 ```{r}
 t=20
-new.adopt.list=list(0) #empty list t=20
+adopt.list=list(0) #empty list t=20
+g.time=list()
 for(j in 1:t){
-  adopters=sample(c(1,0), n, prob=c(x, 1-x), replace=T)
-  new.adopt.list[[j]]=which(V(g)$status==0&adopters==1) #save the identities of adopters for that timestep
-  V(g)$status[which(adopters==1)]=1
-  
+  adopt=sample(c(1,0), n, prob=c(x, 1-x), replace=T) #coin flip
+  V(g)$status[which(adopt==1)]=1
+  g.time[[j]]=g
 }
-new.adopt.list
 ```
 
-```{r}
+```{r, eval=T}
+sapply(g.time, function(x) V(x)$status) 
+```
+
+Ok, now let's make a cumulative list of who
+```{r, eval=F}
 adopt.cumulative=list()
 for(i in 1:t){
-  adopt.cumulative[[i]]=unlist(new.adopt.list[1:i])
+  adopt.cumulative[[i]]=unlist(adopt.list[1:i])
 }
-adopt.cumulative
 ```
 
 ```{r}
 layout(matrix(1:20, byrow=T, nrow=5))
 par(mar=c(1,1,1,1))
 for(i in 1:t){
-  v.col=1:n %in% adopt.cumulative[[i]]+1
-  plot(g, vertex.label="", vertex.color=c("darkgray", "red")[v.col], main=paste("Time",i))
+  v.col=c("darkgray", "red")[V(g.time[[i]])$status+1]
+  plot(g.time[[i]], vertex.label="", vertex.color=c("darkgray", "red")[v.col], layout=l, main=paste("Time",i))
 }
 ```
 
-```{r}
-n.adopt.asocial=sapply(new.adopt.list, length) #for each time step, count the number of adopters.
+```{r, eval=F}
+n.adopt.asocial=sapply(adopt.list, length) #for each time step, count the number of adopters.
 cumulative.asocial=cumsum(n.adopt.asocial)
 plot(cumulative.asocial, type="b", las=1, ylab="Cumulative number of nodes adopted", xlab="Time")
 ```
@@ -110,7 +126,6 @@ library(igraph)
 set.seed(4)
 n=100
 g=erdos.renyi.game(n, p=0.05) #create a Erdos-Renyi Random Graph with uniform edge probability = 0.1
-l = layout_with_fr(g)
 plot(g, vertex.label="", vertex.size=8, vertex.color="darkgray", layout=l)
 ```
 
@@ -167,7 +182,7 @@ layout(matrix(1:20, byrow=T, nrow=5))
 par(mar=c(1,1,1,1))
 for(i in 1:t){
   v.col=1:n %in% adopt.cumulative[[i]]+1
-  plot(g, vertex.label="", vertex.color=c("darkgray", "red")[v.col], main=paste("Time",i))
+  plot(g, vertex.label="", vertex.color=c("darkgray", "red")[v.col], layout=l, main=paste("Time",i))
 }
 ```
 
