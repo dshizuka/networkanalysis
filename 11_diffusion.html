@@ -209,18 +209,15 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#diffusionflowtransmission-through-a-network">11.1 Diffusion/Flow/Transmission through a network</a><ul>
-<li><a href="#simulation-of-asocial-changes-in-state-e.g.-asocial-learning">11.2 Simulation of asocial changes in state (e.g., asocial learning)</a></li>
-<li><a href="#simulation-the-social-transmission-of-whatever-state-in-a-random-graph">11.3 Simulation the social transmission of <em>whatever</em> state in a random graph</a></li>
-</ul></li>
+<li><a href="#simulation-of-asocial-changes-in-state-e.g.-asocial-learning">11.1 Simulation of asocial changes in state (e.g., asocial learning)</a></li>
+<li><a href="#simulation-the-social-transmission-of-whatever-state-in-a-random-graph">11.2 Simulation the social transmission of <em>whatever</em> state in a random graph</a></li>
+<li><a href="#animating-social-transmission-using-gifs">11.3 Animating social transmission using GIFs</a></li>
 </ul>
 </div>
 
 <p>Packages you will need for this tutorial:</p>
 <pre class="r"><code>library(igraph)</code></pre>
 <hr />
-<div id="diffusionflowtransmission-through-a-network" class="section level1">
-<h1>11.1 Diffusion/Flow/Transmission through a network</h1>
 <p>One of the assumptions of network theory is that the connections between elements in a system matter to the function/property of the system and/or the individual elements within the system. One way in which such connections matters is that they can facilitate the flow of <em>something</em> through this system. Some examples include:</p>
 <ul>
 <li>Electricity through an electric grid</li>
@@ -238,7 +235,7 @@ $(document).ready(function () {
 </div>
 <p>Here, let’s explore this paradigm by actually simulating the spread of innovation due to asocial or social processes.</p>
 <div id="simulation-of-asocial-changes-in-state-e.g.-asocial-learning" class="section level2">
-<h2>11.2 Simulation of asocial changes in state (e.g., asocial learning)</h2>
+<h2>11.1 Simulation of asocial changes in state (e.g., asocial learning)</h2>
 <p>Let’s first consider a situation where each individual in a social network has an inherent probability to adopt the innovation at any given time.</p>
 <p>First, we will make a random graph consisting of 100 nodes. We will set the initial ‘innovation adoption’ status for all individuals (all initially 0).</p>
 <pre class="r"><code>set.seed(4)
@@ -258,339 +255,95 @@ V(g)$status[which(adopt==1)]=1 #change status of new adopters adopt.list[[j]]=wh
 
 plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$status+1], vertex.size=8, layout=l)</code></pre>
 <p><img src="11_diffusion_files/figure-html/unnamed-chunk-5-1.png" width="480" /></p>
-<p>Now, we will repeat this simulation for 20 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can’t go back). If you’re thinking about this in terms of disease, it’s like an ‘SI model’ in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.</p>
-<pre class="r"><code>t=20
+<p>Now, we will repeat this simulation for 30 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can’t go back). If you’re thinking about this in terms of disease, it’s like an ‘SI model’ in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.</p>
+<pre class="r"><code>t=30
 adopt.list=list(0) #empty list t=20
 g.time=list()
+V(g)$status=0
 for(j in 1:t){
   adopt=sample(c(1,0), n, prob=c(x, 1-x), replace=T) #coin flip
   V(g)$status[which(adopt==1)]=1
   g.time[[j]]=g
 }</code></pre>
-<pre class="r"><code>sapply(g.time, function(x) V(x)$status)</code></pre>
-<pre><code>##        [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]
-##   [1,]    0    1    1    1    1    1    1    1    1     1     1     1
-##   [2,]    0    0    0    0    0    1    1    1    1     1     1     1
-##   [3,]    1    1    1    1    1    1    1    1    1     1     1     1
-##   [4,]    0    0    0    0    0    0    0    0    0     0     0     0
-##   [5,]    0    1    1    1    1    1    1    1    1     1     1     1
-##   [6,]    0    1    1    1    1    1    1    1    1     1     1     1
-##   [7,]    0    0    0    0    0    0    0    1    1     1     1     1
-##   [8,]    0    0    0    0    0    1    1    1    1     1     1     1
-##   [9,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [10,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [11,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [12,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [13,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [14,]    0    0    0    0    1    1    1    1    1     1     1     1
-##  [15,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [16,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [17,]    0    0    0    0    0    1    1    1    1     1     1     1
-##  [18,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [19,]    0    0    0    0    1    1    1    1    1     1     1     1
-##  [20,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [21,]    0    0    0    0    0    0    0    0    1     1     1     1
-##  [22,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [23,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [24,]    0    0    0    1    1    1    1    1    1     1     1     1
-##  [25,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [26,]    0    0    0    0    1    1    1    1    1     1     1     1
-##  [27,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [28,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [29,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [30,]    0    0    0    0    0    0    0    0    0     0     0     1
-##  [31,]    0    0    0    0    0    1    1    1    1     1     1     1
-##  [32,]    0    0    0    0    0    1    1    1    1     1     1     1
-##  [33,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [34,]    0    1    1    1    1    1    1    1    1     1     1     1
-##  [35,]    0    0    0    1    1    1    1    1    1     1     1     1
-##  [36,]    0    0    0    0    1    1    1    1    1     1     1     1
-##  [37,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [38,]    0    0    1    1    1    1    1    1    1     1     1     1
-##  [39,]    0    1    1    1    1    1    1    1    1     1     1     1
-##  [40,]    0    0    0    0    1    1    1    1    1     1     1     1
-##  [41,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [42,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [43,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [44,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [45,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [46,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [47,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [48,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [49,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [50,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [51,]    0    0    1    1    1    1    1    1    1     1     1     1
-##  [52,]    0    0    0    0    0    0    0    0    0     1     1     1
-##  [53,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [54,]    0    1    1    1    1    1    1    1    1     1     1     1
-##  [55,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [56,]    0    0    0    1    1    1    1    1    1     1     1     1
-##  [57,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [58,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [59,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [60,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [61,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [62,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [63,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [64,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [65,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [66,]    0    1    1    1    1    1    1    1    1     1     1     1
-##  [67,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [68,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [69,]    0    1    1    1    1    1    1    1    1     1     1     1
-##  [70,]    0    0    0    0    0    0    0    0    0     0     0     1
-##  [71,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [72,]    0    0    0    0    0    0    0    0    1     1     1     1
-##  [73,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [74,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [75,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [76,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [77,]    0    0    0    0    1    1    1    1    1     1     1     1
-##  [78,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [79,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [80,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [81,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [82,]    0    0    1    1    1    1    1    1    1     1     1     1
-##  [83,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [84,]    0    1    1    1    1    1    1    1    1     1     1     1
-##  [85,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [86,]    0    0    0    0    0    0    0    0    0     0     0     1
-##  [87,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [88,]    0    0    0    1    1    1    1    1    1     1     1     1
-##  [89,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [90,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [91,]    0    0    0    0    0    0    1    1    1     1     1     1
-##  [92,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [93,]    0    0    0    1    1    1    1    1    1     1     1     1
-##  [94,]    0    0    0    0    0    0    0    0    0     0     0     1
-##  [95,]    0    0    0    0    0    0    0    0    0     0     1     1
-##  [96,]    1    1    1    1    1    1    1    1    1     1     1     1
-##  [97,]    0    0    1    1    1    1    1    1    1     1     1     1
-##  [98,]    0    0    0    0    0    0    0    0    0     0     0     0
-##  [99,]    1    1    1    1    1    1    1    1    1     1     1     1
-## [100,]    0    0    1    1    1    1    1    1    1     1     1     1
-##        [,13] [,14] [,15] [,16] [,17] [,18] [,19] [,20]
-##   [1,]     1     1     1     1     1     1     1     1
-##   [2,]     1     1     1     1     1     1     1     1
-##   [3,]     1     1     1     1     1     1     1     1
-##   [4,]     0     0     1     1     1     1     1     1
-##   [5,]     1     1     1     1     1     1     1     1
-##   [6,]     1     1     1     1     1     1     1     1
-##   [7,]     1     1     1     1     1     1     1     1
-##   [8,]     1     1     1     1     1     1     1     1
-##   [9,]     0     0     0     0     1     1     1     1
-##  [10,]     1     1     1     1     1     1     1     1
-##  [11,]     0     0     0     0     0     0     0     0
-##  [12,]     0     0     0     0     0     0     0     0
-##  [13,]     1     1     1     1     1     1     1     1
-##  [14,]     1     1     1     1     1     1     1     1
-##  [15,]     1     1     1     1     1     1     1     1
-##  [16,]     0     1     1     1     1     1     1     1
-##  [17,]     1     1     1     1     1     1     1     1
-##  [18,]     0     0     0     0     0     0     0     0
-##  [19,]     1     1     1     1     1     1     1     1
-##  [20,]     1     1     1     1     1     1     1     1
-##  [21,]     1     1     1     1     1     1     1     1
-##  [22,]     1     1     1     1     1     1     1     1
-##  [23,]     1     1     1     1     1     1     1     1
-##  [24,]     1     1     1     1     1     1     1     1
-##  [25,]     1     1     1     1     1     1     1     1
-##  [26,]     1     1     1     1     1     1     1     1
-##  [27,]     1     1     1     1     1     1     1     1
-##  [28,]     1     1     1     1     1     1     1     1
-##  [29,]     1     1     1     1     1     1     1     1
-##  [30,]     1     1     1     1     1     1     1     1
-##  [31,]     1     1     1     1     1     1     1     1
-##  [32,]     1     1     1     1     1     1     1     1
-##  [33,]     1     1     1     1     1     1     1     1
-##  [34,]     1     1     1     1     1     1     1     1
-##  [35,]     1     1     1     1     1     1     1     1
-##  [36,]     1     1     1     1     1     1     1     1
-##  [37,]     1     1     1     1     1     1     1     1
-##  [38,]     1     1     1     1     1     1     1     1
-##  [39,]     1     1     1     1     1     1     1     1
-##  [40,]     1     1     1     1     1     1     1     1
-##  [41,]     1     1     1     1     1     1     1     1
-##  [42,]     0     0     0     0     1     1     1     1
-##  [43,]     0     0     0     0     1     1     1     1
-##  [44,]     1     1     1     1     1     1     1     1
-##  [45,]     0     0     0     0     0     0     0     0
-##  [46,]     1     1     1     1     1     1     1     1
-##  [47,]     0     0     1     1     1     1     1     1
-##  [48,]     1     1     1     1     1     1     1     1
-##  [49,]     1     1     1     1     1     1     1     1
-##  [50,]     0     0     0     0     0     0     0     0
-##  [51,]     1     1     1     1     1     1     1     1
-##  [52,]     1     1     1     1     1     1     1     1
-##  [53,]     1     1     1     1     1     1     1     1
-##  [54,]     1     1     1     1     1     1     1     1
-##  [55,]     0     0     0     0     0     0     0     0
-##  [56,]     1     1     1     1     1     1     1     1
-##  [57,]     1     1     1     1     1     1     1     1
-##  [58,]     1     1     1     1     1     1     1     1
-##  [59,]     0     1     1     1     1     1     1     1
-##  [60,]     1     1     1     1     1     1     1     1
-##  [61,]     1     1     1     1     1     1     1     1
-##  [62,]     1     1     1     1     1     1     1     1
-##  [63,]     0     0     1     1     1     1     1     1
-##  [64,]     0     0     0     0     0     0     0     0
-##  [65,]     1     1     1     1     1     1     1     1
-##  [66,]     1     1     1     1     1     1     1     1
-##  [67,]     1     1     1     1     1     1     1     1
-##  [68,]     0     0     1     1     1     1     1     1
-##  [69,]     1     1     1     1     1     1     1     1
-##  [70,]     1     1     1     1     1     1     1     1
-##  [71,]     1     1     1     1     1     1     1     1
-##  [72,]     1     1     1     1     1     1     1     1
-##  [73,]     1     1     1     1     1     1     1     1
-##  [74,]     0     1     1     1     1     1     1     1
-##  [75,]     0     0     0     0     0     0     0     0
-##  [76,]     1     1     1     1     1     1     1     1
-##  [77,]     1     1     1     1     1     1     1     1
-##  [78,]     0     0     0     0     0     0     0     0
-##  [79,]     1     1     1     1     1     1     1     1
-##  [80,]     1     1     1     1     1     1     1     1
-##  [81,]     1     1     1     1     1     1     1     1
-##  [82,]     1     1     1     1     1     1     1     1
-##  [83,]     1     1     1     1     1     1     1     1
-##  [84,]     1     1     1     1     1     1     1     1
-##  [85,]     1     1     1     1     1     1     1     1
-##  [86,]     1     1     1     1     1     1     1     1
-##  [87,]     0     0     0     0     0     0     1     1
-##  [88,]     1     1     1     1     1     1     1     1
-##  [89,]     1     1     1     1     1     1     1     1
-##  [90,]     0     1     1     1     1     1     1     1
-##  [91,]     1     1     1     1     1     1     1     1
-##  [92,]     0     1     1     1     1     1     1     1
-##  [93,]     1     1     1     1     1     1     1     1
-##  [94,]     1     1     1     1     1     1     1     1
-##  [95,]     1     1     1     1     1     1     1     1
-##  [96,]     1     1     1     1     1     1     1     1
-##  [97,]     1     1     1     1     1     1     1     1
-##  [98,]     0     0     0     0     0     0     0     0
-##  [99,]     1     1     1     1     1     1     1     1
-## [100,]     1     1     1     1     1     1     1     1</code></pre>
-<p>Ok, now let’s make a cumulative list of who</p>
-<pre class="r"><code>adopt.cumulative=list()
-for(i in 1:t){
-  adopt.cumulative[[i]]=unlist(adopt.list[1:i])
-}</code></pre>
-<pre class="r"><code>layout(matrix(1:20, byrow=T, nrow=5))
+<p>What we end up with is 20 igraph objects in a list called <code>g.time</code> (output not shown)</p>
+<pre class="r"><code>g.time</code></pre>
+<p>In these graphs, the only thing that changes across these 20 times steps is the individual status. In each time step, there will be more individuals that adopt the innovation. We can plot how many cumulative individuals adopt the new innovation (i.e., become status=1) across time steps:</p>
+<pre class="r"><code>n.adopt.asocial=sapply(g.time, function(x) length(which(V(x)$status==1))) #for each time step, count the number of individuals that have adopted the innovation
+plot(n.adopt.asocial, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;, ylim=c(0,100))</code></pre>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p>You should see that, in the asocial learning case, there is a decelerating accumulation curve of individuals that adopt the innovation. This is because all individual have the same probability of adopting the new status at any given point, but they never go back–so there are fewer individuals left that hasn’t adopted the innovation as time goes on. Thus, there is a steady decelerating rate of adoption of the innovation.</p>
+<p>For visualization purposes, let’s plot the network across the first 20 time points.</p>
+<pre class="r"><code>def.par &lt;- par(no.readonly = TRUE)
+layout(matrix(1:20, byrow=T, nrow=5))
 par(mar=c(1,1,1,1))
-for(i in 1:t){
+for(i in 1:20){
   v.col=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g.time[[i]])$status+1]
-  plot(g.time[[i]], vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], layout=l, main=paste(&quot;Time&quot;,i))
+  plot(g.time[[i]], vertex.label=&quot;&quot;, vertex.color=v.col, layout=l, main=paste(&quot;Time&quot;,i))
 }</code></pre>
 <p><img src="11_diffusion_files/figure-html/unnamed-chunk-9-1.png" width="480" /></p>
-<pre class="r"><code>n.adopt.asocial=sapply(adopt.list, length) #for each time step, count the number of adopters.
-cumulative.asocial=cumsum(n.adopt.asocial)
-plot(cumulative.asocial, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;)</code></pre>
+<p><br></p>
 </div>
 <div id="simulation-the-social-transmission-of-whatever-state-in-a-random-graph" class="section level2">
-<h2>11.3 Simulation the social transmission of <em>whatever</em> state in a random graph</h2>
-<p>First, we will create an Erdös-Renyí Random Graph with 100 nodes and p = 0.1</p>
-<pre class="r"><code>library(igraph)
-set.seed(4)
+<h2>11.2 Simulation the social transmission of <em>whatever</em> state in a random graph</h2>
+<p>Now, let’s take the same network and try the case where a new innovation spreads socially. That is, an innovation is socially transmitted.</p>
+<p>First, we’ll start over by creating a graph object, but we’ll use the same <code>set.seed()</code> function so we can re-create the connectivity of the asocial case.</p>
+<pre class="r"><code>set.seed(4)
 n=100
-g=erdos.renyi.game(n, p=0.05) #create a Erdos-Renyi Random Graph with uniform edge probability = 0.1
-plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=&quot;darkgray&quot;, layout=l)</code></pre>
+g2=erdos.renyi.game(n, p=0.05)</code></pre>
+<p>Next, we will create the “status” vertex attribute. Everyone will start with state = 0. Then, we will randomly pick 2 nodes who will have state = 1</p>
+<pre class="r"><code>V(g2)$status=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
+seed=sample(V(g2),2) #select 2 innovators
+V(g2)$status[seed]=1 #These &#39;seed&#39; individuals get a status of 1 at the beginning.
+plot(g2, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g2)$status+1], layout=l)</code></pre>
 <p><img src="11_diffusion_files/figure-html/unnamed-chunk-11-1.png" width="480" /></p>
-<p>Next, we will create a vertex attribute called “state”. Everyone will start with state = 1. Then, we will randomly pick 2 nodes who will have state = 2</p>
-<pre class="r"><code>V(g)$state=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
-seed=sample(V(g),2) #select 2 innovators
-V(g)$state[seed]=1 #These &#39;seed&#39; individuals get a status of 1 at the beginning.
-plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$state+1], layout=l)</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-12-1.png" width="480" /></p>
 <p>Now, we will set a “social transmission” parameter, <span class="math inline">\(s\)</span>. You can think of this as the linear increase in the probability that an individual will take on a new “state” (e.g., learn a new foraging strategy or get infected by a disease) when it has a ‘neighbor’ that has that state. Since it’s a probabilty 0 ≤ <span class="math inline">\(s\)</span> ≤ 1.</p>
-<p>Let’s set s = 0.1 for now:</p>
-<pre class="r"><code>s = 0.1</code></pre>
-<p>Now we will simulate 20 time steps of the spread of this “state”.</p>
-<pre class="r"><code>t=20 #time steps to run the simulation
-adopt.list=list(0) #empty list 
+<p>Let’s set <span class="math inline">\(\tau = 0.1\)</span> for now:</p>
+<pre class="r"><code>tau = 0.1</code></pre>
+<p>Now we will simulate 30 time steps of the spread of this innovation. We will save the network for each time point. The for-loop routine will be as follows:</p>
+<ol style="list-style-type: decimal">
+<li>first, we will use the <code>neighbors()</code> function to identify the neighbors (i.e., nodes connected to) of each node. We will use this to add up the status of each node’s neighbors.</li>
+<li>Next, we will implement a social learning process in which the probability <span class="math inline">\(p\)</span> that an individual that has not yet adopted the innovation will adopt in that time step = <span class="math inline">\(1-e^{-\tau*s}\)</span>, where <span class="math inline">\(\tau\)</span> is the parameter that describes the influence of social learning, and <span class="math inline">\(s\)</span> is the number of neighbors of an individual that has already adopted the innovation.</li>
+<li>Based on the calculated probability <span class="math inline">\(p\)</span> for each individual, we then use the <code>sample()</code> function to “flip a biased coin” to see if the focal individual adopts the innovation or not.We do this for every individual that has not yet adopted the innovation (i.e., status = 0). Note that if the focal individual has already adopted the innovation, then we just ignore that individual and move on.</li>
+<li>We then change the status of each individual that got a “1” in the coin flip to status=1</li>
+<li>Return to step 1.</li>
+</ol>
+<pre class="r"><code>t=30 #time steps to run the simulation
+g2.time=list() #empty list to store the output networks
+for(j in 1:t){
+  nei.adopt=sapply(V(g2), function(x) sum(V(g2)$status[neighbors(g,x)]))
+  p=(1-exp(-tau*nei.adopt))*abs(V(g2)$status-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
+  adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
+  V(g2)$status[which(adopters==1)]=1
+  g2.time[[j]]=g2
+}</code></pre>
+<p>After this simulation has run, we will plot the accumulation curve for the number of individuals that adopted the innovation through social learning.</p>
+<pre class="r"><code>n.adopt.social=sapply(g2.time, function(x) length(which(V(x)$status==1))) #for each time step, count the number of adopters.
 
-for (j in 1:t){
-nei.adopt=sapply(V(g), function(x) sum(V(g)$state[neighbors(g,x)]))
-p=(1-exp(-s*nei.adopt))*abs(V(g)$state-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
-adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
-V(g)$state[which(adopters==1)]=1
-adopt.list[[j]]=which(adopters==1)
-}</code></pre>
-<pre class="r"><code>n.adopt.social=sapply(adopt.list, length) #for each time step, count the number of adopters.
-cumulative.social=cumsum(n.adopt.social)
-plot(cumulative.social, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;)</code></pre>
+plot(n.adopt.social, type=&quot;b&quot;, las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;, ylim=c(0,100))</code></pre>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-14-1.png" width="480" /></p>
+<p>Ok, this accumulation curve looks different than the asocial case, right? This is a clear “S-shaped” curve characteristic of social learning. Let’s plot both the asocial and social case together:</p>
+<pre class="r"><code>plot(n.adopt.social, type=&quot;l&quot;, lty=1, col=&quot;black&quot;,las=1, ylab=&quot;Cumulative number of nodes adopted&quot;, xlab=&quot;Time&quot;, ylim=c(0,100))
+points(n.adopt.asocial, type=&quot;l&quot;, las=1, lty=2, col=&quot;red&quot;)
+legend(&quot;topleft&quot;, lty=c(1,2), col=c(&quot;black&quot;, &quot;red&quot;), legend=c(&quot;asocial&quot;, &quot;social&quot;))</code></pre>
 <p><img src="11_diffusion_files/figure-html/unnamed-chunk-15-1.png" width="480" /></p>
-<pre class="r"><code>adopt.list</code></pre>
-<pre><code>## [[1]]
-## integer(0)
-## 
-## [[2]]
-## [1] 1
-## 
-## [[3]]
-## [1] 32
-## 
-## [[4]]
-## [1] 25 87
-## 
-## [[5]]
-## integer(0)
-## 
-## [[6]]
-## [1] 43
-## 
-## [[7]]
-## [1] 75 93 97
-## 
-## [[8]]
-## [1]  2  9 23
-## 
-## [[9]]
-## [1] 70
-## 
-## [[10]]
-## [1] 62 69 88
-## 
-## [[11]]
-## [1] 20 40 53
-## 
-## [[12]]
-## [1] 30 38 74 82 84
-## 
-## [[13]]
-## [1] 15 18 36 44 72 81 90 94
-## 
-## [[14]]
-## [1] 12 13 14 22 42 57 58 65
-## 
-## [[15]]
-## [1] 28 56 73
-## 
-## [[16]]
-## [1]  19  33  68  76  80  96 100
-## 
-## [[17]]
-## [1]  4 21 41 59 66
-## 
-## [[18]]
-##  [1]  8 11 16 17 24 26 35 55 67 78
-## 
-## [[19]]
-## [1]  3 10 27 60 85 99
-## 
-## [[20]]
-## [1]  5 34 37 47 83</code></pre>
-<pre class="r"><code>adopt.cumulative=list()
-for(i in 1:t){
-  adopt.cumulative[[i]]=unlist(adopt.list[1:i])
-}</code></pre>
-<pre class="r"><code>layout(matrix(1:20, byrow=T, nrow=5))
-par(mar=c(1,1,1,1))
-for(i in 1:t){
-  v.col=1:n %in% adopt.cumulative[[i]]+1
-  plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[v.col], layout=l, main=paste(&quot;Time&quot;,i))
-}</code></pre>
-<p><img src="11_diffusion_files/figure-html/unnamed-chunk-17-1.png" width="576" /></p>
+<p>This looks an awful lot like the theoretical expectation:</p>
+<div class="figure">
+<img src="assets/images/FranzNunn2009.png" alt="Figure showing classical predictions of asocial versus social spread of innovations. From Franz &amp; Nunn (2009)." />
+<p class="caption">Figure showing classical predictions of asocial versus social spread of innovations. From <a href="http://rspb.royalsocietypublishing.org/content/276/1663/1829">Franz &amp; Nunn (2009)</a>.</p>
 </div>
+</div>
+<div id="animating-social-transmission-using-gifs" class="section level2">
+<h2>11.3 Animating social transmission using GIFs</h2>
+<p>Now, we will use the results of the simulations in section 11.2 and animate the dynamics of social diffusion on a network.</p>
+<p>Let’s first try to plot what the network should look like for the first 12 time points.</p>
+<pre class="r"><code>layout(matrix(1:10, byrow=T, nrow=2))
+par(mar=c(1,1,1,1))
+for(i in 1:10){
+  v.col=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g2.time[[i]])$status+1]
+  plot(g2.time[[i]], vertex.label=&quot;&quot;, vertex.color=v.col, layout=l, main=paste(&quot;Time&quot;,i))
+}</code></pre>
+<p><img src="11_diffusion_files/figure-html/unnamed-chunk-16-1.png" width="768" /></p>
+<pre class="r"><code>par(def.par)</code></pre>
 </div>
 
 
