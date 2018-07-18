@@ -216,10 +216,7 @@ saveGIF(
 ```
 When you run this code, the GIF file should actually pop up on your screen. You can simply drag it to a web browser to see the animation. It should look like this:
 
-```{r, out.width = "400px", echo=F}
-knitr::include_graphics("./assets/images/sample_diffusion.gif")
-```
-
+![](./assets/images/sample_diffusion.gif)
  
  The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
  
