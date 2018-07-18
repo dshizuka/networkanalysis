@@ -32,6 +32,10 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[9. Testing Your Network: Permuations and Randomizations](09_permutations.html)
 
+###[10. Intro to Network Regression (MRQAP)](10_mrqap.html)
+
+###[11. Diffusion in Networks](11_diffusion.html)
+
 --------
 
 ##Worked Examples
