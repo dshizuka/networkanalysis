@@ -203,5 +203,16 @@ par(def.par)
 ```
 What we are looking for here is to make sure that the network is laid out identically in each panel, and only the node colors change as more individual change status through social transmission. 
 
-Next, we will demonstrate how to generate and save this figure directly as a .png file. If you are using 
+Ok, now we are ready to make a GIF that animates the change in the social network across time. To do this, we will use the function `saveGIF()` in the package `animation`. How this function works is that you will run a for loop inside the function to generate a batch of images that you want to stitch together as an animation. Here is the code:
+
+```{r}
+library(animation)
+
+saveGIF( 
+  {for (i in 1:30) {
+  plot(g2.time[[i]], layout=l, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g2.time[[i]])$status+1], main=paste("time",i,sep=" "))
+  }
+  }, movie.name="sample_diffusion.gif", interval=0.2, nmax=30, ani.width=600, ani.height=600)
+```
+
 
