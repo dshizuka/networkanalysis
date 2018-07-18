@@ -353,7 +353,12 @@ saveGIF(
   plot(g2.time[[i]], layout=l, vertex.label=&quot;&quot;, vertex.size=5, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g2.time[[i]])$status+1], main=paste(&quot;time&quot;,i,sep=&quot; &quot;))
   }
   }, movie.name=&quot;sample_diffusion.gif&quot;, interval=0.2, nmax=30, ani.width=600, ani.height=600)</code></pre>
-<pre><code>## [1] TRUE</code></pre>
+<p>When you run this code, the GIF file should actually pop up on your screen. You can simply drag it to a web browser to see the animation. It should look like this:</p>
+<div class="figure">
+<img src="assets/images/sample_diffusion.gif" />
+
+</div>
+<p>The speed of the animation can be set using the argument <code>interval=</code>. Other arguments can be found by going to <code>?ani.options</code>.</p>
 </div>
 
 

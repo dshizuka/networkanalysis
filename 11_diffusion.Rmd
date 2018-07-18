@@ -205,7 +205,7 @@ What we are looking for here is to make sure that the network is laid out identi
 
 Ok, now we are ready to make a GIF that animates the change in the social network across time. To do this, we will use the function `saveGIF()` in the package `animation`. How this function works is that you will run a for loop inside the function to generate a batch of images that you want to stitch together as an animation. Here is the code:
 
-```{r}
+```{r, eval=F}
 library(animation)
 
 saveGIF( 
@@ -214,5 +214,10 @@ saveGIF(
   }
   }, movie.name="sample_diffusion.gif", interval=0.2, nmax=30, ani.width=600, ani.height=600)
 ```
+When you run this code, the GIF file should actually pop up on your screen. You can simply drag it to a web browser to see the animation. It should look like this:
 
-
+![](./assets/images/sample_diffusion.gif)
+ 
+ The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
+ 
+ 
