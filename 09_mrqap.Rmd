@@ -1,7 +1,7 @@
 ---
-title: "10. Intro to Network Regression (MRQAP)"
+title: "9. Intro to Network Regression (MRQAP)"
 author: "Dai Shizuka"
-date: "7/12/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
