@@ -33,7 +33,7 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[7. Simulating Networks](07_simulations.html)
 
-###[9. Testing Your Network: Permuations and Randomizations](09_permutations.html)
+###[8. Testing Your Network: Permuations and Randomizations](08_permutations.html)
 
 ###[10. Intro to Network Regression (MRQAP)](10_mrqap.html)
 

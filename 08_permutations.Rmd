@@ -1,7 +1,7 @@
 ---
-title: "9. Testing against the Null Hypothesis: Permutations and Randomizations"
+title: "8. Testing against the Null Hypothesis: Permutations and Randomizations"
 author: "Dai Shizuka"
-date: "7/12/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
