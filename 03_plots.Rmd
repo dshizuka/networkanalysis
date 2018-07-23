@@ -1,6 +1,7 @@
 ---
 title: "3. Plotting Basics"
 author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes

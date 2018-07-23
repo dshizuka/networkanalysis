@@ -1,5 +1,6 @@
 ---
 title: "Tutorials"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     theme: flatly

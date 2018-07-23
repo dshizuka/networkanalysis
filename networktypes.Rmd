@@ -1,7 +1,7 @@
 ---
 title: "A VERY Brief Survey of Networks for Behavioral Ecologists"
 author: "Dai Shizuka"
-date: "7/10/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes

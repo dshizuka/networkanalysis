@@ -1,5 +1,6 @@
 ---
 title: "2.Data Formats for Networks"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
