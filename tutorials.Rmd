@@ -9,6 +9,8 @@ output:
 
 I'm posting two different types of tutorials. First, the "Basic Tutorials" are general lessons for understanding the basics of network analysis. The "Worked Examples" section are exercises based on published studies--e.g., re-creating the analysis or simulations. 
 
+###[Brief Overview of Network Types in Behavioral Ecology](networktypes.html)
+
 ##Basic Tutorials
 <br>
 
