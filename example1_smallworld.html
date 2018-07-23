@@ -16,7 +16,7 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -100,34 +103,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 60px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 65px;
+  margin-top: -65px;
 }
 </style>
 
@@ -287,10 +290,10 @@ legend(&quot;bottomleft&quot;, pch=c(20,0), legend=c(&quot;Clustering Coefficien
 <pre class="r"><code>g1=erdos.renyi.game(50,p=0.15) 
 b1=barabasi.game(50,power=1,m=3,directed=FALSE) 
 summary(g1)</code></pre>
-<pre><code>## IGRAPH cff4a44 U--- 50 195 -- Erdos renyi (gnp) graph
+<pre><code>## IGRAPH 56cd4bd U--- 50 195 -- Erdos renyi (gnp) graph
 ## + attr: name (g/c), type (g/c), loops (g/l), p (g/n)</code></pre>
 <pre class="r"><code>summary(b1)</code></pre>
-<pre><code>## IGRAPH 2f80815 U--- 50 144 -- Barabasi graph
+<pre><code>## IGRAPH 4417e93 U--- 50 144 -- Barabasi graph
 ## + attr: name (g/c), power (g/n), m (g/n), zero.appeal (g/n),
 ## | algorithm (g/c)</code></pre>
 <p>So we have produced two graphs of the same size and roughly the same number of edges. Let’s plot these graphs side-by-side. And for illustrative purposes, we’ll make the sizes of the vertices proportional to their degree. We’ll also use a force-directed layout algorithm (e.g. Fruchterman-Reingold) so that we can get a sense for how the network is structured.</p>
@@ -303,10 +306,10 @@ plot(b1,layout=layout.fruchterman.reingold,vertex.size=degree(b1),vertex.label=&
 <pre class="r"><code>g=erdos.renyi.game(5000,p=0.002) 
 b=barabasi.game(5000,power=1,m=5,directed=FALSE) 
 summary(g)</code></pre>
-<pre><code>## IGRAPH 6d64e0f U--- 5000 24767 -- Erdos renyi (gnp) graph
+<pre><code>## IGRAPH 2ad6855 U--- 5000 24767 -- Erdos renyi (gnp) graph
 ## + attr: name (g/c), type (g/c), loops (g/l), p (g/n)</code></pre>
 <pre class="r"><code>summary(b)</code></pre>
-<pre><code>## IGRAPH 0334aac U--- 5000 24985 -- Barabasi graph
+<pre><code>## IGRAPH 9b81eee U--- 5000 24985 -- Barabasi graph
 ## + attr: name (g/c), power (g/n), m (g/n), zero.appeal (g/n),
 ## | algorithm (g/c)</code></pre>
 <p>So we have two large graphs with about the same number of edges. Let’s now plot the degree distribution of these two graphs side-by-side, both on a log-log scale.</p>
