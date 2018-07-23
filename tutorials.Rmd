@@ -27,7 +27,7 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[4. Measuring Networks Part 1: Centrality and Global Measures](04_measuring.html)
 
-###[6. Measuring Networks Part 2: Community structure and Assortment](06_community.html)
+###[5. Measuring Networks Part 2: Community structure and Assortment](05_community.html)
 
 ###[7. Random Graphs](07_randomnets.html)
 
