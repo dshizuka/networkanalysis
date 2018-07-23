@@ -1,7 +1,7 @@
 ---
-title: "8. Simulating Networks"
+title: "7. Simulating Networks"
 author: "Dai Shizuka"
-date: "7/12/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
@@ -20,6 +20,7 @@ set.seed(2)
 
 Here, we will simulate some social networks just to get a feel for how to create networks based on simple rules. 
 
+*Note 7/23/18: more simulation exmamples to come soon*
 
 ```{r message=F}
 library(asnipe)
@@ -28,7 +29,7 @@ library(igraph)
 
 <br>
 
-##1. Flock network with size-related variation in gregariousness
+##7.1. Flock network with size-related variation in gregariousness
 
 Let's imagine a scenario in which individuals vary in how often they join groups (e.g., flocks). In addition, let's imagine that individuals also vary in a trait (e.g., body size) that correlates with gregariousness--the tendency to join flocks. In this fictitious scenario, will we find correlation between the trait and centrality?
 
