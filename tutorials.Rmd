@@ -29,7 +29,7 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[5. Measuring Networks Part 2: Community structure and Assortment](05_community.html)
 
-###[7. Random Graphs](07_randomnets.html)
+###[6. Random Graphs](06_randomnets.html)
 
 ###[8. Simulating Networks](08_simulations.html)
 
