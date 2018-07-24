@@ -3,7 +3,7 @@ output:
   html_document:
     theme: flatly
 navbar:
-  title: "Network Analysis Tutorials"
+  title: "Network Analysis in R"
   left:
     - text: "Home"
       href: index.html
