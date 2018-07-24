@@ -1,15 +1,17 @@
 ---
-title: "Intro to Network Analysis (for ecologists)"
+title: "Intro to Network Analysis in R"
 output: 
   html_document:
     theme: flatly
 ---
 
-Hello to the my network analysis tutorials
+####Hello to my network analysis tutorials. This website is a repositories of tutorials for network analysis that I have used in my course for graduate students. The materials on this page tend to be geared towards ecologists, and *behavioral ecologists* in particular. This simply reflects my own training and research interests. 
 
-This website is a repositories of tutorials for network analysis that I have used in my course for graduate students. 
+####The tutorial materials demonstrate how to use the [R programming environment](https://cran.r-project.org/) to start conducting network analysis (again, primarily the types of networks that ecologists tend to use). Most of the materials utilize the [igraph package for R](http://igraph.org/r/). 
 
-The materials on this page tend to be geared towards ecologists, and *behavioral ecologists* in particular. This simply reflects my own training and research interests.  
+####I will do my best to continue to update the material. However, this is not really an active blog where I will be posting regular updates all the time. If there is something that is amiss in the tutorials, please feel free to send me a note. I will keep my contact info updated in the [about page](about.html).
+
+-----
 
 ##Why Network Analysis?
 
