@@ -1,7 +1,7 @@
 ---
-title: "4. Brief Survey of Networks for Behavioral Ecologists"
+title: "A VERY Brief Survey of Networks for Behavioral Ecologists"
 author: "Dai Shizuka"
-date: "7/10/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
@@ -10,10 +10,12 @@ output:
 
 --------------
 
-There are dozens of different types of biological networks. I will focus on a few main types of networks here. For each network, it is particularly important to think about how nodes and edges are defined.
+There are dozens of different types of biological networks. This is an extremely brief overview of some of the different types of networks that might be of interest to behavioral ecologists. I hope to add to this list or provide more details in future updates...
 
-We will present three general types of networks that have been of particular interest for ecologists, each with particular challenges. After a brief overview, I highlight a few particular topics for each type of network.
 
+<br>
+
+----
 
 ###4.1. Social networks
 Social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). Examples of the types of interactions/associations involved include direct interactions (e.g., aggression, grooming), co-membership in groups such as herds and flocks, or co-use of spatial locations (e.g., roosts, refuges). The analysis of such social networks can be used to understand the structure of societies, the dynamics of social structure across time and space, and the flow of information/disease/etc through these connections.
@@ -24,6 +26,9 @@ Social network analysis has a long history in fields such as sociology, where it
 
 Go to a specific tutorial for how to construct social networks [here](04.1_socialnetworks.html)
 
+<br>
+
+----
 
 ###4.2 Ecological Networks
 
@@ -39,6 +44,10 @@ The network view of ecology has a long history (e.g., May 1973), and many great 
 
 For an introductory tutorial for constructing ecological networks [here](04.2_ecolnets.html)
 
+<br>
+
+----
+
 ###4.3 Spatial Networks
 
 Spatial networks are distinguished by the fact that nodes represent some point in space, e.g., habitats within a landscape, or populations across a region. The edges may represent connectivity of these sites or populations, e.g., predicted or actual movements of individuals or measures of genetic connectivity. Defining edges in these type of networks tend to be a challenge because of the inherent difficulties in observing movements, especially since rare dispersal events can have important impacts in ecological patterns and evolutionary processes.
@@ -48,6 +57,8 @@ Spatial networks are distinguished by the fact that nodes represent some point i
 Using network analysis to assess landscape connectivity was first proposed by Urban and Keitt (2001), and has since exploded in the context of conservation (reviews and perspectives by Bunn et al. 2000; McRae et al. 2008; Urban et al. 2008). Dyer & Nelson (2004) and Dyer (2015) provide a good framework for using population genetics to define spatial networks of connectivity. Fall et al. (2007) and Dale & Fortin (2010) are also great references for general challenges in considering spatial networks. Some empirical examples include Fletcher et al. (2011; 2013), Ribeiro et al. (2009).
 
 You will find introductory tutorial matrial for constructing spatial networks [here](04.3_spatialnets.html)
+
+<br>
 
 -----
 

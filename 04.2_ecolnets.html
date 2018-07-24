@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -201,7 +204,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">4.2 Intro to Ecological Networks</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>7/10/2018</em></h4>
+<h4 class="date"><em>updated 07/23/18</em></h4>
 
 </div>
 
@@ -286,9 +289,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH d51aa2d UN-B 9 10 -- 
+<pre><code>## IGRAPH 11f7964 UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from d51aa2d (vertex names):
+## + edges from 11f7964 (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -322,16 +325,16 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH bd0d073 UNW- 4 6 -- 
+## IGRAPH 49cd0c8 UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from bd0d073 (vertex names):
+## + edges from 49cd0c8 (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH 6eb3968 UNW- 5 6 -- 
+## IGRAPH a27dfff UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 6eb3968 (vertex names):
+## + edges from a27dfff (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>

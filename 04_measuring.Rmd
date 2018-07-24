@@ -1,7 +1,7 @@
 ---
-title: "5. Measuring Networks Part 1: Centrality and Global Measures"
+title: "4. Measuring Networks Part 1: Centrality and Global Measures"
 author: "Dai Shizuka"
-date: "7/11/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
@@ -46,11 +46,11 @@ l=layout_with_fr(g)
 plot(g, layout=l, vertex.label="", vertex.color="gold", edge.color="slateblue", edge.width=E(g)$weight*5)
 ```
 
-##5.1 Centrality Measures (i.e., node-level measures)
+##4.1 Centrality Measures (i.e., node-level measures)
 
 Centrality is a general term that relates to measures of a node’s position in the network. There are many such centrality measures, and it can be a daunting task to wade through all of the different ways to measure a node’s importance in the network. Here, we will introduce just a few examples.
 
-###5.1.1 Degree and Strength
+###4.1.1 Degree and Strength
 Let’s start with the most straight-forward centrality metric: **degree centrality**. Degree centrality is simply the *number of edges connected to a given node*. In a social network, this might mean the number of friends an individual has. We can calculate degree centrality with a simple function:
 
 ```{r}
@@ -75,7 +75,7 @@ plot(g,  vertex.label="", vertex.color="gold", edge.color="slateblue", edge.widt
 
 Compare the relative node sizes when plotting by **degree** vs. **strength**. What differences do you notice?
 
-### 5.1.2 Betweenness
+### 4.1.2 Betweenness
 
 Let’s now do the same for **betweenness centrality**, which is defined as *the number of geodesic paths (shortest paths) that go through a given node*. Nodes with high betweenness might be influential in a network if, for example, they capture the most amount of information flowing through the network because the information tends to flow through them. Here, we use the normalized version of betweenness.
 
@@ -99,7 +99,7 @@ closeness | `closeness()` | Number of steps required to access every other node 
 eigenvector centrality | `eigen_centrality()` | Values of the first eigenvector of the graph adjacency matrix. The values are high for vertices that are connected to many other vertices that are, in turn, connected many others, etc.|
 
 
-### 5.1.3 Assembling a dataset of node-level measures
+### 4.1.3 Assembling a dataset of node-level measures
 So now we know the basics of how to get centrality measures. For data analysis, we will likely want to measure and compare measures of node centrality with other traits. This will require putting together a dataframe that combines vertex attributes and centrality measures.
 
 Let’s say we want to assemble a dataset of node centrality for our sparrow network. Let’s use the three centrality measures we already introduced:
@@ -131,9 +131,9 @@ plot(betweenness~strength, data=d)
 
 These are not well correlated, since they describe something different...
 
-##5.2 Network-level measures
+##4.2 Network-level measures
 
-### 5.2.1 Size and density
+### 4.2.1 Size and density
 Let’s start by getting some basic information for the network, such as the number of nodes and edges. There are a couple of functions to help you extract this information without having to look it up in the "object summary" (e.g., `summary(g)`). Using these functions, you can store this information as separate objects, e.g., *n* for # nodes and *m* for # edges.
 
 ```{r}
@@ -163,7 +163,7 @@ edge_density(g)
 ```
 
 
-###5.2.2 Components
+###4.2.2 Components
 When networks are ‘fully connected’, you can follow edges from any given vertex to all other vertices in the network. Alternatively, networks can be composed of multiple components that are not connected to each other, as with our sample network above. We can get this information with a simple function (output not shown).
 
 ```{r}
@@ -173,7 +173,7 @@ components(g)
 The output shows the node membership, component sizes, and number of components.
 
 
-###5.2.3 Degree distributions
+###4.2.3 Degree distributions
 
 Degree distribution—i.e., the statistical distribution of node degrees in a network—is a common and often powerful way to describe a network. We will play around with this more when we talk in depth about ‘random graphs’, but the specific degree distribution can help distinguish networks with specific properties (e.g., ‘scale-free networks’).
 
@@ -192,7 +192,7 @@ pk=degree.distribution(g)
 plot(pk, pch=19)
 ```
 
-###5.2.4 Average path length & Diameter
+###4.2.4 Average path length & Diameter
 In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “*degrees of separation*” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.
 
 You can calculate path lengths with or without the edge weights (if using edge weights, you often simply count up the weights as you go along the path). The igraph package includes a convenient function for finding the shortest paths between every dyad in a network. Here, makes sure you specify the algorithm = “unweighted” (output not shown):
@@ -236,7 +236,7 @@ avg.paths
 diams
 ```
 
-###5.2.5 Clustering Coefficient (Transitivity)
+###4.2.5 Clustering Coefficient (Transitivity)
 
 Clustering coefficients
 There are two formal definitions of the Clustering Coefficient (or Transitivity): “global clustering coefficient” and “locla clustering coefficient”. Though they are slightly different, they both deal with the probability of two nodes that are connected to a common node being connected themselves (e.g., the probability of two of your friends knowing each other).

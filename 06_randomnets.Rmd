@@ -1,7 +1,7 @@
 ---
-title: "7. Simulating Random Graphs and Simulations"
+title: "6. Simulating Random Graphs and Simulations"
 author: "Dai Shizuka"
-date: "7/10/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
@@ -17,7 +17,7 @@ set.seed(2)
 
 -------
 
-##5.1 What is a random graph?
+##6.1 What is a random graph?
 
 Thus far, we have spent most of our time playing around with empirical networks. However, it is often very instructive to understand the behavior of networks that are generated using simple mechanisms.
 The simplest type of random graph is what is called the Erdös-Renyí Random Graph. This is what people typically mean when they say "Random Graph" (though, you will see later, that there are many different ways to be random). 
@@ -53,7 +53,7 @@ plot(g2,layout=layout.circle)
 
 Your output will look approximately like mine, but it’ll be a bit different. This is because now the number of edges is a probabilistic outcome of having p = 0.2 chance of each dyad being connected. This means that if you run this set of codes repeatedly (try it), you will get densities that hover around 0.2.
 
-##5.2 Making ensembles of random graphs
+##6.2 Making ensembles of random graphs
 
 Let’s now try to better understand the behavior of random graphs by creating an ensemble of 100 random graphs with some known property and calculating the mean density of these graphs. We can do this by using “for-loops”
 
@@ -86,7 +86,7 @@ plot(r,layout=layout.circle,edge.color="black",edge.width=2,vertex.color="red",v
 }
 ```
 
-##5.3 Properties of Random Graphs
+##6.3 Properties of Random Graphs
 
 So, why are we fooling around with random graphs anyway? Well, the main reason is that it serves as a good *null hypothesis* of what the structure of a basic system of *n* components and *m* connections or *p* probability of connections look like, all else equal. The great thing about Erdös-Renyí Random Graphs is that the process to generate them is extremely simple, and the properties of the resulting system is highly predictable and simple. 
 
@@ -133,7 +133,7 @@ abline(v=p,lty=2,col="red") #expected global clustering coefficient, which is si
 We can see that the distribution of values fit our expectations.
 
 
-##5.4 Simple exercise: path length and network size
+##6.4 Simple exercise: path length and network size
 
 We can use the same scheme for creating ensembles of random graphs to explore how properties of these networks change with size. As an example, let’s explore how average path length of a network changes as we add more nodes.
 
