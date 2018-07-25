@@ -216,13 +216,25 @@ $(document).ready(function () {
 </ul></li>
 <li><a href="#assortment">5.2 Assortment</a><ul>
 <li><a href="#the-assortment-coefficient">5.2.1 The Assortment Coefficient</a></li>
-<li><a href="#assortment-a-simple-example">5.2.2 Assortment: a simple example</a></li>
+<li><a href="#assortment-a-simple-example-with-igraph">5.2.2 Assortment: a simple example with <code>igraph</code></a></li>
 <li><a href="#using-the-assortnet-package">5.2.3 Using the <code>assortnet</code> package</a></li>
 </ul></li>
 </ul>
 </div>
 
-<hr />
+<table style="width:7%;">
+<colgroup>
+<col width="6%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td>Load packages you need for this tutorial:</td>
+</tr>
+<tr class="even">
+<td><code>r library(igraph) library(assortnet)</code></td>
+</tr>
+</tbody>
+</table>
 <div id="community-structure-in-networks" class="section level2">
 <h2>5.1 Community Structure in Networks</h2>
 <div class="figure">
@@ -300,14 +312,12 @@ $(document).ready(function () {
 <div id="modularity-community-detection-a-simple-example" class="section level4">
 <h4>5.1.3 Modularity &amp; Community Detection: A Simple Example</h4>
 <p>To illustrate how to measure modularity and assortativity using igraph, let’s start by creating a simple graph with clear community structure. First, we’ll create a network consisting of two clusters that are completely connected, which themselves are loosely connected.</p>
-<pre class="r"><code>library(igraph)
-
-g=make_graph(~A:B:C:D:E-A:B:C:D:E, F:G:H:I:J-F:G:H:I:J, A-F, B-G)
+<pre class="r"><code>g=make_graph(~A:B:C:D:E-A:B:C:D:E, F:G:H:I:J-F:G:H:I:J, A-F, B-G)
 
 set.seed(7)
 l=layout_with_fr(g)
 plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-1-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-2-1.png" width="384" /></p>
 <p>Let’s now apply a community detection algorithm to figure out the optimal division of this network into communities. Because the community division in this example is very clear, we can choose any of the community detection method in the table above and we are likely to come up with the same answer. Let’s use one called the edge betweenness method:</p>
 <pre class="r"><code>eb=edge.betweenness.community(g) 
 eb</code></pre>
@@ -329,7 +339,7 @@ eb</code></pre>
 ## 1 1 1 1 1 2 2 2 2 2</code></pre>
 <p>You can also use this communities object to produce a pretty network figure that shows the community structure by incorporating it into the <code>plot()</code> function.</p>
 <pre class="r"><code>plot(eb, g, layout=l)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
 </div>
 </div>
 <div id="example-community-detection-with-sample-sparrow-network" class="section level3">
@@ -343,7 +353,7 @@ mat=get_network(t(assoc), association_index=&quot;SRI&quot;) #create adjacency m
 g.sparrow=graph_from_adjacency_matrix(mat, &quot;undirected&quot;, weighted=T) #make into igrpah object</code></pre>
 <p>Plot the network to see:</p>
 <pre class="r"><code>plot(g.sparrow, edge.width=E(g.sparrow)$weight*5, vertex.label=&quot;&quot;)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
 <p>Use one of the community detection algorithms. Here’s an example with the Louvain method:</p>
 <pre class="r"><code>com=cluster_louvain(g.sparrow)
 com</code></pre>
@@ -363,7 +373,7 @@ com</code></pre>
 <p>Plot the network with the communities assigned.</p>
 <pre class="r"><code>set.seed(2)
 plot(com, g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
 <p>… or if you don’t like the coloring scheme, you can customize it. Let’s get fancy and use RColorBrewer to assign colors.</p>
 <pre class="r"><code>library(RColorBrewer)
 colors=brewer.pal(length(com),&#39;Accent&#39;) #make a color palette
@@ -371,7 +381,7 @@ V(g.sparrow)$color=colors[membership(com)] #assign each vertex a color based on 
 
 set.seed(2)
 plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
 </div>
 </div>
 <div id="assortment" class="section level2">
@@ -387,32 +397,69 @@ plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</co
 <p><span class="math inline">\(r = \frac{\sum_{ij} \left(A_{ij}-k_ik_j/2m\right)x_ix_j}{\sum_{ij} \left(k_i\delta_{ij}-k_ik_j/2m\right)x_ix_j}\)</span></p>
 <p>where <span class="math inline">\(k_i\delta_{ij}\)</span> is the degree of <span class="math inline">\(i\)</span> excluding its connection with <span class="math inline">\(j\)</span>. This is actually a form of the Pearson correlation coefficient. The coefficient is large (approaches 1) if nodes with similar values are more connected and small (approaches 1) when similar nodes are less connected. The value is 0 when edges are random with respect to node values.</p>
 <p>For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014).</p>
-<p>Note also that the igraph function for <code>assortativity()</code> can only handle unweighted networks. To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014). Here, I will first demonstrate how to use the <code>assortativity()</code> function in igraph, and then do the equivalent with the <code>assortnet</code> package functions.</p>
+<p>There are at least two easy ways to calculate the assortment coefficient. In the <code>igraph</code> package, there is a function for <code>assortativity()</code>. One benefit to this function is that it can calculate assortment in directed or undirected network. However, the major downside is that it cannot handle weighted networks.</p>
+<p>To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014). Here, I will first demonstrate how to use the <code>assortativity()</code> function in igraph, and then do the equivalent with the <code>assortnet</code> package functions.</p>
 </div>
-<div id="assortment-a-simple-example" class="section level3">
-<h3>5.2.2 Assortment: a simple example</h3>
+<div id="assortment-a-simple-example-with-igraph" class="section level3">
+<h3>5.2.2 Assortment: a simple example with <code>igraph</code></h3>
 <p>Let’s use the same example network to demonstrate how to calculate assortativity, and to compare the difference between modularity and assortativity.</p>
 <p>Let’s start by assigning each node a value–let’s say nodes vary in size.</p>
-<pre class="r"><code>V(g)$size=c(rnorm(5, mean=20), rnorm(5, mean=40)) #assign sizes to nodes using two normal distributions with different means
+<pre class="r"><code>set.seed(3)
+V(g)$size=c(rnorm(5, mean=20, sd=5), rnorm(5, mean=30, sd=5)) #assign sizes to nodes using two normal distributions with different means
 
 plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-11-1.png" width="384" /></p>
 <p>Now, we can measure the degree to which this network exhibits assortment by node size.</p>
 <pre class="r"><code>assortativity(g, V(g)$size, directed=F)</code></pre>
-<pre><code>## [1] 0.7887182</code></pre>
-<p>As you can see, this network exhibits high levels of assortativity by node size (r = 0.79). As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.</p>
+<pre><code>## [1] 0.5708429</code></pre>
+<p>As you can see, this network exhibits high levels of assortativity by node size.</p>
+<p>We can also convert the size variable into a binary (i.e., discrete) trait and calculate the assortment coefficient.</p>
+<pre class="r"><code>V(g)$size.discrete=(V(g)$size&gt;25)+0 #shortcut to make the values = 1 if large individual and 0 if small individual, with cutoff at size = 25
+assortativity(g, V(g)$size.discrete, directed=F)</code></pre>
+<pre><code>## [1] 0.4358974</code></pre>
+<p>As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.</p>
 <pre class="r"><code>set.seed(3)
 V(g)$random=rnorm(10, mean=20, sd=5) #create a node trait that varies randomly for all nodes 
 assortativity(g, V(g)$random, directed=F)</code></pre>
 <pre><code>## [1] -0.06392816</code></pre>
 <pre class="r"><code>plot(g, layout=l, edge.color=&quot;black&quot;, vertex.size=V(g)$random)</code></pre>
-<p><img src="05_community_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-14-1.png" width="384" /></p>
 <p>You can see that there is little assortment based on this trait.</p>
 <p>Just to be extra clear, this network is still exhibits community structure (A through E and F through J), but the trait we are measuring does not exhibit assortativity.</p>
 </div>
 <div id="using-the-assortnet-package" class="section level3">
 <h3>5.2.3 Using the <code>assortnet</code> package</h3>
 <p>Let’s now try to get the same result using the function in the <code>assortnet</code> package, and then measure the assortment coefficient in a weighted network.</p>
+<p>First, recreate the results from section 5.2.2. In the <code>assortnet</code> version of the functions, the input is an adjacency matrix rather than an igraph object. So what we need to do is generate the adjacency matrix and then run the <code>asssortment.continuous()</code> function:</p>
+<pre class="r"><code>adj=as_adjacency_matrix(g, sparse=F)
+assortment.continuous(adj, V(g)$size)</code></pre>
+<pre><code>## $r
+## [1] 0.5708429</code></pre>
+<pre class="r"><code>assortment.discrete(adj, V(g)$size.discrete)</code></pre>
+<pre><code>## $r
+## [1] 0.4358974
+## 
+## $mixing_matrix
+##            0         1        ai
+## 0  0.4545455 0.1363636 0.5909091
+## 1  0.1363636 0.2727273 0.4090909
+## bi 0.5909091 0.4090909 1.0000000</code></pre>
+<p>You’ll notice that the <code>assortment_discrete()</code> function output includes a “mixing matrix”, which is useful if you want to know the cumulative edge weights that occur between individuals with the same vs. different vertex labels.</p>
+<p>With <code>assortnet</code>, we can also use weighted edges. So let’s add edge weights randomly and calculate the coefficient. Since the functions take adjacency matrix as input, we’ll have to regenerate the matrix with the <code>attr=&quot;weight&quot;</code> argument after adding edge weights.</p>
+<pre class="r"><code>E(g)$weight=runif(length(E(g)), min=0, max=1)
+adj=as_adjacency_matrix(g, sparse=F, attr=&quot;weight&quot;)
+assortment.continuous(adj, V(g)$size)</code></pre>
+<pre><code>## $r
+## [1] 0.5621146</code></pre>
+<pre class="r"><code>assortment.discrete(adj, V(g)$size.discrete)</code></pre>
+<pre><code>## $r
+## [1] 0.498065
+## 
+## $mixing_matrix
+##            0         1        ai
+## 0  0.4628330 0.1218816 0.5847146
+## 1  0.1218816 0.2934038 0.4152854
+## bi 0.5847146 0.4152854 1.0000000</code></pre>
 </div>
 </div>
 

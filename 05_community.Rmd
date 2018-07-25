@@ -150,16 +150,19 @@ where $k_i\delta_{ij}$ is the degree of $i$ excluding its connection with $j$. T
 
 For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014). 
 
-Note also that the igraph function for `assortativity()` can only handle unweighted networks. To measure assortativity on weighted networks, use the `assortment.discrete()` or `assortment.continuous()` function in the `assortnet` library (Farine 2014). Here, I will first demonstrate how to use the `assortativity()` function in igraph, and then do the equivalent with the `assortnet` package functions. 
+There are at least two easy ways to calculate the assortment coefficient. In the `igraph` package, there is a function for `assortativity()`. One benefit to this function is that it can calculate assortment in directed or undirected network. However, the major downside is that it cannot handle weighted networks. 
 
-###5.2.2 Assortment: a simple example
+To measure assortativity on weighted networks, use the `assortment.discrete()` or `assortment.continuous()` function in the `assortnet` library (Farine 2014). Here, I will first demonstrate how to use the `assortativity()` function in igraph, and then do the equivalent with the `assortnet` package functions. 
+
+###5.2.2 Assortment: a simple example with `igraph`
 
 Let’s use the same example network to demonstrate how to calculate assortativity, and to compare the difference between modularity and assortativity.
 
 Let’s start by assigning each node a value--let’s say nodes vary in size.
 
 ```{r}
-V(g)$size=c(rnorm(5, mean=20), rnorm(5, mean=40)) #assign sizes to nodes using two normal distributions with different means
+set.seed(3)
+V(g)$size=c(rnorm(5, mean=20, sd=5), rnorm(5, mean=30, sd=5)) #assign sizes to nodes using two normal distributions with different means
 
 plot(g, layout=l, edge.color="black")
 ```
@@ -170,7 +173,15 @@ Now, we can measure the degree to which this network exhibits assortment by node
 assortativity(g, V(g)$size, directed=F)
 ```
 
-As you can see, this network exhibits high levels of assortativity by node size (r = 0.79). As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.
+As you can see, this network exhibits high levels of assortativity by node size. 
+
+We can also convert the size variable into a binary (i.e., discrete) trait and calculate the assortment coefficient.
+```{r}
+V(g)$size.discrete=(V(g)$size>25)+0 #shortcut to make the values = 1 if large individual and 0 if small individual, with cutoff at size = 25
+assortativity(g, V(g)$size.discrete, directed=F)
+```
+
+As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.
 
 ```{r}
 set.seed(3)
@@ -188,10 +199,22 @@ Just to be extra clear, this network is still exhibits community structure (A th
 
 Let's now try to get the same result using the function in the `assortnet` package, and then measure the assortment coefficient in a weighted network. 
 
-First, recreate the results from section 5.2.2:
+
+First, recreate the results from section 5.2.2. In the `assortnet` version of the functions, the input is an adjacency matrix rather than an igraph object. So what we need to do is generate the adjacency matrix and then run the `asssortment.continuous()` function:
 
 ```{r}
-assortment.continuous(g, V(g)$size)
-
+adj=as_adjacency_matrix(g, sparse=F)
+assortment.continuous(adj, V(g)$size)
+assortment.discrete(adj, V(g)$size.discrete)
 ```
+You'll notice that the `assortment_discrete()` function output includes a "mixing matrix", which is useful if you want to know the cumulative edge weights that occur between individuals with the same vs. different vertex labels. 
 
+With `assortnet`, we can also use weighted edges. So let's add edge weights randomly and calculate the coefficient. Since the functions take adjacency matrix as input, we'll have to regenerate the matrix with the `attr="weight"` argument after adding edge weights. 
+
+```{r}
+E(g)$weight=runif(length(E(g)), min=0, max=1)
+adj=as_adjacency_matrix(g, sparse=F, attr="weight")
+assortment.continuous(adj, V(g)$size)
+assortment.discrete(adj, V(g)$size.discrete)
+                  
+```
