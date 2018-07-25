@@ -15,7 +15,15 @@ library(knitr)
 knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
 set.seed(2)
 ```
+
 -----
+Load packages you need for this tutorial:
+```{r}
+library(igraph)
+library(assortnet)
+```
+
+---
 
 ##5.1 Community Structure in Networks
 
@@ -142,7 +150,9 @@ $r = \frac{\sum_{ij} \left(A_{ij}-k_ik_j/2m\right)x_ix_j}{\sum_{ij} \left(k_i\de
 
 where $k_i\delta_{ij}$ is the degree of $i$ excluding its connection with $j$. This is actually a form of the Pearson correlation coefficient. The coefficient is large (approaches 1) if nodes with similar values are more connected and small (approaches 1) when similar nodes are less connected. The value is 0 when edges are random with respect to node values.
 
-For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014).
+For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014). 
+
+Note also that the igraph function for `assortativity()` can only handle unweighted networks. To measure assortativity on weighted networks, use the `assortment.discrete()` or `assortment.continuous()` function in the `assortnet` library (Farine 2014). Here, I will first demonstrate how to use the `assortativity()` function in igraph, and then do the equivalent with the `assortnet` package functions. 
 
 ###5.2.2 Assortment: a simple example
 
@@ -166,7 +176,7 @@ As you can see, this network exhibits high levels of assortativity by node size 
 
 ```{r}
 set.seed(3)
-V(g)$random=rnorm(10, mean=20, sd=3) #create a node trait that varies randomly for all nodes 
+V(g)$random=rnorm(10, mean=20, sd=5) #create a node trait that varies randomly for all nodes 
 assortativity(g, V(g)$random, directed=F)
 
 plot(g, layout=l, edge.color="black", vertex.size=V(g)$random)
@@ -176,4 +186,14 @@ You can see that there is little assortment based on this trait.
 
 Just to be extra clear, this network is still exhibits community structure (A through E and F through J), but the trait we are measuring does not exhibit assortativity.
 
-***Note***: The igraph function for `assortativity()` can only handle unweighted networks. To measure assortativity on weighted networks, use the `assortment.discrete()` or `assortment.continuous()` function in the `assortnet` library (Farine 2014).
+###5.2.3 Using the `assortnet` package
+
+Let's now try to get the same result using the function in the `assortnet` package, and then measure the assortment coefficient in a weighted network. 
+
+First, recreate the results from section 5.2.2:
+
+```{r}
+library(assortnet)
+
+```
+

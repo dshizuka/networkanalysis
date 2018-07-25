@@ -217,6 +217,7 @@ $(document).ready(function () {
 <li><a href="#assortment">5.2 Assortment</a><ul>
 <li><a href="#the-assortment-coefficient">5.2.1 The Assortment Coefficient</a></li>
 <li><a href="#assortment-a-simple-example">5.2.2 Assortment: a simple example</a></li>
+<li><a href="#using-the-assortnet-package">5.2.3 Using the <code>assortnet</code> package</a></li>
 </ul></li>
 </ul>
 </div>
@@ -386,6 +387,7 @@ plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</co
 <p><span class="math inline">\(r = \frac{\sum_{ij} \left(A_{ij}-k_ik_j/2m\right)x_ix_j}{\sum_{ij} \left(k_i\delta_{ij}-k_ik_j/2m\right)x_ix_j}\)</span></p>
 <p>where <span class="math inline">\(k_i\delta_{ij}\)</span> is the degree of <span class="math inline">\(i\)</span> excluding its connection with <span class="math inline">\(j\)</span>. This is actually a form of the Pearson correlation coefficient. The coefficient is large (approaches 1) if nodes with similar values are more connected and small (approaches 1) when similar nodes are less connected. The value is 0 when edges are random with respect to node values.</p>
 <p>For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014).</p>
+<p>Note also that the igraph function for <code>assortativity()</code> can only handle unweighted networks. To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014). Here, I will first demonstrate how to use the <code>assortativity()</code> function in igraph, and then do the equivalent with the <code>assortnet</code> package functions.</p>
 </div>
 <div id="assortment-a-simple-example" class="section level3">
 <h3>5.2.2 Assortment: a simple example</h3>
@@ -400,14 +402,17 @@ plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
 <pre><code>## [1] 0.7887182</code></pre>
 <p>As you can see, this network exhibits high levels of assortativity by node size (r = 0.79). As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.</p>
 <pre class="r"><code>set.seed(3)
-V(g)$random=rnorm(10, mean=20, sd=3) #create a node trait that varies randomly for all nodes 
+V(g)$random=rnorm(10, mean=20, sd=5) #create a node trait that varies randomly for all nodes 
 assortativity(g, V(g)$random, directed=F)</code></pre>
 <pre><code>## [1] -0.06392816</code></pre>
 <pre class="r"><code>plot(g, layout=l, edge.color=&quot;black&quot;, vertex.size=V(g)$random)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
 <p>You can see that there is little assortment based on this trait.</p>
 <p>Just to be extra clear, this network is still exhibits community structure (A through E and F through J), but the trait we are measuring does not exhibit assortativity.</p>
-<p><strong><em>Note</em></strong>: The igraph function for <code>assortativity()</code> can only handle unweighted networks. To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014).</p>
+</div>
+<div id="using-the-assortnet-package" class="section level3">
+<h3>5.2.3 Using the <code>assortnet</code> package</h3>
+<p>Let’s now try to get the same result using the function in the <code>assortnet</code> package, and then measure the assortment coefficient in a weighted network.</p>
 </div>
 </div>
 
