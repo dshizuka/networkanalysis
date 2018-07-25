@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -177,7 +174,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -206,7 +203,7 @@ $(document).ready(function () {
 <li>Intro to Diffusion on Networks</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 07/25/18</em></h4>
 
 </div>
 
@@ -252,20 +249,22 @@ plot(g, vertex.label=&quot;&quot;, vertex.size=8, vertex.color=&quot;darkgray&qu
 <p>Now, we will set the ‘asocial learning’ parameter, <span class="math inline">\(x\)</span> to be 0.1. This is the probability that any given individual will come up with the innovation–e.g., how to forage for a new prey item.</p>
 <pre class="r"><code>x=0.1</code></pre>
 <p>Let’s run one practice run of how this will work. In one time step, we flip a coin for each individual whether or not they will adopt the innovation. Based on the coin flip, we will convert the status of the individual to 1 if they learned the innovation in that time step:</p>
-<pre class="r"><code>adopt=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
+<pre class="r"><code>naive=which(V(g)$status==0) #which individuals have not adopted yet?
 
-V(g)$status[which(adopt==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
+adopt=sample(c(1,0), length(naive), prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin for each naive individual and determine if the individual adopts the innovation in the current time step
+
+V(g)$status[naive][which(adopt==1)]=1 #change status of individuals whose status is 0 and is in the list of new adopters 
 
 plot(g, vertex.label=&quot;&quot;, vertex.color=c(&quot;darkgray&quot;, &quot;red&quot;)[V(g)$status+1], vertex.size=8, layout=l)</code></pre>
 <p><img src="10_diffusion_files/figure-html/unnamed-chunk-5-1.png" width="480" /></p>
 <p>Now, we will repeat this simulation for 30 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can’t go back). If you’re thinking about this in terms of disease, it’s like an ‘SI model’ in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.</p>
 <pre class="r"><code>t=30
-adopt.list=list(0) #empty list t=20
 g.time=list()
 V(g)$status=0
 for(j in 1:t){
-  adopt=sample(c(1,0), n, prob=c(x, 1-x), replace=T) #coin flip
-  V(g)$status[which(adopt==1)]=1
+  naive=which(V(g)$status==0) 
+  adopt=sample(c(1,0), length(naive), prob=c(x, 1-x), replace=T)
+  V(g)$status[naive][which(adopt==1)]=1 
   g.time[[j]]=g
 }</code></pre>
 <p>What we end up with is 20 igraph objects in a list called <code>g.time</code> (output not shown)</p>

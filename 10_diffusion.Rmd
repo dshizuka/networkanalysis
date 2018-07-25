@@ -69,9 +69,11 @@ Let's run one practice run of how this will work. In one time step, we flip a co
 Based on the coin flip, we will convert the status of the individual to 1 if they learned the innovation in that time step:
 
 ```{r}
-adopt=sample(c(1,0),n, prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin and determine if the individual adopted or not.
+naive=which(V(g)$status==0) #which individuals have not adopted yet?
 
-V(g)$status[which(adopt==1)]=1 #change status of new adopters adopt.list[[j]]=which(adopters==1) #save the identities of adopters for that time step
+adopt=sample(c(1,0), length(naive), prob=c(x, 1-x), replace=T) #based on the probabilities, flip a coin for each naive individual and determine if the individual adopts the innovation in the current time step
+
+V(g)$status[naive][which(adopt==1)]=1 #change status of individuals whose status is 0 and is in the list of new adopters 
 
 plot(g, vertex.label="", vertex.color=c("darkgray", "red")[V(g)$status+1], vertex.size=8, layout=l)
 ```
@@ -80,12 +82,12 @@ Now, we will repeat this simulation for 30 time steps. Here, we need to consider
 
 ```{r}
 t=30
-adopt.list=list(0) #empty list t=20
 g.time=list()
 V(g)$status=0
 for(j in 1:t){
-  adopt=sample(c(1,0), n, prob=c(x, 1-x), replace=T) #coin flip
-  V(g)$status[which(adopt==1)]=1
+  naive=which(V(g)$status==0) 
+  adopt=sample(c(1,0), length(naive), prob=c(x, 1-x), replace=T)
+  V(g)$status[naive][which(adopt==1)]=1 
   g.time[[j]]=g
 }
 ```
