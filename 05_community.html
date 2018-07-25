@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -177,7 +174,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -206,7 +203,7 @@ $(document).ready(function () {
 <li>Measuring Networks Part 2: Community Structure and Assortment</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 07/25/18</em></h4>
 
 </div>
 
@@ -217,7 +214,7 @@ $(document).ready(function () {
 <li><a href="#community-detection-in-igraph">5.1.2 Community detection in <code>igraph</code></a></li>
 <li><a href="#example-community-detection-with-sample-sparrow-network">5.1.4 Example: Community detection with sample sparrow network</a></li>
 </ul></li>
-<li><a href="#assortativity">5.2 Assortativity</a><ul>
+<li><a href="#assortment">5.2 Assortment</a><ul>
 <li><a href="#the-assortment-coefficient">5.2.1 The Assortment Coefficient</a></li>
 <li><a href="#assortment-a-simple-example">5.2.2 Assortment: a simple example</a></li>
 </ul></li>
@@ -228,7 +225,7 @@ $(document).ready(function () {
 <div id="community-structure-in-networks" class="section level2">
 <h2>5.1 Community Structure in Networks</h2>
 <div class="figure">
-<img src="https://www.dropbox.com/s/zdwuurj6kujbkdb/Newman2006_figure.png?dl=1" alt="Figure 1: An example of a network with community structure. From Newman 2006-PNAS" />
+<img src="assets/images/Newman2006_figure.png" alt="Figure 1: An example of a network with community structure. From Newman 2006-PNAS" />
 <p class="caption">Figure 1: An example of a network with community structure. From Newman 2006-PNAS</p>
 </div>
 <p>One of the ubiquitous properties of networks is that they exhibit <em>community structure</em>, the presence of discrete clusters of nodes that are densely connected, which themselves are only loosely connected to other clusters (Figure 6.1). In ecological contexts, these may be clusters of individuals that form social groups, groups of populations that form cohesive genetic or ecological units, or sets of species that have intimate ecological and evolutionary interactions. The problem is, how do we detect the presence of such <em>clusters</em> or <em>communities</em>, and how can we quantify the degree of community structure?</p>
@@ -309,7 +306,7 @@ g=make_graph(~A:B:C:D:E-A:B:C:D:E, F:G:H:I:J-F:G:H:I:J, A-F, B-G)
 set.seed(7)
 l=layout_with_fr(g)
 plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-1-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-1-1.png" width="384" /></p>
 <p>Let’s now apply a community detection algorithm to figure out the optimal division of this network into communities. Because the community division in this example is very clear, we can choose any of the community detection method in the table above and we are likely to come up with the same answer. Let’s use one called the edge betweenness method:</p>
 <pre class="r"><code>eb=edge.betweenness.community(g) 
 eb</code></pre>
@@ -331,7 +328,7 @@ eb</code></pre>
 ## 1 1 1 1 1 2 2 2 2 2</code></pre>
 <p>You can also use this communities object to produce a pretty network figure that shows the community structure by incorporating it into the <code>plot()</code> function.</p>
 <pre class="r"><code>plot(eb, g, layout=l)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-4-1.png" width="384" /></p>
 </div>
 </div>
 <div id="example-community-detection-with-sample-sparrow-network" class="section level3">
@@ -345,7 +342,7 @@ mat=get_network(t(assoc), association_index=&quot;SRI&quot;) #create adjacency m
 g.sparrow=graph_from_adjacency_matrix(mat, &quot;undirected&quot;, weighted=T) #make into igrpah object</code></pre>
 <p>Plot the network to see:</p>
 <pre class="r"><code>plot(g.sparrow, edge.width=E(g.sparrow)$weight*5, vertex.label=&quot;&quot;)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-6-1.png" width="384" /></p>
 <p>Use one of the community detection algorithms. Here’s an example with the Louvain method:</p>
 <pre class="r"><code>com=cluster_louvain(g.sparrow)
 com</code></pre>
@@ -365,7 +362,7 @@ com</code></pre>
 <p>Plot the network with the communities assigned.</p>
 <pre class="r"><code>set.seed(2)
 plot(com, g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
 <p>… or if you don’t like the coloring scheme, you can customize it. Let’s get fancy and use RColorBrewer to assign colors.</p>
 <pre class="r"><code>library(RColorBrewer)
 colors=brewer.pal(length(com),&#39;Accent&#39;) #make a color palette
@@ -373,14 +370,14 @@ V(g.sparrow)$color=colors[membership(com)] #assign each vertex a color based on 
 
 set.seed(2)
 plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
 </div>
 </div>
-<div id="assortativity" class="section level2">
-<h2>5.2 Assortativity</h2>
-<p>One major pattern common to many social networks (and other types of networks) is <em>homophily</em> or <em>assortativity</em>—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).</p>
+<div id="assortment" class="section level2">
+<h2>5.2 Assortment</h2>
+<p>One major pattern common to many social networks (and other types of networks) is <em>homophily</em> or <em>assortment</em>—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).</p>
 <div class="figure">
-<img src="https://www.dropbox.com/s/uljzgbj62x1l5h6/assortment.png?dl=1" alt="Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity." />
+<img src="assets/images/assortment.png" alt="Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity." />
 <p class="caption">Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity.</p>
 </div>
 <div id="the-assortment-coefficient" class="section level3">
@@ -397,7 +394,7 @@ plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</co
 <pre class="r"><code>V(g)$size=c(rnorm(5, mean=20), rnorm(5, mean=40)) #assign sizes to nodes using two normal distributions with different means
 
 plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
 <p>Now, we can measure the degree to which this network exhibits assortment by node size.</p>
 <pre class="r"><code>assortativity(g, V(g)$size, directed=F)</code></pre>
 <pre><code>## [1] 0.7887182</code></pre>
@@ -407,7 +404,7 @@ V(g)$random=rnorm(10, mean=20, sd=3) #create a node trait that varies randomly f
 assortativity(g, V(g)$random, directed=F)</code></pre>
 <pre><code>## [1] -0.06392816</code></pre>
 <pre class="r"><code>plot(g, layout=l, edge.color=&quot;black&quot;, vertex.size=V(g)$random)</code></pre>
-<p><img src="06_community_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
+<p><img src="05_community_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
 <p>You can see that there is little assortment based on this trait.</p>
 <p>Just to be extra clear, this network is still exhibits community structure (A through E and F through J), but the trait we are measuring does not exhibit assortativity.</p>
 <p><strong><em>Note</em></strong>: The igraph function for <code>assortativity()</code> can only handle unweighted networks. To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014).</p>

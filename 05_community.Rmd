@@ -19,7 +19,7 @@ set.seed(2)
 
 ##5.1 Community Structure in Networks
 
-![Figure 1: An example of a network with community structure. From Newman 2006-PNAS](https://www.dropbox.com/s/zdwuurj6kujbkdb/Newman2006_figure.png?dl=1)
+![Figure 1: An example of a network with community structure. From Newman 2006-PNAS](./assets/images/Newman2006_figure.png)
 
 
 One of the ubiquitous properties of networks is that they exhibit *community structure*, the presence of discrete clusters of nodes that are densely connected, which themselves are only loosely connected to other clusters (Figure 6.1). In ecological contexts, these may be clusters of individuals that form social groups, groups of populations that form cohesive genetic or ecological units, or sets of species that have intimate ecological and evolutionary interactions. The problem is, how do we detect the presence of such *clusters* or *communities*, and how can we quantify the degree of community structure?
@@ -128,11 +128,11 @@ plot(g.sparrow, vertex.label="", edge.width=E(g.sparrow)$weight*5)
 ```
 
 
-##5.2 Assortativity
+##5.2 Assortment
 
-One major pattern common to many social networks (and other types of networks) is *homophily* or *assortativity*—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).
+One major pattern common to many social networks (and other types of networks) is *homophily* or *assortment*—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).
 
-![Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity.](https://www.dropbox.com/s/uljzgbj62x1l5h6/assortment.png?dl=1)
+![Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity.](./assets/images/assortment.png)
 
 ###5.2.1 The Assortment Coefficient
 
