@@ -65,8 +65,6 @@ Function | Basic Idea | Reference |
 To illustrate how to measure modularity and assortativity using igraph, let’s start by creating a simple graph with clear community structure. First, we’ll create a network consisting of two clusters that are completely connected, which themselves are loosely connected.
 
 ```{r}
-library(igraph)
-
 g=make_graph(~A:B:C:D:E-A:B:C:D:E, F:G:H:I:J-F:G:H:I:J, A-F, B-G)
 
 set.seed(7)
@@ -193,7 +191,7 @@ Let's now try to get the same result using the function in the `assortnet` packa
 First, recreate the results from section 5.2.2:
 
 ```{r}
-library(assortnet)
+assortment.continuous(g, V(g)$size)
 
 ```
 
