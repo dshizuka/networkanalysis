@@ -177,7 +177,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -204,7 +204,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">4.2 Intro to Ecological Networks</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/10/19</em></h4>
 
 </div>
 
@@ -218,9 +218,10 @@ $(document).ready(function () {
 </ul>
 </div>
 
-<p>ecological networks</p>
 <div id="species-co-occurrence-networks" class="section level2">
 <h2>4.2.1 Species Co-occurrence Networks</h2>
+<p>Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time.</p>
+<p><strong><em>MORE ON THIS SOON</em></strong></p>
 </div>
 <div id="bipartite-networks-e.g.-mutualism-etc" class="section level2">
 <h2>4.2.2 Bipartite Networks (e.g., Mutualism, etc)</h2>
@@ -286,12 +287,13 @@ $(document).ready(function () {
 ## Plant_3           0   1    1         1   0
 ## Plant_4           0   0    0         1   1</code></pre>
 <p>To read this interaction matrix into an igraph object called <em>bg</em>, we will use the function <code>graph_from_incidence_matrix()</code>.</p>
-<pre class="r"><code>library(igraph)
-bg=graph_from_incidence_matrix(bmat) 
+<pre class="r"><code>library(igraph)</code></pre>
+<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
+<pre class="r"><code>bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH 11f7964 UN-B 9 10 -- 
+<pre><code>## IGRAPH 6109592 UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from 11f7964 (vertex names):
+## + edges from 6109592 (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -311,8 +313,11 @@ plot(bg) </code></pre>
 <pre class="r"><code>plot(bg, layout=layout_as_bipartite(bg), edge.color=&quot;black&quot;, edge.width=4,vertex.label.dist=1, vertex.label.degree=c(rep(-pi/2, 4), rep(pi/2, 5)))</code></pre>
 <p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
 <p>The ‘bipartite’ package also has plotting function that produces a prettier version of this:</p>
-<pre class="r"><code>library(bipartite)
-plotweb(bmat) #the base function for bipartite network plot</code></pre>
+<pre class="r"><code>library(bipartite)</code></pre>
+<pre><code>## Warning: package &#39;bipartite&#39; was built under R version 3.5.2</code></pre>
+<pre><code>## Warning: package &#39;statnet.common&#39; was built under R version 3.5.2</code></pre>
+<pre><code>## Warning: package &#39;network&#39; was built under R version 3.5.2</code></pre>
+<pre class="r"><code>plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
 <p>or,</p>
 <pre class="r"><code>plotweb(bmat, method=&quot;normal&quot;,ybig=0.1, col.interaction=&quot;wheat2&quot;, bor.col.interaction=&quot;white&quot;, arrow=&quot;no&quot;,  col.high=&quot;lightblue&quot;, col.low=&quot;tomato&quot;,labsize=2,  adj.low=c(0.5,0.8), adj.high=c(0.5,0))</code></pre>
@@ -325,16 +330,16 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 49cd0c8 UNW- 4 6 -- 
+## IGRAPH a34c0cb UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 49cd0c8 (vertex names):
+## + edges from a34c0cb (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH a27dfff UNW- 5 6 -- 
+## IGRAPH 1ece81d UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from a27dfff (vertex names):
+## + edges from 1ece81d (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>

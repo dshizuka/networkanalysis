@@ -14,10 +14,13 @@ knitr::opts_chunk$set(fig.width=6, fig.height=4)
 set.seed(2)
 ```
 
-ecological networks
+
 
 ##4.2.1 Species Co-occurrence Networks
 
+Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time. 
+
+***MORE ON THIS SOON***
 
 ##4.2.2 Bipartite Networks (e.g., Mutualism, etc)
 
