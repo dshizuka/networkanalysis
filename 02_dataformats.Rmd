@@ -191,4 +191,13 @@ g=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
 plot(g, edge.width=E(g)$weight)
 ```
 
+###2.3.3 Creating a network from group or site associations
+
+There are two common instances when you might make a network from an affiliation matrix--that is, a matrix in which rows are individuals (or whatever element will be your node) and columns are 'groups' that these individuals belong to. 
+
+1. In ***ecological co-occurrence networks*** these matrices may represent species, and 'groups' may be co-occurrence in a site. For a tutorial on making this type of network, go to [this page on ecological networks](https://dshizuka.github.io/networkanalysis/04.2_ecolnets.html)
+
+2. We often build ***social networks*** out of data on co-membership in groups (flocks, herds, shoals, pods, etc.) across time and space. Most often, we apply a 'gambit of the group'--that is, we assume that individuals that occur together in group are "associated". Typically, an association index is calculated using the group membership data. For more detailed tutorial on this, see [this page on social networks](https://dshizuka.github.io/networkanalysis/04.1_socialnetworks.html)
+
+* For in-depth discussion of the pros and cons of the 'gambit of the group' method, see [Franks et al. (2010)](https://link.springer.com/article/10.1007/s00265-009-0865-8). 
 
