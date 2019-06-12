@@ -202,7 +202,7 @@ $(document).ready(function () {
 
 
 <h1 class="title toc-ignore">2.Data Formats for Networks</h1>
-<h4 class="date"><em>updated 06/10/19</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -359,27 +359,27 @@ plot(g2, edge.width=E(g2)$weight)</code></pre>
 <p>In R, you can display an adjacency list as an actual ‘list object’, with each item representing neighbors of each focal node:</p>
 <pre class="r"><code>as_adj_list(g)</code></pre>
 <pre><code>## $A
-## + 3/6 vertices, named, from 4f78866:
+## + 3/6 vertices, named, from ae8c20b:
 ## [1] B C F
 ## 
 ## $B
-## + 2/6 vertices, named, from 4f78866:
+## + 2/6 vertices, named, from ae8c20b:
 ## [1] A C
 ## 
 ## $C
-## + 2/6 vertices, named, from 4f78866:
+## + 2/6 vertices, named, from ae8c20b:
 ## [1] A B
 ## 
 ## $D
-## + 2/6 vertices, named, from 4f78866:
+## + 2/6 vertices, named, from ae8c20b:
 ## [1] E F
 ## 
 ## $E
-## + 2/6 vertices, named, from 4f78866:
+## + 2/6 vertices, named, from ae8c20b:
 ## [1] D F
 ## 
 ## $F
-## + 3/6 vertices, named, from 4f78866:
+## + 3/6 vertices, named, from ae8c20b:
 ## [1] A D E</code></pre>
 <hr />
 </div>
@@ -472,9 +472,9 @@ edge.dat</code></pre>
 <pre class="r"><code>set.seed(2)
 eg=graph_from_data_frame(edge.dat, directed=FALSE) 
 eg</code></pre>
-<pre><code>## IGRAPH f075c96 UNW- 7 10 -- 
+<pre><code>## IGRAPH 95c5832 UNW- 7 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from f075c96 (vertex names):
+## + edges from 95c5832 (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>
@@ -501,11 +501,7 @@ plot(g, edge.width=E(g)$weight)</code></pre>
 </div>
 <div id="creating-a-network-from-group-or-site-associations" class="section level3">
 <h3>2.3.3 Creating a network from group or site associations</h3>
-<p>There are two common instances when you might make a network from an affiliation matrix–that is, a matrix in which rows are individuals (or whatever element will be your node) and columns are ‘groups’ that these individuals belong to.</p>
-<ol style="list-style-type: decimal">
-<li><p>In <strong><em>ecological co-occurrence networks</em></strong> these matrices may represent species, and ‘groups’ may be co-occurrence in a site. For a tutorial on making this type of network, go to <a href="https://dshizuka.github.io/networkanalysis/04.2_ecolnets.html">this page on ecological networks</a></p></li>
-<li><p>We often build <strong><em>social networks</em></strong> out of data on co-membership in groups (flocks, herds, shoals, pods, etc.) across time and space. Most often, we apply a ‘gambit of the group’–that is, we assume that individuals that occur together in group are “associated”. Typically, an association index is calculated using the group membership data. For more detailed tutorial on this, see <a href="https://dshizuka.github.io/networkanalysis/04.1_socialnetworks.html">this page on social networks</a></p></li>
-</ol>
+<p>There are two common instances when you might make a network from an affiliation matrix–that is, a matrix in which rows are individuals (or whatever element will be your node) and columns are ‘groups’ that these individuals belong to. We often build <strong><em>social networks</em></strong> out of data on co-membership in groups (flocks, herds, shoals, pods, etc.) across time and space. Most often, we apply a ‘gambit of the group’–that is, we assume that individuals that occur together in group are “associated”. Typically, an association index is calculated using the group membership data. For more detailed tutorial on this, see <a href="https://dshizuka.github.io/networkanalysis/04.1_socialnetworks.html">this page on social networks</a></p>
 <ul>
 <li>For in-depth discussion of the pros and cons of the ‘gambit of the group’ method, see <a href="https://link.springer.com/article/10.1007/s00265-009-0865-8">Franks et al. (2010)</a>.</li>
 </ul>
