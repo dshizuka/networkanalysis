@@ -266,4 +266,4 @@ av.l.cluster
 ```
 
 
-
+Next: [5. Measuring Networks Part 2: Community Structure and Assortment](05_community.html)

@@ -126,3 +126,6 @@ l=layout_with_fr(g)
 plot(g, layout=l,vertex.label="", vertex.size=V(g)$age, edge.width=E(g)$weight, edge.color="black")
 legend("topleft", legend=c("Female", "Male"), pch=21, pt.bg=c("gold", "slateblue"))
 ```
+
+
+Next: [4. Measuring Networks Part 1: Centrality and Global Measures](04_measuring.html)

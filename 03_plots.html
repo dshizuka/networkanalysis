@@ -177,7 +177,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -206,7 +206,7 @@ $(document).ready(function () {
 <li>Plotting Basics</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -227,8 +227,17 @@ $(document).ready(function () {
 <div id="layout" class="section level3">
 <h3>3.1.1 Layout</h3>
 <p>Let’s start where we left of <a href="02_dataformats.html">Lesson 2</a> and make a network out of a fictional adjacency matrix:</p>
-<pre class="r"><code>library(igraph)
-am=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
+<pre class="r"><code>library(igraph)</code></pre>
+<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;igraph&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     decompose, spectrum</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     union</code></pre>
+<pre class="r"><code>am=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/sample_adjmatrix.csv&quot;, header=T, row.names=1))
 am</code></pre>
 <pre><code>##         Adam Betty Charles Daniel Esther Frank Gina
 ## Adam       0     1       0      1      0     4    0
@@ -308,9 +317,9 @@ attrib</code></pre>
 <pre class="r"><code>V(g)$sex=factor(attrib[match(V(g)$name, attrib$Name), &quot;Sex&quot;]) # factor() preserves data as M/F
 V(g)$age=attrib[match(V(g)$name, attrib$Name), &quot;Age&quot;]
 g</code></pre>
-<pre><code>## IGRAPH b3dd465 UNW- 7 10 -- 
+<pre><code>## IGRAPH bb503b9 UNW- 7 10 -- 
 ## + attr: name (v/c), sex (v/n), age (v/n), weight (e/n)
-## + edges from b3dd465 (vertex names):
+## + edges from bb503b9 (vertex names):
 ##  [1] Adam  --Betty   Adam  --Daniel  Adam  --Frank   Betty --Charles
 ##  [5] Betty --Daniel  Betty --Frank   Daniel--Esther  Daniel--Frank  
 ##  [9] Esther--Frank   Frank --Gina</code></pre>
@@ -322,6 +331,7 @@ l=layout_with_fr(g)
 plot(g, layout=l,vertex.label=&quot;&quot;, vertex.size=V(g)$age, edge.width=E(g)$weight, edge.color=&quot;black&quot;)
 legend(&quot;topleft&quot;, legend=c(&quot;Female&quot;, &quot;Male&quot;), pch=21, pt.bg=c(&quot;gold&quot;, &quot;slateblue&quot;))</code></pre>
 <p><img src="03_plots_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p>Next: <a href="04_measuring.html">4. Measuring Networks Part 1: Centrality and Global Measures</a></p>
 </div>
 </div>
 

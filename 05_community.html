@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -203,7 +206,7 @@ $(document).ready(function () {
 <li>Measuring Networks Part 2: Community Structure and Assortment</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/25/18</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -231,7 +234,13 @@ $(document).ready(function () {
 <td>Load packages you need for this tutorial:</td>
 </tr>
 <tr class="even">
-<td><code>r library(igraph) library(assortnet)</code></td>
+<td><code>r library(igraph)</code></td>
+</tr>
+<tr class="odd">
+<td><code>## Warning: package 'igraph' was built under R version 3.5.2</code></td>
+</tr>
+<tr class="even">
+<td><code>r library(assortnet)</code></td>
 </tr>
 </tbody>
 </table>
@@ -460,6 +469,8 @@ assortment.continuous(adj, V(g)$size)</code></pre>
 ## 0  0.4628330 0.1218816 0.5847146
 ## 1  0.1218816 0.2934038 0.4152854
 ## bi 0.5847146 0.4152854 1.0000000</code></pre>
+<hr />
+<p>Next: <a href="06_randomnets.html">6. Random Graphs</a></p>
 </div>
 </div>
 
