@@ -225,6 +225,8 @@ assortment.discrete(adj, V(g)$size.discrete)
 
 * ####[Constructing Flock Networks in Golden-crowned Sparrows]("example_make_sparrow_network.html")
 
+* ####[Analyzing the US air transportation network]("example_usairports.html")
+
 ----
 
 ##Next: [6. Random Graphs](06_randomnets.html)

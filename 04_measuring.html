@@ -224,6 +224,8 @@ $(document).ready(function () {
 <li><a href="#average-path-length-diameter">4.2.4 Average path length &amp; Diameter</a></li>
 <li><a href="#clustering-coefficient-transitivity">4.2.5 Clustering Coefficient (Transitivity)</a></li>
 </ul></li>
+<li><a href="#worked-examples">Worked Examples:</a></li>
+<li><a href="#next">Next:</a></li>
 </ul>
 </div>
 
@@ -422,16 +424,16 @@ mean(paths[upper.tri(paths)], na.rm=T)</code></pre>
 <pre class="r"><code>comps=decompose(g)
 comps # a list object consisting of each component as graph object</code></pre>
 <pre><code>## [[1]]
-## IGRAPH 1c4dcb8 UNW- 5 10 -- 
+## IGRAPH 99c410e UNW- 5 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 1c4dcb8 (vertex names):
+## + edges from 99c410e (vertex names):
 ##  [1] 23820--23726 23820--23831 23726--23831 23820--23763 23726--23763
 ##  [6] 23831--23763 23820--23853 23726--23853 23831--23853 23763--23853
 ## 
 ## [[2]]
-## IGRAPH ec513d9 UNW- 20 60 -- 
+## IGRAPH 5992005 UNW- 20 60 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from ec513d9 (vertex names):
+## + edges from 5992005 (vertex names):
 ##  [1] 23772--23770 23772--23771 23772--23777 23772--23774 23772--23860
 ##  [6] 23772--23734 23770--23771 23770--23777 23770--23774 23770--23860
 ## [11] 23770--23781 23770--23815 23770--23809 23771--23777 23771--23774
@@ -475,7 +477,20 @@ av.l.cluster=transitivity(g, &quot;localaverage&quot;)</code></pre>
 ## [22] 0.7142857 1.0000000 1.0000000 1.0000000</code></pre>
 <pre class="r"><code>av.l.cluster</code></pre>
 <pre><code>## [1] 0.7903199</code></pre>
-<p>Next: <a href="05_community.html">5. Measuring Networks Part 2: Community Structure and Assortment</a></p>
+<hr />
+</div>
+</div>
+<div id="worked-examples" class="section level2">
+<h2>Worked Examples:</h2>
+<ul>
+<li><h4 id="analyzing-the-us-air-transportation-network"><a href="%22example_usairports.html%22">Analyzing the US air transportation network</a></h4></li>
+</ul>
+<hr />
+</div>
+<div id="next" class="section level2">
+<h2>Next:</h2>
+<div id="measuring-networks-part-2-community-structure-and-assortment" class="section level4">
+<h4><a href="05_community.html">5. Measuring Networks Part 2: Community Structure and Assortment</a></h4>
 </div>
 </div>
 

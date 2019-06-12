@@ -265,5 +265,13 @@ l.cluster
 av.l.cluster
 ```
 
+---
 
-Next: [5. Measuring Networks Part 2: Community Structure and Assortment](05_community.html)
+##Worked Examples:
+
+* ####[Analyzing the US air transportation network]("example_usairports.html")
+
+---
+
+##Next: 
+####[5. Measuring Networks Part 2: Community Structure and Assortment](05_community.html)
