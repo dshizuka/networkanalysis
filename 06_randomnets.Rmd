@@ -1,5 +1,5 @@
 ---
-title: "6. Simulating Random Graphs and Simulations"
+title: "6. Random Graphs"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -192,5 +192,7 @@ plot(x,paths.avg,type="b",pch=20,xlab="N",ylab="Average Path Length",log="x",las
 
 So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are *s* steps away scales exponentially with the average degree--if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc. This means that average path length increases more slowly than network size.
 
+---
 
+Next: [7. Simulating Networks](07_simulations.html)
 

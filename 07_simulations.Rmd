@@ -20,7 +20,7 @@ set.seed(2)
 
 Here, we will simulate some social networks just to get a feel for how to create networks based on simple rules. 
 
-*Note 7/23/18: more simulation exmamples to come soon*
+*Note 7/23/18: more simulation examples to come soon*
 
 ```{r message=F}
 library(asnipe)
@@ -91,3 +91,6 @@ As you can see, there is quite a strong correlation between trait and social pos
 cor.test(trait, degree(g))
 ```
 
+---
+
+Next: [8. Permutations and Randomizations](08_permutations.html)

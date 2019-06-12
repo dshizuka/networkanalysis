@@ -177,7 +177,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -206,7 +206,7 @@ $(document).ready(function () {
 <li>Simulating Networks</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -218,9 +218,10 @@ $(document).ready(function () {
 
 <hr />
 <p>Here, we will simulate some social networks just to get a feel for how to create networks based on simple rules.</p>
-<p><em>Note 7/23/18: more simulation exmamples to come soon</em></p>
+<p><em>Note 7/23/18: more simulation examples to come soon</em></p>
 <pre class="r"><code>library(asnipe)
 library(igraph)</code></pre>
+<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
 <p><br></p>
 <div id="flock-network-with-size-related-variation-in-gregariousness" class="section level2">
 <h2>7.1. Flock network with size-related variation in gregariousness</h2>
@@ -269,6 +270,8 @@ g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)</code></p
 ## sample estimates:
 ##        cor 
 ## -0.7577462</code></pre>
+<hr />
+<p>Next: <a href="08_permutations.html">8. Permutations and Randomizations</a></p>
 </div>
 
 
