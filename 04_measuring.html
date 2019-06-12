@@ -177,7 +177,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -206,7 +206,7 @@ $(document).ready(function () {
 <li>Measuring Networks Part 1: Centrality and Global Measures</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -407,10 +407,8 @@ plot(pk, pch=19)</code></pre>
 <h3>4.2.4 Average path length &amp; Diameter</h3>
 <p>In network jargon, a “path” is typically a shorthand for “geodesic path” or “shortest path”—the fewest number of edges that you would have to go on to get from one node to another. The average path length and the ‘diameter’ (maximum path length) can be useful measures of the network. The average path length can be considered the average “<em>degrees of separation</em>” between all pairs of nodes in the network, and the diameter is the maximum degree of separation that exists in the network.</p>
 <p>You can calculate path lengths with or without the edge weights (if using edge weights, you often simply count up the weights as you go along the path). The igraph package includes a convenient function for finding the shortest paths between every dyad in a network. Here, makes sure you specify the algorithm = “unweighted” (output not shown):</p>
-<pre class="r"><code>paths=distances(g, algorithm=&quot;unweighted&quot;)</code></pre>
-<pre><code>## Warning in distances(g, algorithm = &quot;unweighted&quot;): Unweighted algorithm
-## chosen, weights ignored</code></pre>
-<pre class="r"><code>paths</code></pre>
+<pre class="r"><code>paths=distances(g, algorithm=&quot;unweighted&quot;)
+paths</code></pre>
 <p>This matrix gives us the geodesic path length between each pair of nodes in the network. We can describe the network using some characteristics of the paths that exist in that network. However, you will notice that this matrix contains a bunch of cells that are “Inf” (i.e., infinity). This is because the network is <strong>not connected</strong>, and you can’t calculate path lengths between nodes in different components.</p>
 <p>How should we measure the average path length &amp; diameter of a network with multiple components? There are two common solutions. First is to ignore pairs of nodes that are in different components and only measure average lengths of the paths that exist. This solution doesn’t really make sense for the diameter–the diameter of an unconnected network should be infinity. The second solution is to measure each component separately. Let’s do each of these in turn.</p>
 <p>Option 1: To calculate the average path length while ignoring pairs of nodes that are in different components, we can first replace the “Inf” with “NA” in the path length matrix. Next, we want just the “upper triangle” or “lower triangle” of this matrix, which is lists all the geodesic paths without duplicates.</p>
@@ -424,16 +422,16 @@ mean(paths[upper.tri(paths)], na.rm=T)</code></pre>
 <pre class="r"><code>comps=decompose(g)
 comps # a list object consisting of each component as graph object</code></pre>
 <pre><code>## [[1]]
-## IGRAPH eabc48d UNW- 5 10 -- 
+## IGRAPH 2a74167 UNW- 5 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from eabc48d (vertex names):
+## + edges from 2a74167 (vertex names):
 ##  [1] 23820--23726 23820--23831 23726--23831 23820--23763 23726--23763
 ##  [6] 23831--23763 23820--23853 23726--23853 23831--23853 23763--23853
 ## 
 ## [[2]]
-## IGRAPH d69cff3 UNW- 20 60 -- 
+## IGRAPH 6918ec6 UNW- 20 60 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from d69cff3 (vertex names):
+## + edges from 6918ec6 (vertex names):
 ##  [1] 23772--23770 23772--23771 23772--23777 23772--23774 23772--23860
 ##  [6] 23772--23734 23770--23771 23770--23777 23770--23774 23770--23860
 ## [11] 23770--23781 23770--23815 23770--23809 23771--23777 23771--23774
@@ -443,13 +441,8 @@ comps # a list object consisting of each component as graph object</code></pre>
 ## [31] 23860--23862 23860--23857 23860--23871 23860--23781 23860--23815
 ## [36] 23860--23809 23779--23773 23779--23862 23773--23862 23773--23732
 ## + ... omitted several edges</code></pre>
-<pre class="r"><code>path.list=lapply(comps, function(x) distances(x, algorithm=&quot;unweighted&quot;)) #make list object with two path length matrices</code></pre>
-<pre><code>## Warning in distances(x, algorithm = &quot;unweighted&quot;): Unweighted algorithm
-## chosen, weights ignored
-
-## Warning in distances(x, algorithm = &quot;unweighted&quot;): Unweighted algorithm
-## chosen, weights ignored</code></pre>
-<pre class="r"><code>avg.paths=sapply(path.list, mean) #average path length of each component
+<pre class="r"><code>path.list=lapply(comps, function(x) distances(x, algorithm=&quot;unweighted&quot;)) #make list object with two path length matrices
+avg.paths=sapply(path.list, mean) #average path length of each component
 diams=sapply(path.list, max) #diameter of each component
 avg.paths</code></pre>
 <pre><code>## [1] 0.800 1.815</code></pre>

@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -201,7 +204,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Intro to Ecological Networks</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/11/19</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -273,11 +276,9 @@ $(document).ready(function () {
 <div id="working-with-bipartite-networks-in-r" class="section level3">
 <h3>Working with bipartite networks in R</h3>
 <p>Let’s now try playing around with this type of data in R. We will start by using the igraph package. First, we will read the sample data into R. The file Sample_bipartite.csv is the plant-pollinator interaction matrix as presented above:</p>
-<pre class="r"><code>bmat=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_bipartite.csv&quot;, header=T, row.names=1))</code></pre>
-<pre><code>## Warning in read.table(file = file, header = header, sep = sep, quote
-## = quote, : incomplete final line found by readTableHeader on &#39;https://
-## dshizuka.github.io/networkanalysis/SampleData/Sample_bipartite.csv&#39;</code></pre>
-<pre class="r"><code>bmat</code></pre>
+<pre class="r"><code>bmat=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_bipartite.csv&quot;, header=T, row.names=1))
+
+bmat</code></pre>
 <pre><code>##         hummingbird bat moth butterfly bee
 ## Plant_1           1   1    0         1   0
 ## Plant_2           1   0    0         1   0
@@ -287,9 +288,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH 026da1b UN-B 9 10 -- 
+<pre><code>## IGRAPH 998b1bf UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from 026da1b (vertex names):
+## + edges from 998b1bf (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -323,16 +324,16 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 5b7a756 UNW- 4 6 -- 
+## IGRAPH 3721e4c UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 5b7a756 (vertex names):
+## + edges from 3721e4c (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH 5ba5b14 UNW- 5 6 -- 
+## IGRAPH bae3e4a UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 5ba5b14 (vertex names):
+## + edges from bae3e4a (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
