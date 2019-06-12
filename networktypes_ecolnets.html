@@ -225,60 +225,78 @@ $(document).ready(function () {
 <p>Load this dataset:</p>
 <pre class="r"><code>g_a=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Gotelli_Abele.csv&quot;, header=T, row.names=1))
 g_a</code></pre>
-<pre><code>##     Cuba Hispaniola Jamaica Puerto.Rico Guadeloupe Martinique Dominica
-## C.d    0          1       0           0          0          0        0
-## L.l    0          1       0           0          0          0        0
-## V.j    0          0       0           0          0          0        0
-## S.n    0          0       0           0          0          0        0
-## M.n    1          0       0           0          0          0        0
-## L.p    0          0       0           1          0          0        0
-## L.v    0          1       1           0          0          0        0
-## L.n    0          0       0           0          1          1        1
-## M.r    0          0       0           0          0          0        0
-## T.o    1          1       1           1          0          0        0
-## T.b    0          1       1           1          1          1        1
-## T.c    1          0       0           0          0          0        0
-## L.a    0          0       1           0          0          0        0
-## S.a    0          0       0           0          1          1        1
-## T.i    1          0       0           0          0          0        0
-## A.s    0          1       1           1          0          0        0
-## Z.c    0          1       0           0          0          0        0
-##     St.Lucia Barbados St.Vincent Grenada Antigua St.Croix GrandCayman
-## C.d        0        0          0       0       0        0           0
-## L.l        0        0          0       0       0        0           0
-## V.j        0        0          0       1       0        0           0
-## S.n        0        0          0       1       0        0           0
-## M.n        0        0          0       0       0        0           1
-## L.p        0        0          0       0       0        0           0
-## L.v        0        0          0       0       0        0           0
-## L.n        1        1          1       1       1        0           0
-## M.r        1        0          0       0       0        0           0
-## T.o        0        0          0       0       0        0           1
-## T.b        1        1          1       1       1        1           0
-## T.c        0        0          0       0       0        0           0
-## L.a        0        0          0       0       0        0           0
-## S.a        1        0          0       0       0        0           0
-## T.i        0        0          0       0       0        0           0
-## A.s        0        0          0       0       0        0           0
-## Z.c        0        0          0       0       0        0           0
-##     St.Kitts Barbuda MonSt.errat St.Martin St.Thomas
-## C.d        0       0           0         0         0
-## L.l        0       0           0         0         0
-## V.j        0       0           0         0         0
-## S.n        0       0           0         0         0
-## M.n        0       0           0         0         0
-## L.p        0       0           0         0         0
-## L.v        0       0           0         0         0
-## L.n        1       1           1         1         1
-## M.r        0       0           0         0         0
-## T.o        0       0           0         0         0
-## T.b        1       1           1         1         1
-## T.c        0       0           0         0         0
-## L.a        0       0           0         0         0
-## S.a        0       0           0         0         0
-## T.i        0       0           0         0         0
-## A.s        0       0           0         0         0
-## Z.c        0       0           0         0         0</code></pre>
+<pre><code>##                         Cuba Hispaniola Jamaica Puerto.Rico Guadeloupe
+## Carduelis dominicensis     0          1       0           0          0
+## Loxia leucoptera           0          1       0           0          0
+## Volatinia jacarina         0          0       0           0          0
+## Sprophila nigricollis      0          0       0           0          0
+## Melopyrrha nigra           1          0       0           0          0
+## Loxigilla portoricensis    0          0       0           1          0
+## Loxigilla violacea         0          1       1           0          0
+## Loxigilla noxis            0          0       0           0          1
+## Melanospiza richardsoni    0          0       0           0          0
+## Tiara olivacea             1          1       1           1          0
+## Tirar bicolor              0          1       1           1          1
+## Tirar canora               1          0       0           0          0
+## Loxipasser anoxanthus      0          0       1           0          0
+## Saltator albicollis        0          0       0           0          1
+## Torreornis inexpectata     1          0       0           0          0
+## Ammodramus savannarum      0          1       1           1          0
+## Zonotrichia capensis       0          1       0           0          0
+##                         Martinique Dominica St.Lucia Barbados St.Vincent
+## Carduelis dominicensis           0        0        0        0          0
+## Loxia leucoptera                 0        0        0        0          0
+## Volatinia jacarina               0        0        0        0          0
+## Sprophila nigricollis            0        0        0        0          0
+## Melopyrrha nigra                 0        0        0        0          0
+## Loxigilla portoricensis          0        0        0        0          0
+## Loxigilla violacea               0        0        0        0          0
+## Loxigilla noxis                  1        1        1        1          1
+## Melanospiza richardsoni          0        0        1        0          0
+## Tiara olivacea                   0        0        0        0          0
+## Tirar bicolor                    1        1        1        1          1
+## Tirar canora                     0        0        0        0          0
+## Loxipasser anoxanthus            0        0        0        0          0
+## Saltator albicollis              1        1        1        0          0
+## Torreornis inexpectata           0        0        0        0          0
+## Ammodramus savannarum            0        0        0        0          0
+## Zonotrichia capensis             0        0        0        0          0
+##                         Grenada Antigua St.Croix GrandCayman St.Kitts
+## Carduelis dominicensis        0       0        0           0        0
+## Loxia leucoptera              0       0        0           0        0
+## Volatinia jacarina            1       0        0           0        0
+## Sprophila nigricollis         1       0        0           0        0
+## Melopyrrha nigra              0       0        0           1        0
+## Loxigilla portoricensis       0       0        0           0        0
+## Loxigilla violacea            0       0        0           0        0
+## Loxigilla noxis               1       1        0           0        1
+## Melanospiza richardsoni       0       0        0           0        0
+## Tiara olivacea                0       0        0           1        0
+## Tirar bicolor                 1       1        1           0        1
+## Tirar canora                  0       0        0           0        0
+## Loxipasser anoxanthus         0       0        0           0        0
+## Saltator albicollis           0       0        0           0        0
+## Torreornis inexpectata        0       0        0           0        0
+## Ammodramus savannarum         0       0        0           0        0
+## Zonotrichia capensis          0       0        0           0        0
+##                         Barbuda MonSt.errat St.Martin St.Thomas
+## Carduelis dominicensis        0           0         0         0
+## Loxia leucoptera              0           0         0         0
+## Volatinia jacarina            0           0         0         0
+## Sprophila nigricollis         0           0         0         0
+## Melopyrrha nigra              0           0         0         0
+## Loxigilla portoricensis       0           0         0         0
+## Loxigilla violacea            0           0         0         0
+## Loxigilla noxis               1           1         1         1
+## Melanospiza richardsoni       0           0         0         0
+## Tiara olivacea                0           0         0         0
+## Tirar bicolor                 1           1         1         1
+## Tirar canora                  0           0         0         0
+## Loxipasser anoxanthus         0           0         0         0
+## Saltator albicollis           0           0         0         0
+## Torreornis inexpectata        0           0         0         0
+## Ammodramus savannarum         0           0         0         0
+## Zonotrichia capensis          0           0         0         0</code></pre>
 <p><strong><em>MORE ON THIS SOON</em></strong></p>
 </div>
 <div id="bipartite-networks-e.g.-mutualism-etc" class="section level2">
@@ -346,9 +364,9 @@ bmat</code></pre>
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH c5b349f UN-B 9 10 -- 
+<pre><code>## IGRAPH 648fce4 UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from c5b349f (vertex names):
+## + edges from 648fce4 (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -382,16 +400,16 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 5959875 UNW- 4 6 -- 
+## IGRAPH c476c9d UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 5959875 (vertex names):
+## + edges from c476c9d (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH 2b172fd UNW- 5 6 -- 
+## IGRAPH 796b46e UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 2b172fd (vertex names):
+## + edges from 796b46e (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
