@@ -197,3 +197,6 @@ There are two common instances when you might make a network from an affiliation
 
 * For in-depth discussion of the pros and cons of the 'gambit of the group' method, see [Franks et al. (2010)](https://link.springer.com/article/10.1007/s00265-009-0865-8). 
 
+----
+
+Next: [3. Plotting Basics](03_plots.html)
