@@ -91,6 +91,9 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -201,7 +204,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Intro to Animal Social Networks</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/11/19</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
@@ -211,6 +214,7 @@ $(document).ready(function () {
 <li><a href="#constructing-networks-from-associations">Constructing networks from associations</a><ul>
 <li><a href="#construct-social-network-from-associations-using-the-asnipe-package">Construct social network from associations using the <code>asnipe</code> package</a></li>
 </ul></li>
+<li><a href="#worked-examples">Worked Examples:</a></li>
 </ul>
 </div>
 
@@ -329,6 +333,13 @@ plot(assoc.g, edge.width=E(assoc.g)$weight*10) #Since the edge weights are small
 <pre class="r"><code>plot(assoc.g, edge.width=E(assoc.g)$weight*10, vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;cornflowerblue&quot;, vertex.frame.color=&quot;black&quot;)</code></pre>
 <p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
 </div>
+</div>
+<div id="worked-examples" class="section level2">
+<h2>Worked Examples:</h2>
+<p>For worked examples, see:</p>
+<ul>
+<li><a href="example_make_sparrow_network.html">Constructing Flock Networks in Golden-crowned Sparrows</a></li>
+</ul>
 </div>
 
 

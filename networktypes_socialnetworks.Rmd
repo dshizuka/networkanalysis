@@ -11,7 +11,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(fig.width=6, fig.height=4, message=F) 
+knitr::opts_chunk$set(fig.width=6, fig.height=4, message=F, warning=F) 
 set.seed(2)
 ```
 
@@ -99,4 +99,10 @@ Let's make it look prettier:
 ```{r}
 plot(assoc.g, edge.width=E(assoc.g)$weight*10, vertex.label="", vertex.color="gold", edge.color="cornflowerblue", vertex.frame.color="black")
 ```
+
+##Worked Examples:
+
+For worked examples, see:
+
+* [Constructing Flock Networks in Golden-crowned Sparrows](example_make_sparrow_network.html)
 

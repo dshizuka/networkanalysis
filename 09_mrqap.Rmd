@@ -43,4 +43,6 @@ netlm(m1, m2+m3, mode="graph", nullhyp="qap", test.statistic="t-value")
 mrqap.dsp(m1~m2+m3, directed="undirected")
 ```
 
+
+
 Next: [10. Diffusion in Networks](10_diffusion.html)
