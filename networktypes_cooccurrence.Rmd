@@ -1,0 +1,47 @@
+---
+title: "Species Co-Occurrence Networks"
+author: "Dai Shizuka"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
+output: 
+  html_document:
+    toc: yes
+    toc_depth: 3
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+------
+
+##Species Co-occurrence Networks
+
+Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time. 
+
+
+Let's use a famous example of a co-occurrence dataset. [Gotelli and Abele (1982)](https://www.jstor.org/stable/2844574?seq=1#metadata_info_tab_contents) surveyed bird species in the Caribbean Islands to examine whether there were non-random patterns of distribution of bird families among those islands (This dataset was later used in a much more famous paper by [Gotelli (2000)](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9658%282000%29081%5B2606%3ANMAOSC%5D2.0.CO%3B2), which describes null model randomization tests that have become pervasive in community ecology). 
+
+
+Load this dataset:
+
+```{r}
+g.a=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Gotelli_Abele.csv", header=T, row.names=1))
+g.a
+```
+
+You will notice that this can be interpreted as a bipartite network with bird species and islands at two node types. Thus, one simple way to build a co-occurrence network is to use a projection of this bipartite network:
+
+```{r}
+bird.net=graph_from_incidence_matrix(g.a)
+bird.net
+```
+
+```{r, fig.width=8}
+bird.proj=bipartite.projection(bird.net, multiplicity=T)
+par(mar=c(1,1,1,1))
+plot(bird.proj$proj1, edge.width=E(bird.proj$proj1)$weight, layout=layout_in_circle(bird.proj$proj1))
+```
+
+
+Of course, what we really want to do is determine whether these patterns of co-occurrence are non-random with respect to a null model. For example, Loxigilla noxis and Tiaris bicolor might co-occur often simply because they are both common and generalist. Likewise, other pairs of species may not co-occur simply because they are both rare.
+

@@ -14,29 +14,11 @@ knitr::opts_chunk$set(fig.width=6, fig.height=4, warning = F)
 set.seed(2)
 ```
 
+---------------
 
+##Bipartite Networks (e.g., Plant-pollinator networks, etc)
 
-##Species Co-occurrence Networks
-
-Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time. 
-
-
-Let's use a famous example of a co-occurrence dataset. [Gotelli and Abele (1982)](https://www.jstor.org/stable/2844574?seq=1#metadata_info_tab_contents) surveyed bird species in the Caribbean Islands to examine whether there were non-random patterns of distribution of bird families among those islands (This dataset was later used in a much more famous paper by [Gotelli (2000)](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9658%282000%29081%5B2606%3ANMAOSC%5D2.0.CO%3B2), which describes null model randomization tests that have become pervasive in community ecology). 
-
-
-Load this dataset:
-
-```{r}
-g_a=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Gotelli_Abele.csv", header=T, row.names=1))
-g_a
-```
-
-***MORE ON THIS SOON***
-
-##Bipartite Networks (e.g., Mutualism, etc)
-
-.3.1 Intro to bipartite networks
-Bipartite network, or two-mode network, is a special type of network in which there are two kinds of nodes, and only nodes of different type are connected. In this case, the data is often organized as a ‘biadjacency matrix’, in which rows and columns are two different types of nodes. For example, let’s take a hypothetical dataset on plant-pollinator interactions. The following interaction matrix describes which animal pollinates which plant: cell value is 1 if there is an interaction and 0 if not.
+A bipartite network, or two-mode network, is a special type of network in which there are two kinds of nodes, and only nodes of different type are connected. In this case, the data is often organized as a ‘biadjacency matrix’, in which rows and columns are two different types of nodes. For example, let’s take a hypothetical dataset on plant-pollinator interactions. The following interaction matrix describes which animal pollinates which plant: cell value is 1 if there is an interaction and 0 if not.
 
 ```{r, echo=F}
 sample.mat=matrix(c(1,1,0,0, 1,0,1,0, 0,0,1,0, 1,1,1,1, 0,0,0,1), nrow=4)
@@ -143,3 +125,5 @@ pg2=graph_from_adjacency_matrix(proj2, mode="undirected",diag=F, weighted=T)
 plot(pg1, vertex.color="tomato", vertex.shape="square", edge.color="black",edge.width=E(pg1)$weight^3)
 plot(pg2, vertex.color="lightblue", vertex.shape="circle", edge.color="black",edge.width=E(pg1)$weight^3)
 ```
+
+
