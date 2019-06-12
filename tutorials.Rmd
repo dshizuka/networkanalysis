@@ -14,6 +14,7 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 * [Intro to Animal Social Networks](networktypes_socialnetworks.html)
 
+* [Intro to Ecological Networks](networktypes_ecolnets.html)
 ---
 
 ##Basic Tutorials

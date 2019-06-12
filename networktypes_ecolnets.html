@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>4.2 Intro to Ecological Networks</title>
+<title>Intro to Ecological Networks</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,9 +90,6 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -202,16 +199,16 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">4.2 Intro to Ecological Networks</h1>
+<h1 class="title toc-ignore">Intro to Ecological Networks</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/10/19</em></h4>
+<h4 class="date"><em>updated 06/11/19</em></h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#species-co-occurrence-networks">4.2.1 Species Co-occurrence Networks</a></li>
-<li><a href="#bipartite-networks-e.g.-mutualism-etc">4.2.2 Bipartite Networks (e.g., Mutualism, etc)</a><ul>
+<li><a href="#species-co-occurrence-networks">Species Co-occurrence Networks</a></li>
+<li><a href="#bipartite-networks-e.g.-mutualism-etc">Bipartite Networks (e.g., Mutualism, etc)</a><ul>
 <li><a href="#working-with-bipartite-networks-in-r">Working with bipartite networks in R</a></li>
 <li><a href="#bipartite-projections">Bipartite projections</a></li>
 </ul></li>
@@ -219,12 +216,12 @@ $(document).ready(function () {
 </div>
 
 <div id="species-co-occurrence-networks" class="section level2">
-<h2>4.2.1 Species Co-occurrence Networks</h2>
+<h2>Species Co-occurrence Networks</h2>
 <p>Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time.</p>
 <p><strong><em>MORE ON THIS SOON</em></strong></p>
 </div>
 <div id="bipartite-networks-e.g.-mutualism-etc" class="section level2">
-<h2>4.2.2 Bipartite Networks (e.g., Mutualism, etc)</h2>
+<h2>Bipartite Networks (e.g., Mutualism, etc)</h2>
 <p>.3.1 Intro to bipartite networks Bipartite network, or two-mode network, is a special type of network in which there are two kinds of nodes, and only nodes of different type are connected. In this case, the data is often organized as a ‘biadjacency matrix’, in which rows and columns are two different types of nodes. For example, let’s take a hypothetical dataset on plant-pollinator interactions. The following interaction matrix describes which animal pollinates which plant: cell value is 1 if there is an interaction and 0 if not.</p>
 <table>
 <thead>
@@ -287,13 +284,12 @@ $(document).ready(function () {
 ## Plant_3           0   1    1         1   0
 ## Plant_4           0   0    0         1   1</code></pre>
 <p>To read this interaction matrix into an igraph object called <em>bg</em>, we will use the function <code>graph_from_incidence_matrix()</code>.</p>
-<pre class="r"><code>library(igraph)</code></pre>
-<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
-<pre class="r"><code>bg=graph_from_incidence_matrix(bmat) 
+<pre class="r"><code>library(igraph)
+bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH 6109592 UN-B 9 10 -- 
+<pre><code>## IGRAPH 026da1b UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from 6109592 (vertex names):
+## + edges from 026da1b (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -308,20 +304,17 @@ bg</code></pre>
 <pre class="r"><code>V(bg)$shape=c(&quot;square&quot;,&quot;circle&quot;)[V(bg)$type+1]# you can assign vertex shapes this way 
 V(bg)$color=c(&quot;tomato&quot;,&quot;lightblue&quot;)[V(bg)$type+1] # assign colors the same way 
 plot(bg) </code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
 <p><code>igraph</code> also includes a ‘bipartite layout’, in which the two node types are arranged in two rows.</p>
 <pre class="r"><code>plot(bg, layout=layout_as_bipartite(bg), edge.color=&quot;black&quot;, edge.width=4,vertex.label.dist=1, vertex.label.degree=c(rep(-pi/2, 4), rep(pi/2, 5)))</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
 <p>The ‘bipartite’ package also has plotting function that produces a prettier version of this:</p>
-<pre class="r"><code>library(bipartite)</code></pre>
-<pre><code>## Warning: package &#39;bipartite&#39; was built under R version 3.5.2</code></pre>
-<pre><code>## Warning: package &#39;statnet.common&#39; was built under R version 3.5.2</code></pre>
-<pre><code>## Warning: package &#39;network&#39; was built under R version 3.5.2</code></pre>
-<pre class="r"><code>plotweb(bmat) #the base function for bipartite network plot</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
+<pre class="r"><code>library(bipartite)
+plotweb(bmat) #the base function for bipartite network plot</code></pre>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
 <p>or,</p>
 <pre class="r"><code>plotweb(bmat, method=&quot;normal&quot;,ybig=0.1, col.interaction=&quot;wheat2&quot;, bor.col.interaction=&quot;white&quot;, arrow=&quot;no&quot;,  col.high=&quot;lightblue&quot;, col.low=&quot;tomato&quot;,labsize=2,  adj.low=c(0.5,0.8), adj.high=c(0.5,0))</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
 </div>
 <div id="bipartite-projections" class="section level3">
 <h3>Bipartite projections</h3>
@@ -330,24 +323,24 @@ plot(bg) </code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH a34c0cb UNW- 4 6 -- 
+## IGRAPH 5b7a756 UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from a34c0cb (vertex names):
+## + edges from 5b7a756 (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH 1ece81d UNW- 5 6 -- 
+## IGRAPH 5ba5b14 UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 1ece81d (vertex names):
+## + edges from 5ba5b14 (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
 <pre class="r"><code>set.seed(2)
 plot(proj$proj1, edge.color=&quot;black&quot;, edge.width=E(proj$proj1)$weight^3)</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
 <pre class="r"><code>plot(proj$proj2, edge.color=&quot;black&quot;, edge.width=E(proj$proj2)$weight^3)</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-10-2.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-10-2.png" width="576" /></p>
 <div id="what-is-a-bipartite-projection-anyway" class="section level4">
 <h4>What is a bipartite projection anyway?</h4>
 <p>Although I’ve presented the bipartite projection using a canned function in igraph, so let’s explain it briefly here. Mathematically, the adjacency matrices of the bipartite projection is the matrix product of the interaction matrix and its transpose. That is:</p>
@@ -373,9 +366,9 @@ proj1</code></pre>
 pg1=graph_from_adjacency_matrix(proj1, mode=&quot;undirected&quot;,diag=F, weighted=T)
 pg2=graph_from_adjacency_matrix(proj2, mode=&quot;undirected&quot;,diag=F, weighted=T)
 plot(pg1, vertex.color=&quot;tomato&quot;, vertex.shape=&quot;square&quot;, edge.color=&quot;black&quot;,edge.width=E(pg1)$weight^3)</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
 <pre class="r"><code>plot(pg2, vertex.color=&quot;lightblue&quot;, vertex.shape=&quot;circle&quot;, edge.color=&quot;black&quot;,edge.width=E(pg1)$weight^3)</code></pre>
-<p><img src="04.2_ecolnets_files/figure-html/unnamed-chunk-12-2.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-12-2.png" width="576" /></p>
 </div>
 </div>
 </div>

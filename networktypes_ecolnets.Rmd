@@ -1,5 +1,5 @@
 ---
-title: "4.2 Intro to Ecological Networks"
+title: "Intro to Ecological Networks"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -16,13 +16,13 @@ set.seed(2)
 
 
 
-##4.2.1 Species Co-occurrence Networks
+##Species Co-occurrence Networks
 
 Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time. 
 
 ***MORE ON THIS SOON***
 
-##4.2.2 Bipartite Networks (e.g., Mutualism, etc)
+##Bipartite Networks (e.g., Mutualism, etc)
 
 .3.1 Intro to bipartite networks
 Bipartite network, or two-mode network, is a special type of network in which there are two kinds of nodes, and only nodes of different type are connected. In this case, the data is often organized as a ‘biadjacency matrix’, in which rows and columns are two different types of nodes. For example, let’s take a hypothetical dataset on plant-pollinator interactions. The following interaction matrix describes which animal pollinates which plant: cell value is 1 if there is an interaction and 0 if not.
