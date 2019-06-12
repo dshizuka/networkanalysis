@@ -222,6 +222,63 @@ $(document).ready(function () {
 <h2>Species Co-occurrence Networks</h2>
 <p>Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time.</p>
 <p>Let’s use a famous example of a co-occurrence dataset. <a href="https://www.jstor.org/stable/2844574?seq=1#metadata_info_tab_contents">Gotelli and Abele (1982)</a> surveyed bird species in the Caribbean Islands to examine whether there were non-random patterns of distribution of bird families among those islands (This dataset was later used in a much more famous paper by <a href="https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9658%282000%29081%5B2606%3ANMAOSC%5D2.0.CO%3B2">Gotelli (2000)</a>, which describes null model randomization tests that have become pervasive in community ecology).</p>
+<p>Load this dataset:</p>
+<pre class="r"><code>g_a=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Gotelli_Abele.csv&quot;, header=T, row.names=1))
+g_a</code></pre>
+<pre><code>##     Cuba Hispaniola Jamaica Puerto.Rico Guadeloupe Martinique Dominica
+## C.d    0          1       0           0          0          0        0
+## L.l    0          1       0           0          0          0        0
+## V.j    0          0       0           0          0          0        0
+## S.n    0          0       0           0          0          0        0
+## M.n    1          0       0           0          0          0        0
+## L.p    0          0       0           1          0          0        0
+## L.v    0          1       1           0          0          0        0
+## L.n    0          0       0           0          1          1        1
+## M.r    0          0       0           0          0          0        0
+## T.o    1          1       1           1          0          0        0
+## T.b    0          1       1           1          1          1        1
+## T.c    1          0       0           0          0          0        0
+## L.a    0          0       1           0          0          0        0
+## S.a    0          0       0           0          1          1        1
+## T.i    1          0       0           0          0          0        0
+## A.s    0          1       1           1          0          0        0
+## Z.c    0          1       0           0          0          0        0
+##     St.Lucia Barbados St.Vincent Grenada Antigua St.Croix GrandCayman
+## C.d        0        0          0       0       0        0           0
+## L.l        0        0          0       0       0        0           0
+## V.j        0        0          0       1       0        0           0
+## S.n        0        0          0       1       0        0           0
+## M.n        0        0          0       0       0        0           1
+## L.p        0        0          0       0       0        0           0
+## L.v        0        0          0       0       0        0           0
+## L.n        1        1          1       1       1        0           0
+## M.r        1        0          0       0       0        0           0
+## T.o        0        0          0       0       0        0           1
+## T.b        1        1          1       1       1        1           0
+## T.c        0        0          0       0       0        0           0
+## L.a        0        0          0       0       0        0           0
+## S.a        1        0          0       0       0        0           0
+## T.i        0        0          0       0       0        0           0
+## A.s        0        0          0       0       0        0           0
+## Z.c        0        0          0       0       0        0           0
+##     St.Kitts Barbuda MonSt.errat St.Martin St.Thomas
+## C.d        0       0           0         0         0
+## L.l        0       0           0         0         0
+## V.j        0       0           0         0         0
+## S.n        0       0           0         0         0
+## M.n        0       0           0         0         0
+## L.p        0       0           0         0         0
+## L.v        0       0           0         0         0
+## L.n        1       1           1         1         1
+## M.r        0       0           0         0         0
+## T.o        0       0           0         0         0
+## T.b        1       1           1         1         1
+## T.c        0       0           0         0         0
+## L.a        0       0           0         0         0
+## S.a        0       0           0         0         0
+## T.i        0       0           0         0         0
+## A.s        0       0           0         0         0
+## Z.c        0       0           0         0         0</code></pre>
 <p><strong><em>MORE ON THIS SOON</em></strong></p>
 </div>
 <div id="bipartite-networks-e.g.-mutualism-etc" class="section level2">
@@ -289,9 +346,9 @@ bmat</code></pre>
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH 5dde449 UN-B 9 10 -- 
+<pre><code>## IGRAPH dff75d0 UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from 5dde449 (vertex names):
+## + edges from dff75d0 (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -306,17 +363,17 @@ bg</code></pre>
 <pre class="r"><code>V(bg)$shape=c(&quot;square&quot;,&quot;circle&quot;)[V(bg)$type+1]# you can assign vertex shapes this way 
 V(bg)$color=c(&quot;tomato&quot;,&quot;lightblue&quot;)[V(bg)$type+1] # assign colors the same way 
 plot(bg) </code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
 <p><code>igraph</code> also includes a ‘bipartite layout’, in which the two node types are arranged in two rows.</p>
 <pre class="r"><code>plot(bg, layout=layout_as_bipartite(bg), edge.color=&quot;black&quot;, edge.width=4,vertex.label.dist=1, vertex.label.degree=c(rep(-pi/2, 4), rep(pi/2, 5)))</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
 <p>The ‘bipartite’ package also has plotting function that produces a prettier version of this:</p>
 <pre class="r"><code>library(bipartite)
 plotweb(bmat) #the base function for bipartite network plot</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-8-1.png" width="384" /></p>
 <p>or,</p>
 <pre class="r"><code>plotweb(bmat, method=&quot;normal&quot;,ybig=0.1, col.interaction=&quot;wheat2&quot;, bor.col.interaction=&quot;white&quot;, arrow=&quot;no&quot;,  col.high=&quot;lightblue&quot;, col.low=&quot;tomato&quot;,labsize=2,  adj.low=c(0.5,0.8), adj.high=c(0.5,0))</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-9-1.png" width="480" /></p>
 </div>
 <div id="bipartite-projections" class="section level3">
 <h3>Bipartite projections</h3>
@@ -325,24 +382,24 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 142a93f UNW- 4 6 -- 
+## IGRAPH 7e042c2 UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 142a93f (vertex names):
+## + edges from 7e042c2 (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH e2b7aad UNW- 5 6 -- 
+## IGRAPH 5eaf9a7 UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from e2b7aad (vertex names):
+## + edges from 5eaf9a7 (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
 <pre class="r"><code>set.seed(2)
 plot(proj$proj1, edge.color=&quot;black&quot;, edge.width=E(proj$proj1)$weight^3)</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-10-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
 <pre class="r"><code>plot(proj$proj2, edge.color=&quot;black&quot;, edge.width=E(proj$proj2)$weight^3)</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-10-2.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-11-2.png" width="576" /></p>
 <div id="what-is-a-bipartite-projection-anyway" class="section level4">
 <h4>What is a bipartite projection anyway?</h4>
 <p>Although I’ve presented the bipartite projection using a canned function in igraph, so let’s explain it briefly here. Mathematically, the adjacency matrices of the bipartite projection is the matrix product of the interaction matrix and its transpose. That is:</p>
@@ -368,9 +425,9 @@ proj1</code></pre>
 pg1=graph_from_adjacency_matrix(proj1, mode=&quot;undirected&quot;,diag=F, weighted=T)
 pg2=graph_from_adjacency_matrix(proj2, mode=&quot;undirected&quot;,diag=F, weighted=T)
 plot(pg1, vertex.color=&quot;tomato&quot;, vertex.shape=&quot;square&quot;, edge.color=&quot;black&quot;,edge.width=E(pg1)$weight^3)</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-12-1.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
 <pre class="r"><code>plot(pg2, vertex.color=&quot;lightblue&quot;, vertex.shape=&quot;circle&quot;, edge.color=&quot;black&quot;,edge.width=E(pg1)$weight^3)</code></pre>
-<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-12-2.png" width="576" /></p>
+<p><img src="networktypes_ecolnets_files/figure-html/unnamed-chunk-13-2.png" width="576" /></p>
 </div>
 </div>
 </div>

@@ -26,7 +26,7 @@ Let's use a famous example of a co-occurrence dataset. [Gotelli and Abele (1982)
 Load this dataset:
 
 ```{r}
-g_a=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Gotell_Abele.csv", header=T, row.names=1))
+g_a=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Gotelli_Abele.csv", header=T, row.names=1))
 g_a
 ```
 
