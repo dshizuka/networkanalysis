@@ -23,6 +23,12 @@ Species co-occurrence networks are essentially networks of associations, much li
 
 Let's use a famous example of a co-occurrence dataset. [Gotelli and Abele (1982)](https://www.jstor.org/stable/2844574?seq=1#metadata_info_tab_contents) surveyed bird species in the Caribbean Islands to examine whether there were non-random patterns of distribution of bird families among those islands (This dataset was later used in a much more famous paper by [Gotelli (2000)](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9658%282000%29081%5B2606%3ANMAOSC%5D2.0.CO%3B2), which describes null model randomization tests that have become pervasive in community ecology). 
 
+Load this dataset:
+
+```{r}
+g_a=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/Gotell_Abele.csv", header=T, row.names=1))
+g_a
+```
 
 ***MORE ON THIS SOON***
 
