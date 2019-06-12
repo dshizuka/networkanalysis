@@ -100,5 +100,5 @@ plot(g)
 
 You can see that now the edges are slightly different widths: these could represent the variations in the strength of relationships between nodes in a *weighted network*.
 
-
+Next: [Data formats for networks]("02_dataformats.html")
 

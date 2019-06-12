@@ -176,7 +176,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -230,8 +230,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(help=&#39;igraph&#39;)</code></pre>
 <p>This should open a new window that gives you a lot of info. The Index shows all of the functions that come as part of the package.</p>
 <p>Now we want to try getting information on some of these. However, first, we have to load the package before we can begin to use it. Then, try looking up some functions:</p>
-<pre class="r"><code> library(igraph) #load the package 
-?graph_from_adjacency_matrix</code></pre>
+<pre class="r"><code> library(igraph) #load the package </code></pre>
+<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
+<pre class="r"><code>?graph_from_adjacency_matrix</code></pre>
 <div id="our-first-network" class="section level3">
 <h3>1.2.1 Our first network!</h3>
 <p>Let’s jump right in and try making a network using the <code>igraph</code> package. Here, we will manually make a network using the <code>make_graph()</code> function. You likely won’t use this function that often, but it is very useful for the purpose of demonstration.</p>
@@ -246,17 +247,17 @@ plot(g)</code></pre>
 <pre><code>## [1] &quot;igraph&quot;</code></pre>
 <p>You can see that <code>g</code> is an ‘igraph object’. This means that it is now a <em>graph</em> or <em>network</em>. You can see more details about this object by simply:</p>
 <pre class="r"><code>g</code></pre>
-<pre><code>## IGRAPH 1d3fbb1 UN-- 6 7 -- 
+<pre><code>## IGRAPH 264945b UN-- 6 7 -- 
 ## + attr: name (v/c)
-## + edges from 1d3fbb1 (vertex names):
+## + edges from 264945b (vertex names):
 ## [1] A--B A--C A--F B--C D--E D--F E--F</code></pre>
 <p>As you can see, simply printing <code>g</code> will display the bare minimum information: “UN” means “<strong>U</strong>ndirected network with <strong>N</strong>ames of vertices”, and the numbers indicate that there are 6 vertices and 7 edges. The second line shows that there is attribute called ‘name’. The characters inside the parentheses (v/c) indicates that it is a ‘vertex attribute’ and that it is a ‘character’ attribute (i.e., rather than numeric or integers). The third and fourth lines show us the 7 edges that exist in this network.</p>
 <p>We can look up the vertices and edges using this special syntax:</p>
 <pre class="r"><code>V(g) #look up vertices </code></pre>
-<pre><code>## + 6/6 vertices, named, from 1d3fbb1:
+<pre><code>## + 6/6 vertices, named, from 264945b:
 ## [1] A B C D E F</code></pre>
 <pre class="r"><code>E(g) #look up edges</code></pre>
-<pre><code>## + 7/7 edges from 1d3fbb1 (vertex names):
+<pre><code>## + 7/7 edges from 264945b (vertex names):
 ## [1] A--B A--C A--F B--C D--E D--F E--F</code></pre>
 <p>In addition, we can look up vertex attributes. We currently only have one vertex attribute, called ‘name’:</p>
 <pre class="r"><code>V(g)$name</code></pre>
@@ -271,6 +272,7 @@ E(g)$color=rainbow(7) #rainbow() function chooses a specified number of colors
 plot(g)</code></pre>
 <p><img src="01_intro_files/figure-html/unnamed-chunk-8-1.png" width="576" /></p>
 <p>You can see that now the edges are slightly different widths: these could represent the variations in the strength of relationships between nodes in a <em>weighted network</em>.</p>
+<p>Next: <a href="%2202_dataformats.html%22">Data formats for networks</a></p>
 </div>
 </div>
 
