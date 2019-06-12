@@ -346,9 +346,9 @@ bmat</code></pre>
 <pre class="r"><code>library(igraph)
 bg=graph_from_incidence_matrix(bmat) 
 bg</code></pre>
-<pre><code>## IGRAPH ae45d1e UN-B 9 10 -- 
+<pre><code>## IGRAPH c5b349f UN-B 9 10 -- 
 ## + attr: type (v/l), name (v/c)
-## + edges from ae45d1e (vertex names):
+## + edges from c5b349f (vertex names):
 ##  [1] Plant_1--hummingbird Plant_1--bat         Plant_1--butterfly  
 ##  [4] Plant_2--hummingbird Plant_2--butterfly   Plant_3--bat        
 ##  [7] Plant_3--moth        Plant_3--butterfly   Plant_4--butterfly  
@@ -382,16 +382,16 @@ plotweb(bmat) #the base function for bipartite network plot</code></pre>
 <pre class="r"><code>proj=bipartite_projection(bg, multiplicity = T)
 proj</code></pre>
 <pre><code>## $proj1
-## IGRAPH 5fceead UNW- 4 6 -- 
+## IGRAPH 5959875 UNW- 4 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 5fceead (vertex names):
+## + edges from 5959875 (vertex names):
 ## [1] Plant_1--Plant_2 Plant_1--Plant_3 Plant_1--Plant_4 Plant_2--Plant_3
 ## [5] Plant_2--Plant_4 Plant_3--Plant_4
 ## 
 ## $proj2
-## IGRAPH 964dab2 UNW- 5 6 -- 
+## IGRAPH 2b172fd UNW- 5 6 -- 
 ## + attr: name (v/c), shape (v/c), color (v/c), weight (e/n)
-## + edges from 964dab2 (vertex names):
+## + edges from 2b172fd (vertex names):
 ## [1] hummingbird--bat       hummingbird--butterfly bat        --butterfly
 ## [4] bat        --moth      moth       --butterfly butterfly  --bee</code></pre>
 <p>This new object, called proj, is in a format called list [you can see this by running <code>class(proj)</code>]. A list is an object that has multiple components—in this case, <code>proj</code> is a list with two distinct graphs: (1) <code>proj$proj1</code> (or alternatively, <code>proj[[1]]</code>) is a network with 4 nodes and 6 edges. (2) <code>proj$proj2</code> (or alternatively, <code>proj[[2]]</code>) is also a network with 5 nodes and 6 edges. You’ll get a better sense of these projections if you plot them:</p>
