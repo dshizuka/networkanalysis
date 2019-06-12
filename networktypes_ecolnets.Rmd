@@ -20,6 +20,10 @@ set.seed(2)
 
 Species co-occurrence networks are essentially networks of associations, much like social networks using group membership data. The goal is to determine whether there are patterns in which species co-exist across space and time. 
 
+
+Let's use a famous example of a co-occurrence dataset. [Gotelli and Abele (1982)](https://www.jstor.org/stable/2844574?seq=1#metadata_info_tab_contents) surveyed bird species in the Caribbean Islands to examine whether there were non-random patterns of distribution of bird families among those islands (This dataset was later used in a much more famous paper by [Gotelli (2000)](https://esajournals.onlinelibrary.wiley.com/doi/full/10.1890/0012-9658%282000%29081%5B2606%3ANMAOSC%5D2.0.CO%3B2), which describes null model randomization tests that have become pervasive in community ecology). 
+
+
 ***MORE ON THIS SOON***
 
 ##Bipartite Networks (e.g., Mutualism, etc)
