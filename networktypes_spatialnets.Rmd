@@ -1,5 +1,5 @@
 ---
-title: "4.3 Intro to Spatial Networks"
+title: "Intro to Spatial Networks"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 

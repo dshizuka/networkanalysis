@@ -19,7 +19,7 @@ Animals interact and associate. These interactions and associations can build up
 
 As mentioned in the [survey of network types](04_networktypes.html), social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). However, there are potential bananaskins to look out for when constructing social networks. The most important question here (and whenever you are making networks in general) is: ***what are your edges?***
 
-##4.1.1. Constructing networks from interactions
+##Constructing networks from interactions
 
 Constructing networks from interactions is conceptually straightforward. 
 
@@ -55,7 +55,7 @@ plot(ig2, edge.width=E(ig2)$weight/4, edge.curved=T, layout=layout_in_circle(ig2
 ```
 
 
-##4.1.2. Constructing networks from associations
+##Constructing networks from associations
 
 Association networks are created by connecting nodes that belong to the same ‘group’. For example, individuals that belong to the same club may be considered to be ‘associates’ and therefore connected in a network. Similarly, in animal social networks, individuals that are observed to be in the same flock or herd may be considered to be associated in some way. Keep in mind though that this is an assumption, and the inference of social networks from patterns of group association is often called the ‘gambit of the group’ (Franks et al. 2010).
 

@@ -13,8 +13,9 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 ###[Brief Overview of Network Types in Ecology & Behavioral Ecology](networktypes.html)
 
 * [Intro to Animal Social Networks](networktypes_socialnetworks.html)
-
 * [Intro to Ecological Networks](networktypes_ecolnets.html)
+* [Intro to Spatial Networks](networktypes_spatialnets.html)
+
 ---
 
 ##Basic Tutorials

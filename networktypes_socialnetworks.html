@@ -207,8 +207,8 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#constructing-networks-from-interactions">4.1.1. Constructing networks from interactions</a></li>
-<li><a href="#constructing-networks-from-associations">4.1.2. Constructing networks from associations</a><ul>
+<li><a href="#constructing-networks-from-interactions">Constructing networks from interactions</a></li>
+<li><a href="#constructing-networks-from-associations">Constructing networks from associations</a><ul>
 <li><a href="#construct-social-network-from-associations-using-the-asnipe-package">Construct social network from associations using the <code>asnipe</code> package</a></li>
 </ul></li>
 </ul>
@@ -217,7 +217,7 @@ $(document).ready(function () {
 <p>Animals interact and associate. These interactions and associations can build up to social relations between individuals in a population. <em>Social structure</em> refers to the global description of these social relations (Hinde 1976). Social network analysis can be used as a method to quantify the structure and dynamics of animal societies. There has been an explosion of empirical studies (and review articles) on the topic since the early 2000s.</p>
 <p>As mentioned in the <a href="04_networktypes.html">survey of network types</a>, social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). However, there are potential bananaskins to look out for when constructing social networks. The most important question here (and whenever you are making networks in general) is: <strong><em>what are your edges?</em></strong></p>
 <div id="constructing-networks-from-interactions" class="section level2">
-<h2>4.1.1. Constructing networks from interactions</h2>
+<h2>Constructing networks from interactions</h2>
 <p>Constructing networks from interactions is conceptually straightforward.</p>
 <p>Here is a sample data set of dominance interactions between pairs of individuals. Each individual has a 5 digit id number. The data is organized as a two-column matrix with winner on the first column and loser on the second column:</p>
 <pre class="r"><code>library(igraph)
@@ -245,7 +245,7 @@ plot(ig2, edge.width=E(ig2)$weight)</code></pre>
 <p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
 </div>
 <div id="constructing-networks-from-associations" class="section level2">
-<h2>4.1.2. Constructing networks from associations</h2>
+<h2>Constructing networks from associations</h2>
 <p>Association networks are created by connecting nodes that belong to the same ‘group’. For example, individuals that belong to the same club may be considered to be ‘associates’ and therefore connected in a network. Similarly, in animal social networks, individuals that are observed to be in the same flock or herd may be considered to be associated in some way. Keep in mind though that this is an assumption, and the inference of social networks from patterns of group association is often called the ‘gambit of the group’ (Franks et al. 2010).</p>
 <p>Typically, association data would be first be gathered as an individual-by-group matrix (or group-by-individual matrix). That is, individuals are listed in rows and groups (e.g., flocks/herds/schools) listed in columns (or vice-versa). The cell value is 1 if that individual is in that group, and 0 if not.</p>
 <div class="figure">
