@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Worked Example: Centrality, Community Structure and Resilience of US Air Transportation Network</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="tutorials.html">Tutorials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Worked Example: Centrality, Community Structure and Resilience of US Air Transportation Network</h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#getting-and-plotting-the-us-air-transportation-network">1. Getting and plotting the US air transportation network</a></li>
+<li><a href="#relationship-between-degree-and-betweenness-of-u.s.-airports">2. Relationship between degree and betweenness of U.S. airports</a></li>
+<li><a href="#community-structure-in-the-u.s.-air-transportation-network">3. Community structure in the U.S. air transportation network</a></li>
+</ul>
+</div>
+
+<p>The air transportation network–a network of airports connected by airline routes–is a great example of a spatial network. In a now-classic study, <a href="https://www.pnas.org/content/102/22/7794.short">Guimerà et al. (2005)</a> used the world-wide air transportation network to tackle the question of how to measure the importance of nodes in a network, and how different measures can tell us different things. They also propose some alternative measures of position that tells a little bit more about the roles that different nodes play in a complex network. In this exercise we will be a little bit further to think about methods for testing the <em>resilience</em> of networks to disturbance using virtual knockout experiments. Researchers in a wide variety of fields use these virtual knockouts as one tool to understand things like:</p>
+<ul>
+<li>the potential effects of node failure on power grids, transportation networks and information flow</li>
+<li>the effects of the loss of particular individuals in a social network</li>
+<li>the effects of habitat alteration on spatial networks of organisms</li>
+</ul>
+<hr />
+<div id="getting-and-plotting-the-us-air-transportation-network" class="section level2">
+<h2>1. Getting and plotting the US air transportation network</h2>
+<p>The Guimerà et al. (2005) paper is based on the global air transportation network. Today, we will play with a smaller (but still plenty big) network of the US domestic air transportation network. The <code>igraphdata</code> package contains a version of this network. In this network, the nodes represent airports and the edges represent flights that went between the airports in December 2010. You can import this data using the following set of codes:</p>
+<pre class="r"><code>library(igraph) 
+library(igraphdata) 
+data(USairports) 
+USairports</code></pre>
+<pre><code>## IGRAPH bf6202d DN-- 755 23473 -- US airports
+## + attr: name (g/c), name (v/c), City (v/c), Position (v/c),
+## | Carrier (e/c), Departures (e/n), Seats (e/n), Passengers (e/n),
+## | Aircraft (e/n), Distance (e/n)
+## + edges from bf6202d (vertex names):
+##  [1] BGR-&gt;JFK BGR-&gt;JFK BOS-&gt;EWR ANC-&gt;JFK JFK-&gt;ANC LAS-&gt;LAX MIA-&gt;JFK
+##  [8] EWR-&gt;ANC BJC-&gt;MIA MIA-&gt;BJC TEB-&gt;ANC JFK-&gt;LAX LAX-&gt;JFK LAX-&gt;SFO
+## [15] AEX-&gt;LAS BFI-&gt;SBA ELM-&gt;PIT GEG-&gt;SUN ICT-&gt;PBI LAS-&gt;LAX LAS-&gt;PBI
+## [22] LAS-&gt;SFO LAX-&gt;LAS PBI-&gt;AEX PBI-&gt;ICT PIT-&gt;VCT SFO-&gt;LAX VCT-&gt;DWH
+## [29] IAD-&gt;JFK ABE-&gt;CLT ABE-&gt;HPN AGS-&gt;CLT AGS-&gt;CLT AVL-&gt;CLT AVL-&gt;CLT
+## [36] AVP-&gt;CLT AVP-&gt;PHL BDL-&gt;CLT BHM-&gt;CLT BHM-&gt;CLT BNA-&gt;CLT BNA-&gt;CLT
+## + ... omitted several edges</code></pre>
+<p>This igraph object actually includes a vertex attribute called “Position” that encodes the latitude/longitude information. HOWEVER, I found that there are some errors in this data (due to slight errors in airport codes and coordinates). So, what we will do is to use an free, external dataset on airport locations, compiled by the <a href="https://openflights.org/">Open Flights project (openflights.org)</a>. We can download the airport location data directly a url (output not shown):</p>
+<pre class="r"><code>airports=read.csv(&#39;https://raw.githubusercontent.com/jpatokal/openflights/master/data/airports.dat&#39;, header=F)
+head(airports)</code></pre>
+<pre><code>##   V1                                          V2           V3
+## 1  1                              Goroka Airport       Goroka
+## 2  2                              Madang Airport       Madang
+## 3  3                Mount Hagen Kagamuga Airport  Mount Hagen
+## 4  4                              Nadzab Airport       Nadzab
+## 5  5 Port Moresby Jacksons International Airport Port Moresby
+## 6  6                 Wewak International Airport        Wewak
+##                 V4  V5   V6        V7      V8   V9 V10 V11
+## 1 Papua New Guinea GKA AYGA -6.081690 145.392 5282  10   U
+## 2 Papua New Guinea MAG AYMD -5.207080 145.789   20  10   U
+## 3 Papua New Guinea HGU AYMH -5.826790 144.296 5388  10   U
+## 4 Papua New Guinea LAE AYNZ -6.569803 146.726  239  10   U
+## 5 Papua New Guinea POM AYPY -9.443380 147.220  146  10   U
+## 6 Papua New Guinea WWK AYWK -3.583830 143.669   19  10   U
+##                    V12     V13         V14
+## 1 Pacific/Port_Moresby airport OurAirports
+## 2 Pacific/Port_Moresby airport OurAirports
+## 3 Pacific/Port_Moresby airport OurAirports
+## 4 Pacific/Port_Moresby airport OurAirports
+## 5 Pacific/Port_Moresby airport OurAirports
+## 6 Pacific/Port_Moresby airport OurAirports</code></pre>
+<p>So, we can use this data and import the correct latitude (column 7) and longitude (column 8) for each airport as a node attribute:</p>
+<pre class="r"><code>V(USairports)$lat=airports[match(V(USairports)$name, airports[,5]), 7] 
+V(USairports)$long=airports[match(V(USairports)$name, airports[,5]), 8]</code></pre>
+<p>Now, we are going to do a little bit of “clean up” to the data. We are going to: (1) ‘simplify’ the network into an undirected network with no loops (2) remove nodes with airport codes that didn’t match the Open Flights database (probably data entry error in igraphdata) (3) remove US territories nodes that are in the Eastern and Southern Hemispheres to make it easier to see (4) keep only the airports that belong to the largest connected component (called the ‘giant component’), which will also make the network easier to interpret.</p>
+<p>Follow the codes below to end up with a new igraph object called <code>usair</code>:</p>
+<pre class="r"><code>#remove loops and make undirected
+usair=as.undirected(simplify(USairports))
+
+#remove airports whose codes didn&#39;t match the OpenFlights database (and hence returned &quot;NA&quot; for latitude)
+usair=delete.vertices(usair, which(is.na(V(usair)$lat)==TRUE))
+
+#remove nodes in the Eastern and Southern Hemispheres (US territories). This will make the plot easier to see.
+usair=delete.vertices(usair, which(V(usair)$lat&lt;0))
+usair=delete.vertices(usair, which(V(usair)$long&gt;0))
+
+#keep only the largest connected component of the network (&quot;giant component&quot;). this also makes the network easier to see.
+decomp=decompose.graph(usair)
+usair=decomp[[1]]</code></pre>
+<p>Now, let’s take a look at this network:</p>
+<pre class="r"><code>set.seed(3)
+l=layout_with_fr(usair)
+plot(usair, layout=l, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<hr />
+</div>
+<div id="relationship-between-degree-and-betweenness-of-u.s.-airports" class="section level2">
+<h2>2. Relationship between degree and betweenness of U.S. airports</h2>
+<p>How should we define the ‘importance’ of an airport in this network? Degree and betweenness are the two most commonly used measure of node centrality (i.e., measures of node position in a network), and in this case, they represent two different measures of importance. Degree centrality tell us how many airports one fly to directly from a given airport. In contrast, betweenness centrality (which is the number of geodesic paths go through the node) gives us a sense for how important the airport is as a transfer location for people getting from one part of the country to another. Note that we are using a simplified network here that only counts unique flight routes, so we are not accounting for the number of replicated flights or the size of the planes.</p>
+<p>Let’s explore the relationship between degree and betweenness by generating a simple scatterplot:</p>
+<pre class="r"><code>plot(degree(usair), betweenness(usair), pch=19) #pch=19 uses filled circles</code></pre>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p>Compare this to Figure 2a in Guimerà et al. (2005). We can see that in both cases, there is a strong relationship between degree and betweenness, but there are a few nodes that have high betweenness despite intermediate degree. When looking at the U.S. domestic flights only, there is one airport that stands out for having a huge betweenness value but moderate degree. To see what some of these points are, let’s first take a look at the top 10 airports in terms of node degree:</p>
+<pre class="r"><code>V(usair)$name[order(degree(usair), decreasing=T)][1:10] #order() gives us the element number in order of ranking.</code></pre>
+<pre><code>##  [1] &quot;ATL&quot; &quot;DEN&quot; &quot;ORD&quot; &quot;MSP&quot; &quot;DFW&quot; &quot;DTW&quot; &quot;LAS&quot; &quot;IAH&quot; &quot;CLT&quot; &quot;LAX&quot;</code></pre>
+<p>You can see that most of these are hubs in the interior of the lower 48 states–probably because we are not counting international flights in this network. Given that, there are few surprises here: we see a lot of familiar names here including Atlanta (ATL), Denver (DEN), O’Hare (ORD), Minneapolis (MSP), Dallas-Ft. Worth (DFW), etc.</p>
+<p>Let’s now look at the top 10 airports in terms of node betweenness:</p>
+<pre class="r"><code>V(usair)$name[order(betweenness(usair), decreasing=T)][1:10] #order() gives us the element number in order of ranking.</code></pre>
+<pre><code>##  [1] &quot;ANC&quot; &quot;SEA&quot; &quot;DEN&quot; &quot;MSP&quot; &quot;ORD&quot; &quot;FAI&quot; &quot;DTW&quot; &quot;ATL&quot; &quot;BET&quot; &quot;LAX&quot;</code></pre>
+<p>Many of the top 10 betweenness airports are familiar ones from looking at node degree: Denver (DEN), Minneapolis (MSP), Chicago O’Hare (ORD), Detroit (DTW), Atlanta (ATL) and LAX. However, there are some surprises in here: Anchorage (ANC) is the top airport in terms of betweenness by far. Second is Seattle (SEA), which is a big airport but did not appear in the top 10 for degree. There are two other airports from Alaska in here: Fairbanks (FAI), the second largest city in Alaska, and perhaps most surprisingly, Bethel (BET), an airport based in a town of ~ 6,000 people!</p>
+<p>Why this discrepancy between the top 10 nodes by degree and top 10 nodes by betweenness? This becomes clear when you look at the network plotted in space. We can also use the coordinates data that we downloaded from Open Flights project earlier to plot the network in space:</p>
+<pre class="r"><code>longlat=matrix(c(V(usair)$long, V(usair)$lat), ncol=2) #set up layout matrix 
+par(mar=c(1,1,1,1))
+plot(usair, layout=longlat, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<p>You can see the outline of the US here. Now note how many airports there are in Alaska alone! This makes sense because there are so few roads in Alaska relative to landmass that flying is the main mode of transportation between remote towns. Thus, the airports in Alaska are not well connected in terms of the number of places you can get to by direct flight, but the hubs that connect Alaska to the rest of the U.S. (e.g., Anchorage and Seattle) are disproportionately important in terms of betweenness centrality.</p>
+<p>The main point of this exercise is to consider what different indices of centrality are measuring and make sure you consider the complex structure of the network so that you can make sense of what that index is telling you.</p>
+<hr />
+</div>
+<div id="community-structure-in-the-u.s.-air-transportation-network" class="section level2">
+<h2>3. Community structure in the U.S. air transportation network</h2>
+<p>One of the findings of the Guimerà et al. (2005) study was that the global airport network has significant community structure (see their Figure 3). That is, the globe divides up into discrete regions where the air transportation network are tightly knit, and the connections between them are relatively sparse. We can apply community detection algorithms to figure out the cluster patterns of the U.S. domestic air transportation network. Guimerà et al. (2005) uses an algorithm called <em>simulated annealing</em> (Guimerà and Amaral 2005). This algorithm is available through a different R package called <code>rnetcarto</code>. However, since this algorithm runs a little bit slow for our purposes today, we will use a faster community detection algorithm called the fast greedy method (Clauset, Newman &amp; Moore 2004), which yield similar results.</p>
+<pre class="r"><code>fg=fastgreedy.community(usair) 
+length(fg)</code></pre>
+<pre><code>## [1] 14</code></pre>
+<pre class="r"><code>modularity(fg)</code></pre>
+<pre><code>## [1] 0.3644685</code></pre>
+<p>Now let’s visualize this on the network. We will plot the network with nodes colored based on their community membership. I will use the RColorBrewer to generate 12 colors (maximum distinct colors I can get), and make the last two communities white:</p>
+<pre class="r"><code>library(RColorBrewer)
+fgmembership=membership(fg)
+colors.fg=c(brewer.pal(12, name=&quot;Paired&quot;), rep(&quot;white&quot;,2)) #first 12 colors from RColorBrewer, last 2 communities are white
+par(mar=c(1,1,1,1))
+plot(usair, layout=longlat, vertex.label=&quot;&quot;, vertex.color=colors.fg[fgmembership], vertex.size=5)</code></pre>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p>What you can see in these figures is that the U.S. transportation system is broken up into several communities that make some geographic sense: Alaska, West Coast/Hawaii, Eastern/Puerto Rico. There are also a few small, very local subnetworks like the Kenai Peninsula and Southern Alaska or the Northern Great Plains. If you look carefully, there are even a few small clusters that don’t make much geographic sense–some of these are subnetworks of private/corporate airports or Air Force bases.</p>
+<p>Guimerà et al. (2005) proposed that we can use this community structure to identify the roles that nodes play within and across their networks. They propose two measures in particular: Within-Community Degree (z) and Participation Coefficient (P). They define them as follows:</p>
+<p>The Within-community Degree of node <span class="math inline">\(i\)</span> is:</p>
+<p><span class="math inline">\(Z_i=\frac{k_i-\overline{k}_{si}}{\sigma_{k_{si}}}\)</span></p>
+<p>Where <span class="math inline">\(k_i\)</span> is the number of links of node <span class="math inline">\(i\)</span> to other nodes in its community, <span class="math inline">\(s_i\)</span>, then this value is the z-score of the node’s degree within it’s community, standardized across communities.</p>
+<p>The Participation Coefficient is defined as:</p>
+<p><span class="math inline">\(P_i=1-\sum_{s=1}^{N_m} \left(\frac{k_{is}}{k_i}\right)^2\)</span></p>
+<p>Where <span class="math inline">\(k_{is}\)</span> is the number of links of node <span class="math inline">\(i\)</span> to nodes in community <span class="math inline">\(s\)</span>, and <span class="math inline">\(k_i\)</span> is the total degree of node <span class="math inline">\(i\)</span>. <span class="math inline">\(N_M\)</span> is the total number of communities. Thus, the participation coefficient is close to one if the links of a node is evenly distributed across all communities and zero if it links are exclusively with nodes of their own community.</p>
+<p>We can manually calculate both of these scores:</p>
+<pre class="r"><code>##calculate within-module degree, z
+z=list()
+for (i in 1:max(fgmembership)){ 
+  newg=delete.vertices(usair, which(fgmembership!=i)) 
+wideg=degree(newg) 
+z[[i]]=(wideg-mean(wideg))/sd(wideg)
+}
+z=unlist(z)
+
+## calculate participation coefficient
+p=vector(length=vcount(usair))
+for(i in 1:vcount(usair)){
+nei=neighbors(usair, i) #get all neighbors of node i 
+tab=table(fgmembership[names=nei]) #get table of community membership for neighbors 
+p[i]=1-sum((tab/sum(tab))^2)
+}
+
+#create dataframe with airport name, z and p
+dat=data.frame(name=V(usair)$name, z=z[match(V(usair)$name,names(z))], p=p)</code></pre>
+<p>Let’s plot the z-P phase-space, as in Figure 4a of Guimerà et al. (2005):</p>
+<pre class="r"><code>plot(dat$p, dat$z, pch=19, ylab=&quot;Within-Community Degree (z)&quot;, xlab=&quot;Participation Coefficient (p)&quot;)</code></pre>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
+<p>In the paper, Guimerà and colleagues heuristically into several parts. Here is a simplified version of what they do: <img src="example_usairports_files/USair_pxz_colorsections.jpg" /></p>
+<p>Under this framework, we can identify several different types of roles.</p>
+<ul>
+<li>Most nodes are considered “Peripherals”, with relatively low <span class="math inline">\(z\)</span> and low <span class="math inline">\(P\)</span>.</li>
+<li>“Connector” nodes may have high <span class="math inline">\(P\)</span> without having a high <span class="math inline">\(z\)</span>: they don’t play a strong role in their own community but tend to bridge communities. These tend to be lesser-known airports (e.g., Topeka, Ketchikan).</li>
+<li>“Provincial Hubs” are nodes that have high degree within their community but low connections across communities. These include airports like Fairbanks and Bethel in Alaska.</li>
+<li>“Connector Hubs” are strongly connected within their community but also bridge their community with other communities. These include aiports like Anchorage and Seattle.</li>
+</ul>
+<hr />
+<p><strong>NOTE:</strong> You can actually do this exercise more easily using the <code>rnetcarto</code> package. However, the <code>netcarto()</code> function takes a while to run (a few minutes), which makes it a bit cumbersome for workshop purposes. Here is the code to do that (result not shown)</p>
+<pre class="r"><code>library(rnetcarto)
+usair.mat=as_adjacency_matrix(usair, sparse=F) #make the igraph object into an adjacency matrix (the format rnetcarto likes)
+rnc=netcarto(usair.mat) #run the simulated annealing algorithm
+
+#modularity
+rnc[[2]]
+
+#number of modules
+length(unique(rnc[[1]]$module))
+
+plot(rnc[[1]]$participation, rnc[[1]]$connectivity, pch=19)</code></pre>
+<hr />
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

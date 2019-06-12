@@ -1,7 +1,7 @@
 ---
 title: 'Worked Example: Constructing Flock Network'
 author: "Dai Shizuka"
-date: "7/12/2018"
+date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
   html_document:
     toc: yes
