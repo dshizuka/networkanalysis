@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -177,7 +174,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -204,16 +201,16 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">A VERY Brief Survey of Networks for Behavioral Ecologists</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/11/19</em></h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#social-networks">4.1. Social networks</a></li>
-<li><a href="#ecological-networks">4.2 Ecological Networks</a></li>
-<li><a href="#spatial-networks">4.3 Spatial Networks</a></li>
-<li><a href="#architecture-of-signals-in-animal-communication">4.4 Architecture of Signals in Animal Communication</a></li>
+<li><a href="#social-networks">Social networks</a></li>
+<li><a href="#ecological-networks">Ecological Networks</a></li>
+<li><a href="#spatial-networks">Spatial Networks</a></li>
+<li><a href="#architecture-of-signals-in-animal-communication">Architecture of Signals in Animal Communication</a></li>
 </ul>
 </div>
 
@@ -222,7 +219,7 @@ $(document).ready(function () {
 <p><br></p>
 <hr />
 <div id="social-networks" class="section level3">
-<h3>4.1. Social networks</h3>
+<h3>Social networks</h3>
 <p>Social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). Examples of the types of interactions/associations involved include direct interactions (e.g., aggression, grooming), co-membership in groups such as herds and flocks, or co-use of spatial locations (e.g., roosts, refuges). The analysis of such social networks can be used to understand the structure of societies, the dynamics of social structure across time and space, and the flow of information/disease/etc through these connections.</p>
 <div class="figure">
 <img src="assets/images/ASN_fig1.png" alt="Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from Flack et al. (2006)." />
@@ -234,7 +231,7 @@ $(document).ready(function () {
 <hr />
 </div>
 <div id="ecological-networks" class="section level3">
-<h3>4.2 Ecological Networks</h3>
+<h3>Ecological Networks</h3>
 <p>In many ecological networks, nodes represent species and edges represents some sort of species interaction. Two prominent examples include food webs and mutualism networks. * In <em>food webs</em>, the edges represent trophic interactions. * In <em>mutualism networks</em>, the edges may represent interactions such as plant-pollinator relations. In mutualism networks in particular, the network may be <em>bipartite</em>: that is, there are two types of nodes (e.g., plants and pollinators), and interactions only occur between two different types of nodes. * In <em>species co-occurrence networks</em>, edges represent the frequency or probability of two species co-occurring in a given space and/or time.</p>
 <div class="figure">
 <img src="assets/images/PlantPollinator.png" alt="Plant-pollinator network: photo by Sffubs via wikimedia, network from Burkle et al. 2013" />
@@ -246,7 +243,7 @@ $(document).ready(function () {
 <hr />
 </div>
 <div id="spatial-networks" class="section level3">
-<h3>4.3 Spatial Networks</h3>
+<h3>Spatial Networks</h3>
 <p>Spatial networks are distinguished by the fact that nodes represent some point in space, e.g., habitats within a landscape, or populations across a region. The edges may represent connectivity of these sites or populations, e.g., predicted or actual movements of individuals or measures of genetic connectivity. Defining edges in these type of networks tend to be a challenge because of the inherent difficulties in observing movements, especially since rare dispersal events can have important impacts in ecological patterns and evolutionary processes.</p>
 <div class="figure">
 <img src="assets/images/Fletcher2013.png" alt="Examples of spatial networks for four different species, each displaying connectivity of populations using movement or genetic data. From Fletcher et al. (2013)." />
@@ -258,7 +255,7 @@ $(document).ready(function () {
 <hr />
 </div>
 <div id="architecture-of-signals-in-animal-communication" class="section level3">
-<h3>4.4 Architecture of Signals in Animal Communication</h3>
+<h3>Architecture of Signals in Animal Communication</h3>
 <p>Recenly, there has been an increase in interest in using networks to describe the architecture of a complex suite of traits such as multicomponent signals in animals. This can be thought of as a <em>systems biology approach to animal communication</em> <a href="http://rspb.royalsocietypublishing.org/content/283/1826/20152889">see Hebets et al. (2016)</a>. For example, we can describe the architecture of the complex suite of plumage, acoustic and morphological traits involved in sexual signaling in barn swallows (Wilkins et al. 2015).</p>
 <div class="figure">
 <img src="assets/images/Wilkins2015.png" alt="An example of a phenotype network describing the traits involved in sexual signaling in barn swallows. From Wilkins et al. (2015)" />

@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>4.1 Intro to Animal Social Networks</title>
+<title>Intro to Animal Social Networks</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,9 +90,6 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -177,7 +174,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -202,9 +199,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">4.1 Intro to Animal Social Networks</h1>
+<h1 class="title toc-ignore">Intro to Animal Social Networks</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/11/19</em></h4>
 
 </div>
 
@@ -236,23 +233,23 @@ head(idat)</code></pre>
 <p>Let’s make this into a directed network, with arrows going from winner to loser:</p>
 <pre class="r"><code>ig=graph_from_data_frame(idat, directed=T)
 plot(ig)</code></pre>
-<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
+<p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-2-1.png" width="576" /></p>
 <p>You’ll notice that this network has some pairs of individuals that have multiple edges connecting them. This is because the same pair of individuals interact multiple times in this dataset.</p>
 <p>Perhaps you want to combine these ‘multiedges’ into weighted edges. That is, each pair of individuals will be connected by one edge, but the number of interactions will be represented by the edge widths. There are a few different ways to do this. Here’s one:</p>
 <pre class="r"><code>E(ig)$weight=1 #make all edge weights = 1
 ig2=simplify(ig, remove.multiple=T, edge.attr.comb=list(weight=sum))
 plot(ig2, edge.width=E(ig2)$weight)</code></pre>
-<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
+<p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-3-1.png" width="576" /></p>
 <p>Since this is a directed network, it may be good to have curved edges so we can detect instances where arrows go both ways. We will also arrange the nodes in a circle so we can see the patterns of edges a bit better.</p>
 <pre class="r"><code>plot(ig2, edge.width=E(ig2)$weight/4, edge.curved=T, layout=layout_in_circle(ig2))</code></pre>
-<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
+<p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-4-1.png" width="576" /></p>
 </div>
 <div id="constructing-networks-from-associations" class="section level2">
 <h2>4.1.2. Constructing networks from associations</h2>
 <p>Association networks are created by connecting nodes that belong to the same ‘group’. For example, individuals that belong to the same club may be considered to be ‘associates’ and therefore connected in a network. Similarly, in animal social networks, individuals that are observed to be in the same flock or herd may be considered to be associated in some way. Keep in mind though that this is an assumption, and the inference of social networks from patterns of group association is often called the ‘gambit of the group’ (Franks et al. 2010).</p>
 <p>Typically, association data would be first be gathered as an individual-by-group matrix (or group-by-individual matrix). That is, individuals are listed in rows and groups (e.g., flocks/herds/schools) listed in columns (or vice-versa). The cell value is 1 if that individual is in that group, and 0 if not.</p>
 <div class="figure">
-<img src="https://www.dropbox.com/s/0suulftm2762l41/flocktable1.png?dl=1" alt="Sample individual-by-group matrix" />
+<img src="https://www.dropbox.com/s/0suulftm2762l41/flocktable1.png?dl=0" alt="Sample individual-by-group matrix" />
 <p class="caption"><em>Sample individual-by-group matrix</em></p>
 </div>
 <p>Let’s play with a sample dataset (<em>Sample_association.csv</em>), which is a snippet of real data from a study on Golden-crowned Sparrows. My colleagues and I collected some data on which individually-marked sparrow was observed together in flocks (typically 2-10 birds), defined as a collection of individuals within a 5m radius during a given observation (Shizuka et al. 2014). Flock membership changes within minutes—some birds leave and other birds join. Here, each individual is presented in the rows, and each flock is presented in columns (‘individual-by-group matrix’). The cell value is 1 if that individual was seen in that flock, and 0 if not.. Let’s take a look at a slice of the data (output not shown):</p>
@@ -327,10 +324,10 @@ adj.m=get_network(t(assoc), association_index=&quot;SRI&quot;) #this function co
 <pre><code>## Generating  25  x  25  matrix</code></pre>
 <pre class="r"><code>assoc.g=graph_from_adjacency_matrix(adj.m, &quot;undirected&quot;, weighted=T) #create a graph object
 plot(assoc.g, edge.width=E(assoc.g)$weight*10) #Since the edge weights are small (values = 0 to 1), let&#39;s multiply by 10 for edge widths.</code></pre>
-<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
 <p>Let’s make it look prettier:</p>
 <pre class="r"><code>plot(assoc.g, edge.width=E(assoc.g)$weight*10, vertex.label=&quot;&quot;, vertex.color=&quot;gold&quot;, edge.color=&quot;cornflowerblue&quot;, vertex.frame.color=&quot;black&quot;)</code></pre>
-<p><img src="04.1_socialnetworks_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
+<p><img src="networktypes_socialnetworks_files/figure-html/unnamed-chunk-7-1.png" width="576" /></p>
 </div>
 </div>
 
