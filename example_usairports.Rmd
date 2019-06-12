@@ -1,5 +1,5 @@
 ---
-title: 'Worked Example: Centrality, Community Structure and Resilience of US Air Transportation Network'
+title: 'Worked Example: Centrality and Community Structure of US Air Transportation Network'
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 

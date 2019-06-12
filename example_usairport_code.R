@@ -42,6 +42,11 @@ length(fg)
 modularity(fg)
 
 library(rnetcarto)
+usair.mat=as_adjacency_matrix(usair, sparse=F)
+rnc=netcarto(usair.mat)
+#modularity
+rnc[[2]]
+#modules
+length(unique(rnc[[1]]$module))
 
-rnc=netcarto(usair)
-usair
+plot(rnc[[1]]$participation, rnc[[1]]$connectivity, pch=19)
