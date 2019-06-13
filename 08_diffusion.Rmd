@@ -222,4 +222,7 @@ When you run this code, the GIF file should actually pop up on your screen. You 
  
  The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
  
+ ---
+ 
+##Next: [9. Random Graphs](09_randomnets.html)
  

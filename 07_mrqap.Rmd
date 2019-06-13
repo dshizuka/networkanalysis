@@ -45,4 +45,4 @@ mrqap.dsp(m1~m2+m3, directed="undirected")
 
 
 
-Next: [8. Diffusion in Networks](10_diffusion.html)
+Next: [8. Diffusion in Networks](08_diffusion.html)

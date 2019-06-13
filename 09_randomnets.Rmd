@@ -200,5 +200,5 @@ So, average path length increases in proportion to the log of network size in a 
 
 ---
 
-##Next: [7. Simulating Networks](07_simulations.html)
+##Next: [10. Simulating Networks](10_simulations.html)
 
