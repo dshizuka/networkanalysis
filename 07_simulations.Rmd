@@ -12,7 +12,7 @@ output:
 
 ```{r setup, include=FALSE}
 library(knitr)
-knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F) 
+knitr::opts_chunk$set(fig.width=4, fig.height=3.5, message=F, warning=F) 
 set.seed(2)
 ```
 
