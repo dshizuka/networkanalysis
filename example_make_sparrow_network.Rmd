@@ -1,5 +1,5 @@
 ---
-title: 'Worked Example: Constructing Flock Network'
+title: 'Worked Example: Constructing Flock Network of Golden-crowned Sparrows'
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -14,17 +14,6 @@ set.seed(2)
 ```
 
 -----
-
-It's one thing to learn the basics the theory, but it's a whole other thing to learn how to actually go from observed data to a network. Because let's be real: we don't often collect data in adjacency matrix, or even edge list format. In this worked example, we will go through how to construct a network from data on flock observations.
-
-Here are the packages you will need to load for this exercise:
-```{r}
-library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
-library(asnipe)
-library(igraph)
-```
-
-<br>
 
 ##1. Constructing sparrow networks from observed group data: Golden-crowned Sparrow flock network
 
@@ -42,6 +31,13 @@ Here, we will walk through how to make these social networks, starting with the 
 <br>
 
 ##2. Accessing the raw data
+
+First, here are the packages you will need to load for this exercise:
+```{r}
+library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
+library(asnipe)
+library(igraph)
+```
 
 The raw flocking data from the Shizuka et al. 2014 paper is available to download from Dryad (www.datadryad.org). You can actually just download the data directly into R without having to download it to your computer first. Here, we will download the flock data for season 2 (which is shown in the figure above.)
 

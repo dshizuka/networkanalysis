@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Worked Example: Constructing Flock Network</title>
+<title>Worked Example: Constructing Flock Network of Golden-crowned Sparrows</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,9 +90,6 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -202,7 +199,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Worked Example: Constructing Flock Network</h1>
+<h1 class="title toc-ignore">Worked Example: Constructing Flock Network of Golden-crowned Sparrows</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
 <h4 class="date"><em>updated 06/12/19</em></h4>
 
@@ -225,13 +222,6 @@ $(document).ready(function () {
 </div>
 
 <hr />
-<p>It’s one thing to learn the basics the theory, but it’s a whole other thing to learn how to actually go from observed data to a network. Because let’s be real: we don’t often collect data in adjacency matrix, or even edge list format. In this worked example, we will go through how to construct a network from data on flock observations.</p>
-<p>Here are the packages you will need to load for this exercise:</p>
-<pre class="r"><code>library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
-library(asnipe)
-library(igraph)</code></pre>
-<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
-<p><br></p>
 <div id="constructing-sparrow-networks-from-observed-group-data-golden-crowned-sparrow-flock-network" class="section level2">
 <h2>1. Constructing sparrow networks from observed group data: Golden-crowned Sparrow flock network</h2>
 <p>One of the most common form of animal social networks is constructed from a series of observations of groups–i.e., herds, flocks, etc. The idea is to identify individuals within groups (and observe many groups), then use the pattern of co-membership in groups to define connections between individuals. In behavioral ecology, this method is often called “the gambit of the group”.</p>
@@ -249,6 +239,10 @@ library(igraph)</code></pre>
 </div>
 <div id="accessing-the-raw-data" class="section level2">
 <h2>2. Accessing the raw data</h2>
+<p>First, here are the packages you will need to load for this exercise:</p>
+<pre class="r"><code>library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
+library(asnipe)
+library(igraph)</code></pre>
 <p>The raw flocking data from the Shizuka et al. 2014 paper is available to download from Dryad (www.datadryad.org). You can actually just download the data directly into R without having to download it to your computer first. Here, we will download the flock data for season 2 (which is shown in the figure above.)</p>
 <pre class="r"><code>flockdat=read.csv(&#39;https://datadryad.org/bitstream/handle/10255/dryad.63925/Flock_Season2_Dryad.csv&#39;)
 head(flockdat)</code></pre>
