@@ -1,5 +1,5 @@
 ---
-title: "9. Intro to Network Regression (MRQAP)"
+title: "7. Intro to Network Regression (MRQAP)"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -45,4 +45,4 @@ mrqap.dsp(m1~m2+m3, directed="undirected")
 
 
 
-Next: [10. Diffusion in Networks](10_diffusion.html)
+Next: [8. Diffusion in Networks](10_diffusion.html)

@@ -1,5 +1,5 @@
 ---
-title: "10. Intro to Diffusion on Networks"
+title: "8. Intro to Diffusion on Networks"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -40,7 +40,7 @@ One of the classical theories on social spread is that the accumulation of indiv
 
 Here, let's explore this paradigm by actually simulating the spread of innovation due to asocial or social processes. 
 
-##10.1 Simulation of asocial changes in state (e.g., asocial learning)
+##8.1 Simulation of asocial changes in state (e.g., asocial learning)
 
 Let’s first consider a situation where each individual in a social network has an inherent probability to adopt the innovation at any given time. 
 
@@ -118,7 +118,7 @@ for(i in 1:20){
 
 <br>
 
-##10.2 Simulation the social transmission of *whatever* state in a random graph
+##8.2 Simulation the social transmission of *whatever* state in a random graph
 
 Now, let's take the same network and try the case where a new innovation spreads socially. That is, an innovation is socially transmitted. 
 
@@ -189,7 +189,7 @@ This looks an awful lot like the theoretical expectation:
 
 ![Figure showing classical predictions of asocial versus social spread of innovations. From [Franz & Nunn (2009)](http://rspb.royalsocietypublishing.org/content/276/1663/1829).](./assets/images/FranzNunn2009.png)
 
-##10.3 Animating social transmission using GIFs
+##8.3 Animating social transmission using GIFs
 
 Now, we will use the results of the simulations in section 11.2 and animate the dynamics of social diffusion on a network. 
 

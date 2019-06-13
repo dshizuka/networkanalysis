@@ -199,7 +199,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><ol start="6" style="list-style-type: decimal">
+<h1 class="title toc-ignore"><ol start="9" style="list-style-type: decimal">
 <li>Random Graphs</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
@@ -209,10 +209,10 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#what-is-a-random-graph">6.1 What is a random graph?</a></li>
-<li><a href="#making-ensembles-of-random-graphs">6.2 Making ensembles of random graphs</a></li>
-<li><a href="#properties-of-random-graphs">6.3 Properties of Random Graphs</a></li>
-<li><a href="#simple-exercise-path-length-and-network-size">6.4 Simple exercise: path length and network size</a></li>
+<li><a href="#what-is-a-random-graph">9.1 What is a random graph?</a></li>
+<li><a href="#making-ensembles-of-random-graphs">9.2 Making ensembles of random graphs</a></li>
+<li><a href="#properties-of-random-graphs">9.3 Properties of Random Graphs</a></li>
+<li><a href="#simple-exercise-path-length-and-network-size">9.4 Simple exercise: path length and network size</a></li>
 <li><a href="#worked-examples">Worked Examples:</a></li>
 <li><a href="#next-7.-simulating-networks">Next: <a href="07_simulations.html">7. Simulating Networks</a></a></li>
 </ul>
@@ -220,7 +220,7 @@ $(document).ready(function () {
 
 <hr />
 <div id="what-is-a-random-graph" class="section level2">
-<h2>6.1 What is a random graph?</h2>
+<h2>9.1 What is a random graph?</h2>
 <p>Thus far, we have spent most of our time playing around with empirical networks. However, it is often very instructive to understand the behavior of networks that are generated using simple mechanisms. The simplest type of random graph is what is called the Erdös-Renyí Random Graph. This is what people typically mean when they say “Random Graph” (though, you will see later, that there are many different ways to be random).</p>
 <p>These come in two flavors:</p>
 <ol style="list-style-type: decimal">
@@ -232,9 +232,9 @@ $(document).ready(function () {
 <pre class="r"><code>library(igraph)
 g1=erdos.renyi.game(20,38,type=&quot;gnm&quot;) 
 g1</code></pre>
-<pre><code>## IGRAPH 579d5b4 U--- 20 38 -- Erdos renyi (gnm) graph
+<pre><code>## IGRAPH 2b12a1a U--- 20 38 -- Erdos renyi (gnm) graph
 ## + attr: name (g/c), type (g/c), loops (g/l), m (g/n)
-## + edges from 579d5b4:
+## + edges from 2b12a1a:
 ##  [1]  1-- 3  2-- 4  4-- 6  5-- 6  1-- 7  5-- 8  6-- 8  3-- 9  6-- 9  1--10
 ## [11]  8--10  1--11 10--11  5--12  6--12  7--12  4--13  9--13 10--14 12--14
 ## [21]  4--15  5--15  1--16  7--16 11--16  6--17 11--17 12--17  6--18  7--19
@@ -242,7 +242,7 @@ g1</code></pre>
 <pre class="r"><code>graph.density(g1) </code></pre>
 <pre><code>## [1] 0.2</code></pre>
 <pre class="r"><code>plot(g1,layout=layout.circle)</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-1-1.png" width="384" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-1-1.png" width="384" /></p>
 <p>This random graph will “look” different each time you run this set of codes—different sets of nodes will be connected (Unless you’ve used the <code>set.seed()</code> function). However, the density will always remain the same (#edges/[#dyads] = 38/[20*19/2] = 0.2).</p>
 <p>Let’s contrast this now with a G(n,p) random graph with n = 20 and p = 0.2. We’ll print the number of edges and the graph density, and plot the graph.</p>
 <pre class="r"><code>g2=erdos.renyi.game(20,0.2,type=&quot;gnp&quot;) 
@@ -251,11 +251,11 @@ ecount(g2)</code></pre>
 <pre class="r"><code>graph.density(g2) </code></pre>
 <pre><code>## [1] 0.1684211</code></pre>
 <pre class="r"><code>plot(g2,layout=layout.circle)</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-2-1.png" width="384" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-2-1.png" width="384" /></p>
 <p>Your output will look approximately like mine, but it’ll be a bit different. This is because now the number of edges is a probabilistic outcome of having p = 0.2 chance of each dyad being connected. This means that if you run this set of codes repeatedly (try it), you will get densities that hover around 0.2.</p>
 </div>
 <div id="making-ensembles-of-random-graphs" class="section level2">
-<h2>6.2 Making ensembles of random graphs</h2>
+<h2>9.2 Making ensembles of random graphs</h2>
 <p>Let’s now try to better understand the behavior of random graphs by creating an ensemble of 100 random graphs with some known property and calculating the mean density of these graphs. We can do this by using “for-loops”</p>
 <p>What we want to do is use the for-loop to calculate densities for 100 random graphs of n = 20 and p = 0.2, and take the mean of these values.</p>
 <pre class="r"><code>densities=vector(length=100) #set up empty vector 
@@ -282,7 +282,7 @@ densities #print the resulting vector (I won&#39;t show this below) mean(densiti
 <p>The result should always be very close to 0.2. You can visualize this data by making a histogram of the densities of your random graphs, and then compare it to the theoretical average by drawing a line at density = 0.2. The peak of the histogram should be near the line.</p>
 <pre class="r"><code>hist(densities)
 abline(v=0.2,lwd=3,lty=2,col=&quot;red&quot;) #draw a vertical line at x = 0.2. Make this line width = 3, line type = 2 (dashed line), and the line color = red</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-4-1.png" width="288" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-4-1.png" width="288" /></p>
 <p>While we’re at it, let’s visualize a set of random graphs. Here, we are going to first set up the plotting region using the <code>par()</code> function. We will divide up the plotting region into a 3x3 grid to accommodate 9 figures.</p>
 <pre class="r"><code># Make a plot of 9 random graphs
 par(mfrow=c(3,3),mar=c(1,1,1,1)) #the mfrow= argument sets up the number of rows and columns within the plotting region. mar= argument sets the margins of the figures:c(bottom,left,top,right).
@@ -290,10 +290,10 @@ for (i in 1:9){
 r=erdos.renyi.game(20,p=0.2)
 plot(r,layout=layout.circle,edge.color=&quot;black&quot;,edge.width=2,vertex.color=&quot;red&quot;,vertex.label=&quot;&quot;) #a bunch of arguments to make the figure look pretty.
 }</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
 </div>
 <div id="properties-of-random-graphs" class="section level2">
-<h2>6.3 Properties of Random Graphs</h2>
+<h2>9.3 Properties of Random Graphs</h2>
 <p>So, why are we fooling around with random graphs anyway? Well, the main reason is that it serves as a good <em>null hypothesis</em> of what the structure of a basic system of <em>n</em> components and <em>m</em> connections or <em>p</em> probability of connections look like, all else equal. The great thing about Erdös-Renyí Random Graphs is that the process to generate them is extremely simple, and the properties of the resulting system is highly predictable and simple.</p>
 <p>An example: we can’t know exactly what the mean degree or density of any given random graph is, but we can know what the average value of those things are given we make enough random graphs with the same property.</p>
 <p>Here are some basic properties of random graphs of size <em>n</em> and probability of links <em>p</em>:</p>
@@ -326,11 +326,11 @@ hist(mean.k)
 abline(v=(n-1)*p,lty=2,col=&quot;red&quot;) # expected mean degree, which is (n-1)*p
 hist(C.glob)
 abline(v=p,lty=2,col=&quot;red&quot;) #expected global clustering coefficient, which is simply p</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-7-1.png" width="768" /></p>
 <p>We can see that the distribution of values fit our expectations.</p>
 </div>
 <div id="simple-exercise-path-length-and-network-size" class="section level2">
-<h2>6.4 Simple exercise: path length and network size</h2>
+<h2>9.4 Simple exercise: path length and network size</h2>
 <p>We can use the same scheme for creating ensembles of random graphs to explore how properties of these networks change with size. As an example, let’s explore how average path length of a network changes as we add more nodes.</p>
 <p>As an example, let’s explore the relationship between the size of the network and its average path length. Recall that here, a “path” means the shortest path (aka geodesic path) between any pair of nodes. As the network grows in size, we would expect that the average path length will increase… but how fast? Is it proportional to the number of nodes? Let’s explore this question using simulations of random graphs.</p>
 <p>First, let’s think about what we want to do… We want to build random graphs of varying size: let’s say we’ll make n = 10, 20, 30, … to 100. To get a vector of this sequence of numbers, we’ll use a function called <code>seq()</code>:</p>
@@ -373,10 +373,10 @@ paths.avg</code></pre>
 <p>Now let’s plot these results.</p>
 <pre class="r"><code>x=seq(10,100,10) #the x-axis is going to be 10, 20, 30,...100
 plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;, las=1)</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-11-1.png" width="384" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-11-1.png" width="384" /></p>
 <p>As you can see, the average path length does not increase as fast as network size: it has only doubled, while network size has increased 10-fold. Now, let’s plot make the x-axis a log-scale. To do this, we just add another argument: log=“x”).</p>
 <pre class="r"><code>plot(x,paths.avg,type=&quot;b&quot;,pch=20,xlab=&quot;N&quot;,ylab=&quot;Average Path Length&quot;,log=&quot;x&quot;,las=1)</code></pre>
-<p><img src="06_randomnets_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
+<p><img src="09_randomnets_files/figure-html/unnamed-chunk-12-1.png" width="384" /></p>
 <p>So, average path length increases in proportion to the log of network size in a random graph. This makes a lot of sense: the number of nodes that are <em>s</em> steps away scales exponentially with the average degree–if everyone knows 5 people, you can potentially reach up to 5^2 = 25 people in two steps, 5^3 = 125 people in three steps, etc. This means that average path length increases more slowly than network size.</p>
 <hr />
 </div>

@@ -1,5 +1,5 @@
 ---
-title: "7. Simulating Networks"
+title: "10. Simulating Networks"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -29,7 +29,7 @@ library(igraph)
 
 <br>
 
-##7.1. Flock network with size-related variation in gregariousness
+##10.1. Flock network with size-related variation in gregariousness
 
 Let's imagine a scenario in which individuals vary in how often they join groups (e.g., flocks). In addition, let's imagine that individuals also vary in a trait (e.g., body size) that correlates with gregariousness--the tendency to join flocks. In this fictitious scenario, will we find correlation between the trait and centrality?
 
@@ -93,4 +93,4 @@ cor.test(trait, degree(g))
 
 ---
 
-Next: [8. Permutations and Randomizations](08_permutations.html)
+

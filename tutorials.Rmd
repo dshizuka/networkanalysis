@@ -33,15 +33,15 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[5. Measuring Networks Part 2: Community structure and Assortment](05_community.html)
 
-###[6. Random Graphs](06_randomnets.html)
+###[6. Testing Your Network: Permuations and Randomizations](06_permutations.html)
 
-###[7. Simulating Networks](07_simulations.html)
+###[7. Intro to Network Regression (MRQAP)](07_mrqap.html)
 
-###[8. Testing Your Network: Permuations and Randomizations](08_permutations.html)
+###[8. Diffusion in Networks](08_diffusion.html)
 
-###[9. Intro to Network Regression (MRQAP)](09_mrqap.html)
+###[9. Random Graphs](09_randomnets.html)
 
-###[10. Diffusion in Networks](10_diffusion.html)
+###[10. Simulating Networks](10_simulations.html)
 
 --------
 

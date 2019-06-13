@@ -199,7 +199,7 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><ol start="7" style="list-style-type: decimal">
+<h1 class="title toc-ignore"><ol start="10" style="list-style-type: decimal">
 <li>Simulating Networks</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
@@ -209,7 +209,7 @@ $(document).ready(function () {
 
 <div id="TOC">
 <ul>
-<li><a href="#flock-network-with-size-related-variation-in-gregariousness">7.1. Flock network with size-related variation in gregariousness</a></li>
+<li><a href="#flock-network-with-size-related-variation-in-gregariousness">10.1. Flock network with size-related variation in gregariousness</a></li>
 </ul>
 </div>
 
@@ -220,7 +220,7 @@ $(document).ready(function () {
 library(igraph)</code></pre>
 <p><br></p>
 <div id="flock-network-with-size-related-variation-in-gregariousness" class="section level2">
-<h2>7.1. Flock network with size-related variation in gregariousness</h2>
+<h2>10.1. Flock network with size-related variation in gregariousness</h2>
 <p>Let’s imagine a scenario in which individuals vary in how often they join groups (e.g., flocks). In addition, let’s imagine that individuals also vary in a trait (e.g., body size) that correlates with gregariousness–the tendency to join flocks. In this fictitious scenario, will we find correlation between the trait and centrality?</p>
 <p>Let’s start by setting up a population of 50 individuals with a trait distributed normally (i.e., mean of 20 and standard deviation of 5). We can use the <code>rnorm()</code> function to generate these random values</p>
 <p>Note that we are going to sort the sizes so that the largest individual is listed first.</p>
@@ -231,7 +231,7 @@ trait=sort(rnorm(n,mean=20, sd=5), decreasing = T) </code></pre>
 <pre class="r"><code>p=sort(runif(n, min=0.01, max=0.1)) #gregariousness
 
 plot(trait, p, ylab=&quot;Gregariousness&quot;, xlab=&quot;Trait Value&quot;) #see that gregariousness and trait are correlated</code></pre>
-<p><img src="07_simulations_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
+<p><img src="10_simulations_files/figure-html/unnamed-chunk-3-1.png" width="384" /></p>
 <p>Ok, now let’s simulate some flock observations. First, we’ll choose how many flocks to observe. Totally arbitrarily, let’s just say we’ll observe 100 flocks.</p>
 <pre class="r"><code>f=100</code></pre>
 <p>Then, we’ll implement a simulation that will ultimately generate an individual-by-group matrix, whose dimensions will be 50 rows x 100 columns. The simulation will go as follows: For each cell, the probability that the individual (rows) is found in that flock (column) depends on that individual’s gregariousness value, <span class="math inline">\(p\)</span></p>
@@ -249,10 +249,10 @@ for(i in 1:n){
 g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)</code></pre>
 <p>Let’s plot the resulting network, with node size proportional to the individual’s trait value.</p>
 <pre class="r"><code>plot(g,vertex.size=trait/2, vertex.label=&quot;&quot;, edge.width=E(g)$weight*5)</code></pre>
-<p><img src="07_simulations_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
+<p><img src="10_simulations_files/figure-html/unnamed-chunk-7-1.png" width="480" /></p>
 <p>Now, let’s plot the relationship between trait value and the individual’s degree centrality.</p>
 <pre class="r"><code>plot(trait, degree(g), pch=19, col=&quot;tomato&quot;)</code></pre>
-<p><img src="07_simulations_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
+<p><img src="10_simulations_files/figure-html/unnamed-chunk-8-1.png" width="480" /></p>
 <p>As you can see, there is quite a strong correlation between trait and social position of the individual.</p>
 <pre class="r"><code>cor.test(trait, degree(g))</code></pre>
 <pre><code>## 
@@ -267,7 +267,6 @@ g=graph_from_adjacency_matrix(adj, &quot;undirected&quot;, weighted=T)</code></p
 ##        cor 
 ## -0.7577462</code></pre>
 <hr />
-<p>Next: <a href="08_permutations.html">8. Permutations and Randomizations</a></p>
 </div>
 
 

@@ -91,9 +91,6 @@ img {
 .tabbed-pane {
   padding-top: 12px;
 }
-.html-widget {
-  margin-bottom: 20px;
-}
 button.code-folding-btn:focus {
   outline: none;
 }
@@ -177,7 +174,7 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Network Analysis Tutorials</a>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
@@ -202,23 +199,24 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore"><ol start="8" style="list-style-type: decimal">
+<h1 class="title toc-ignore"><ol start="6" style="list-style-type: decimal">
 <li>Testing against the Null Hypothesis: Permutations and Randomizations</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 07/23/18</em></h4>
+<h4 class="date"><em>updated 06/12/19</em></h4>
 
 </div>
 
 <div id="TOC">
 <ul>
-<li><a href="#node-label-permutations">8.1 Node-label Permutations</a></li>
-<li><a href="#edge-permutations">8.2 Edge Permutations</a><ul>
-<li><a href="#unconstrained-edge-permutations">8.2.1 Unconstrained edge permutations</a></li>
-<li><a href="#edge-rewiring-while-keeping-the-degree-distribution-constant">8.2.2. Edge rewiring while keeping the degree distribution constant</a></li>
-<li><a href="#group-membership-permutation">8.3 Group membership permutation</a></li>
+<li><a href="#node-label-permutations">6.1 Node-label Permutations</a></li>
+<li><a href="#edge-permutations">6.2 Edge Permutations</a><ul>
+<li><a href="#unconstrained-edge-permutations">6.2.1 Unconstrained edge permutations</a></li>
+<li><a href="#edge-rewiring-while-keeping-the-degree-distribution-constant">6.2.2. Edge rewiring while keeping the degree distribution constant</a></li>
+<li><a href="#group-membership-permutation">6.3 Group membership permutation</a></li>
 </ul></li>
-<li><a href="#using-randomizations-for-hypothesis-testing">8.4 Using Randomizations for Hypothesis Testing</a></li>
+<li><a href="#using-randomizations-for-hypothesis-testing">6.4 Using Randomizations for Hypothesis Testing</a></li>
+<li><a href="#next-7.-network-regression">Next: <a href="07_mrqap.html">7. Network Regression</a></a></li>
 </ul>
 </div>
 
@@ -232,14 +230,14 @@ library(assortnet)</code></pre>
 <p>The problem with this simplistic question, however, is that no real network is ever random. There are a multitude of factors that make networks deviate from an idealized Erdös-Renyí random graph (see <a href="07_randomnets.html">7. Random Graphs</a>)</p>
 <p>Because most networks are complex and relational data do not conform to the requirement of non-independence of data, we often use randomizations/permutations to generate null models against which we can compare the empirical data. Here, we focus narrowly on some classic forms of null model hypothesis testing using randomizations. In the context of animal social networks, there have been a couple of good review and tutorial of this method (Croft et al. 2011; Farine &amp; Whitehead 2015). We will provide a quick overview here.</p>
 <div id="node-label-permutations" class="section level2">
-<h2>8.1 Node-label Permutations</h2>
+<h2>6.1 Node-label Permutations</h2>
 <p>Node-label permutations involve shuffling the node type or node values (e.g., sex, size, etc.) randomly across all nodes in a network, while keeping the edges the same. This ensures that the inherent structural pattern of the network remains the same, but the node values are randomized. This type of randomization scheme may be appropriate when you are interested in understanding how node attributes affect connectivity of nodes, e.g.:</p>
 <ol style="list-style-type: lower-alpha">
 <li>testing correlations between node attribute and network position</li>
 <li>using as null model for assortativity</li>
 </ol>
 <div class="figure">
-<img src="08_permutations_files/figure-html/unnamed-chunk-3-1.png" alt="Illustration of node label permutation: The node labels in the large graph has been permuted in three different versions." width="576" />
+<img src="06_permutations_files/figure-html/unnamed-chunk-3-1.png" alt="Illustration of node label permutation: The node labels in the large graph has been permuted in three different versions." width="576" />
 <p class="caption">
 Illustration of node label permutation: The node labels in the large graph has been permuted in three different versions.
 </p>
@@ -248,7 +246,7 @@ Illustration of node label permutation: The node labels in the large graph has b
 <p><br></p>
 </div>
 <div id="edge-permutations" class="section level2">
-<h2>8.2 Edge Permutations</h2>
+<h2>6.2 Edge Permutations</h2>
 <p>May be appropriate when:</p>
 <ul>
 <li>Not necessarily testing for the roles of particular node types</li>
@@ -256,11 +254,11 @@ Illustration of node label permutation: The node labels in the large graph has b
 <li>Must be careful about exactly how we permute edges–do we want to preserve any aspect of the connectivity of nodes?</li>
 </ul>
 <div id="unconstrained-edge-permutations" class="section level3">
-<h3>8.2.1 Unconstrained edge permutations</h3>
+<h3>6.2.1 Unconstrained edge permutations</h3>
 <p>One straight-forward way to randomize edges in a network is to generate ‘random graphs’ in which there are the same number of nodes and edges as the empirical network, but the edges are now distributed randomly. One can create such networks by generating a ‘Erdös-Renyí random graph’ or by ‘rewiring’ the network randomly.</p>
 </div>
 <div id="edge-rewiring-while-keeping-the-degree-distribution-constant" class="section level3">
-<h3>8.2.2. Edge rewiring while keeping the degree distribution constant</h3>
+<h3>6.2.2. Edge rewiring while keeping the degree distribution constant</h3>
 <p>Alternatively, we may want to ask whether the degree distribution itself may affect the clustering coefficient of the network. That is, if the distribution of node degrees is non-random, that alone may cause the clustering coefficient to be larger than expected by Erdös-Renyí random graph. We can implement this with the <code>rewire()</code> function as well, with a different method. I’ll briefly explain how this edge rewiring method works. This method is sometimes called the “switching” algorithm because it works by identifying two edges that connect different pairs of edges and then switches the ends of these nodes (illustrated below). Milo et al. (2003) found that this method works well and produces a randomized graph after implementing this switching step <span class="math inline">\(m\)</span> number of times, where <span class="math inline">\(m\)</span> is the number of edges in the network.</p>
 <div class="figure">
 <img src="assets/images/rewire.png" alt="Figure illustrating the rewiring algorithm to preserve the degree distribution. The numbers in the nodes represent their degrees. In one step of the switching algorithm, we identify a pair of connected nodes that themselves are not connected to each other (represented in different colors), and we simply swap the ends of the two edges. You can see that this does not change the degree of the nodes." />
@@ -268,7 +266,7 @@ Illustration of node label permutation: The node labels in the large graph has b
 </div>
 </div>
 <div id="group-membership-permutation" class="section level3">
-<h3>8.3 Group membership permutation</h3>
+<h3>6.3 Group membership permutation</h3>
 <p>The edge randomization with constant degree sequence as described above preserves much more of the network structure than a completely random graph. However, these edge randomization methods are both using association indices that are non-random based on the group membership of individuals. An alternative way to conduct a randomization is to permute the group membership data (i.e., the original group-by-individual matrix) such that we randomize which group (e.g., flock) that each individual is in. Now I will explain how the group membership swapping works. This method is sometimes called the “swap algorithm”, or “flipping procedure”. It is actually the same algorithm that community ecologists use to generate a null model for species co-occurrences (see Manly 1995; Gotelli 2000; Ulrich &amp; Gotelli 2007). It has been adapted for generating a null model for social associations in animals by Bejder et al. (1998) and advocated for use in social network studies (Whitehead et al. 2005).</p>
 <p>Step 1: Identify a 2x2 sub-matrix within the bipartite matrix that looks like: <span class="math inline">\(\begin{bmatrix} 0 &amp; 1 \\ 1 &amp; 0 \\ \end{bmatrix}\)</span></p>
 <p>Step 2: Swap the row/columns so that the 2x2 matrix looks like: <span class="math inline">\(\begin{bmatrix} 1 &amp; 0 \\ 0 &amp; 1 \\ \end{bmatrix}\)</span></p>
@@ -280,7 +278,7 @@ Illustration of node label permutation: The node labels in the large graph has b
 </div>
 </div>
 <div id="using-randomizations-for-hypothesis-testing" class="section level2">
-<h2>8.4 Using Randomizations for Hypothesis Testing</h2>
+<h2>6.4 Using Randomizations for Hypothesis Testing</h2>
 <p>These randomization procedures can be used as a null model–i.e., a model to generate a distribution of the value of interest (e.g., node-level or global measure) that is expected under the null hypothesis. Then, what we can do is to compare the empirical value against this null distribution.</p>
 <p>The choice of permutation strategy depends fundamentally on the question you want to ask.</p>
 <p>Is your question about the role of node attributes in the structure of the network? If so, then you might consider a node label permutation method.</p>
@@ -288,6 +286,10 @@ Illustration of node label permutation: The node labels in the large graph has b
 <p>If your question is about the structural property of the network, but your network is based on group co-membership, then you will want to conduct the group membership permutation method.</p>
 <p>I highly recommend <a href="https://besjournals.onlinelibrary.wiley.com/doi/abs/10.1111/2041-210X.12772">Farine (2017)</a> for a guide to randomization procedures.</p>
 <p>I recommend going through some of the worked examples to get practice using these different types of randomization procedures.</p>
+<hr />
+</div>
+<div id="next-7.-network-regression" class="section level2">
+<h2>Next: <a href="07_mrqap.html">7. Network Regression</a></h2>
 </div>
 
 

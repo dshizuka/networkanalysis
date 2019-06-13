@@ -194,7 +194,7 @@ plot(dat$p, dat$z, pch=19, ylab="Within-Community Degree (z)", xlab="Participati
 ```
 
 In the paper, Guimerà and colleagues heuristically into several parts. Here is a simplified version of what they do:
-![](example_usairports_files/USair_pxz_colorsections.jpg)
+![](assets/USair_pxz_colorsections.jpg)
 
 Under this framework, we can identify several different types of roles.
 

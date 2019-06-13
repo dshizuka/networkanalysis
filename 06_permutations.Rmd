@@ -1,5 +1,5 @@
 ---
-title: "8. Testing against the Null Hypothesis: Permutations and Randomizations"
+title: "6. Testing against the Null Hypothesis: Permutations and Randomizations"
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -32,7 +32,7 @@ The problem with this simplistic question, however, is that no real network is e
 
 Because most networks are complex and relational data do not conform to the requirement of non-independence of data, we often use randomizations/permutations to generate null models against which we can compare the empirical data. Here, we focus narrowly on some classic forms of null model hypothesis testing using randomizations. In the context of animal social networks, there have been a couple of good review and tutorial of this method (Croft et al. 2011; Farine & Whitehead 2015). We will provide a quick overview here.
 
-##8.1 Node-label Permutations
+##6.1 Node-label Permutations
 
 Node-label permutations involve shuffling the node type or node values (e.g., sex, size, etc.) randomly across all nodes in a network, while keeping the edges the same. This ensures that the inherent structural pattern of the network remains the same, but the node values are randomized. This type of randomization scheme may be appropriate when you are interested in understanding how node attributes affect connectivity of nodes, e.g.:
 
@@ -75,7 +75,7 @@ plot(g3, vertex.color=c("red", "gold")[V(g3)$trait.random3], vertex.label="", la
 <br>
 
 
-##8.2 Edge Permutations
+##6.2 Edge Permutations
 
 May be appropriate when:
 
@@ -83,18 +83,18 @@ May be appropriate when:
 * Testing whether structure of network is non-random... but what is random?
 * Must be careful about exactly how we permute edges--do we want to preserve any aspect of the connectivity of nodes?
 
-###8.2.1 Unconstrained edge permutations
+###6.2.1 Unconstrained edge permutations
 
 One straight-forward way to randomize edges in a network is to generate ‘random graphs’ in which there are the same number of nodes and edges as the empirical network, but the edges are now distributed randomly. One can create such networks by generating a ‘Erdös-Renyí random graph’ or by ‘rewiring’ the network randomly.
 
-###8.2.2. Edge rewiring while keeping the degree distribution constant
+###6.2.2. Edge rewiring while keeping the degree distribution constant
 
 Alternatively, we may want to ask whether the degree distribution itself may affect the clustering coefficient of the network. That is, if the distribution of node degrees is non-random, that alone may cause the clustering coefficient to be larger than expected by Erdös-Renyí random graph. We can implement this with the `rewire()` function as well, with a different method.
 I’ll briefly explain how this edge rewiring method works. This method is sometimes called the “switching” algorithm because it works by identifying two edges that connect different pairs of edges and then switches the ends of these nodes (illustrated below). Milo et al. (2003) found that this method works well and produces a randomized graph after implementing this switching step $m$ number of times, where $m$ is the number of edges in the network.
 
 ![*Figure illustrating the rewiring algorithm to preserve the degree distribution. The numbers in the nodes represent their degrees. In one step of the switching algorithm, we identify a pair of connected nodes that themselves are not connected to each other (represented in different colors), and we simply swap the ends of the two edges. You can see that this does not change the degree of the nodes.*](./assets/images/rewire.png)
 
-###8.3 Group membership permutation
+###6.3 Group membership permutation
 
 The edge randomization with constant degree sequence as described above preserves much more of the network structure than a completely random graph. However, these edge randomization methods are both using association indices that are non-random based on the group membership of individuals. An alternative way to conduct a randomization is to permute the group membership data (i.e., the original group-by-individual matrix) such that we randomize which group (e.g., flock) that each individual is in. Now I will explain how the group membership swapping works. This method is sometimes called the “swap algorithm”, or “flipping procedure”. It is actually the same algorithm that community ecologists use to generate a null model for species co-occurrences (see Manly 1995; Gotelli 2000; Ulrich & Gotelli 2007). It has been adapted for generating a null model for social associations in animals by Bejder et al. (1998) and advocated for use in social network studies (Whitehead et al. 2005).
 
@@ -109,7 +109,7 @@ $\begin{bmatrix} 1 & 0 \\ 0 & 1 \\ \end{bmatrix}$
 
 There are generally two ways to generate a P-value using the group membership swapping algorithm. First, one could repeat the swaps until the test statistic of interest (modularity in this case) stabilizes to a range of values corresponding to a randomized matrix, and then repeat this procedure a large number of times, say 1,000 times, to calculate a distribution of the test statistic under the null model (let’s call it the ‘global test’). Alternatively, one can run a large number of swaps from a single initial matrix, calculating a test statistic after each ‘swap’ of the matrix, and compare this distribution against the empirical test statistic (‘serial test’). Manly (1995) discusses why the serial method is a valid method for testing whether the empirical matrix is non-random as long as we conduct a very large number of swaps. I will not get into the logic behind this: I highly recommend reading the Manly (1995) and references therein. The ‘serial test’ method is much more computationally efficient than the ‘global test’.
 
-##8.4 Using Randomizations for Hypothesis Testing
+##6.4 Using Randomizations for Hypothesis Testing
 
 These randomization procedures can be used as a null model--i.e., a model to generate a distribution of the value of interest (e.g., node-level or global measure) that is expected under the null hypothesis. Then, what we can do is to compare the empirical value against this null distribution.
 
@@ -125,4 +125,6 @@ I highly recommend [Farine (2017)](https://besjournals.onlinelibrary.wiley.com/d
 
 I recommend going through some of the worked examples to get practice using these different types of randomization procedures. 
 
+---
 
+##Next: [7. Network Regression](07_mrqap.html)
