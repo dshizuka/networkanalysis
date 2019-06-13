@@ -9,9 +9,17 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4, warning=F, message = F)
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4, fig.align='center',warning=F, message = F)
 set.seed(2)
 ```
+
+---
+
+```{r, echo=F}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Pegasus_Airlines_Boeing_737-800%2C_Munich%2C_April_2019.jpg/320px-Pegasus_Airlines_Boeing_737-800%2C_Munich%2C_April_2019.jpg")
+```
+
+---
 
 The air transportation network--a network of airports connected by airline routes--is a great example of a spatial network. In a now-classic study, [Guimerà et al. (2005)](https://www.pnas.org/content/102/22/7794.short) used the world-wide air transportation network to tackle the question of how to measure the importance of nodes in a network, and how different measures can tell us different things. They also propose some alternative measures of position that tells a little bit more about the roles that different nodes play in a complex network. In this exercise we will be a little bit further to think about methods for testing the *resilience* of networks to disturbance using virtual knockout experiments. Researchers in a wide variety of fields use these virtual knockouts as one tool to understand things like:
 
@@ -75,6 +83,7 @@ Now, let’s take a look at this network:
 ```{r}
 set.seed(3)
 l=layout_with_fr(usair)
+par(mar=c(1,1,1,1))
 plot(usair, layout=l, vertex.label="", vertex.size=3)
 ```
 
@@ -194,7 +203,12 @@ plot(dat$p, dat$z, pch=19, ylab="Within-Community Degree (z)", xlab="Participati
 ```
 
 In the paper, Guimerà and colleagues heuristically into several parts. Here is a simplified version of what they do:
-![](assets/USair_pxz_colorsections.jpg)
+
+```{r, echo=F, out.width="50%"}
+knitr::include_graphics("assets/USair_pxz_colorsections.jpg")
+```
+
+
 
 Under this framework, we can identify several different types of roles.
 

@@ -213,6 +213,9 @@ $(document).ready(function () {
 </ul>
 </div>
 
+<hr />
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Pegasus_Airlines_Boeing_737-800%2C_Munich%2C_April_2019.jpg/320px-Pegasus_Airlines_Boeing_737-800%2C_Munich%2C_April_2019.jpg" style="display: block; margin: auto;" /></p>
+<hr />
 <p>The air transportation network–a network of airports connected by airline routes–is a great example of a spatial network. In a now-classic study, <a href="https://www.pnas.org/content/102/22/7794.short">Guimerà et al. (2005)</a> used the world-wide air transportation network to tackle the question of how to measure the importance of nodes in a network, and how different measures can tell us different things. They also propose some alternative measures of position that tells a little bit more about the roles that different nodes play in a complex network. In this exercise we will be a little bit further to think about methods for testing the <em>resilience</em> of networks to disturbance using virtual knockout experiments. Researchers in a wide variety of fields use these virtual knockouts as one tool to understand things like:</p>
 <ul>
 <li>the potential effects of node failure on power grids, transportation networks and information flow</li>
@@ -284,8 +287,9 @@ usair=decomp[[1]]</code></pre>
 <p>Now, let’s take a look at this network:</p>
 <pre class="r"><code>set.seed(3)
 l=layout_with_fr(usair)
+par(mar=c(1,1,1,1))
 plot(usair, layout=l, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-5-1.png" width="576" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-6-1.png" width="576" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="relationship-between-degree-and-betweenness-of-u.s.-airports" class="section level2">
@@ -293,7 +297,7 @@ plot(usair, layout=l, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
 <p>How should we define the ‘importance’ of an airport in this network? Degree and betweenness are the two most commonly used measure of node centrality (i.e., measures of node position in a network), and in this case, they represent two different measures of importance. Degree centrality tell us how many airports one fly to directly from a given airport. In contrast, betweenness centrality (which is the number of geodesic paths go through the node) gives us a sense for how important the airport is as a transfer location for people getting from one part of the country to another. Note that we are using a simplified network here that only counts unique flight routes, so we are not accounting for the number of replicated flights or the size of the planes.</p>
 <p>Let’s explore the relationship between degree and betweenness by generating a simple scatterplot:</p>
 <pre class="r"><code>plot(degree(usair), betweenness(usair), pch=19) #pch=19 uses filled circles</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-6-1.png" width="576" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Compare this to Figure 2a in Guimerà et al. (2005). We can see that in both cases, there is a strong relationship between degree and betweenness, but there are a few nodes that have high betweenness despite intermediate degree. When looking at the U.S. domestic flights only, there is one airport that stands out for having a huge betweenness value but moderate degree. To see what some of these points are, let’s first take a look at the top 10 airports in terms of node degree:</p>
 <pre class="r"><code>V(usair)$name[order(degree(usair), decreasing=T)][1:10] #order() gives us the element number in order of ranking.</code></pre>
 <pre><code>##  [1] &quot;ATL&quot; &quot;DEN&quot; &quot;ORD&quot; &quot;MSP&quot; &quot;DFW&quot; &quot;DTW&quot; &quot;LAS&quot; &quot;IAH&quot; &quot;CLT&quot; &quot;LAX&quot;</code></pre>
@@ -306,7 +310,7 @@ plot(usair, layout=l, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
 <pre class="r"><code>longlat=matrix(c(V(usair)$long, V(usair)$lat), ncol=2) #set up layout matrix 
 par(mar=c(1,1,1,1))
 plot(usair, layout=longlat, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-9-1.png" width="576" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>You can see the outline of the US here. Now note how many airports there are in Alaska alone! This makes sense because there are so few roads in Alaska relative to landmass that flying is the main mode of transportation between remote towns. Thus, the airports in Alaska are not well connected in terms of the number of places you can get to by direct flight, but the hubs that connect Alaska to the rest of the U.S. (e.g., Anchorage and Seattle) are disproportionately important in terms of betweenness centrality.</p>
 <p>The main point of this exercise is to consider what different indices of centrality are measuring and make sure you consider the complex structure of the network so that you can make sense of what that index is telling you.</p>
 <hr />
@@ -325,7 +329,7 @@ fgmembership=membership(fg)
 colors.fg=c(brewer.pal(12, name=&quot;Paired&quot;), rep(&quot;white&quot;,2)) #first 12 colors from RColorBrewer, last 2 communities are white
 par(mar=c(1,1,1,1))
 plot(usair, layout=longlat, vertex.label=&quot;&quot;, vertex.color=colors.fg[fgmembership], vertex.size=5)</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-11-1.png" width="576" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>What you can see in these figures is that the U.S. transportation system is broken up into several communities that make some geographic sense: Alaska, West Coast/Hawaii, Eastern/Puerto Rico. There are also a few small, very local subnetworks like the Kenai Peninsula and Southern Alaska or the Northern Great Plains. If you look carefully, there are even a few small clusters that don’t make much geographic sense–some of these are subnetworks of private/corporate airports or Air Force bases.</p>
 <p>Guimerà et al. (2005) proposed that we can use this community structure to identify the roles that nodes play within and across their networks. They propose two measures in particular: Within-Community Degree (z) and Participation Coefficient (P). They define them as follows:</p>
 <p>The Within-community Degree of node <span class="math inline">\(i\)</span> is:</p>
@@ -356,8 +360,9 @@ p[i]=1-sum((tab/sum(tab))^2)
 dat=data.frame(name=V(usair)$name, z=z[match(V(usair)$name,names(z))], p=p)</code></pre>
 <p>Let’s plot the z-P phase-space, as in Figure 4a of Guimerà et al. (2005):</p>
 <pre class="r"><code>plot(dat$p, dat$z, pch=19, ylab=&quot;Within-Community Degree (z)&quot;, xlab=&quot;Participation Coefficient (p)&quot;)</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-13-1.png" width="576" /></p>
-<p>In the paper, Guimerà and colleagues heuristically into several parts. Here is a simplified version of what they do: <img src="assets/USair_pxz_colorsections.jpg" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>In the paper, Guimerà and colleagues heuristically into several parts. Here is a simplified version of what they do:</p>
+<p><img src="assets/USair_pxz_colorsections.jpg" width="50%" style="display: block; margin: auto;" /></p>
 <p>Under this framework, we can identify several different types of roles.</p>
 <ul>
 <li>Most nodes are considered “Peripherals”, with relatively low <span class="math inline">\(z\)</span> and low <span class="math inline">\(P\)</span>.</li>
