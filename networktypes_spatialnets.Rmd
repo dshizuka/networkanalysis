@@ -107,23 +107,26 @@ register_google(key=" youhavetoenteryourkeyhere ")
 ```{r, echo=F}
 library(popgraph)
 library(ggmap)
-register_google(key=" AIzaSyA3VUtWgt2rYUmoGaRpj3kcd7OEAA6J6D4 ")
 ```
-
 After you have registered your API key, you can run this:
 
-```{r}
+```{r, eval=F}
 location = c( mean(V(g)$x), mean(V(g)$y))
-map = get_map(location,maptype="satellite", zoom=6) #use ggmap to get a satellite image of the study area.
+map = get_map(location ,maptype="satellite", zoom=6) #use ggmap to get a satellite image of the study area.
 p = ggmap( map ) #plot will include this image
 p = p + geom_edgeset(aes(x=x, y=y), g, color="white") #plot will also include the network edges, in white
 p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=4) #plot will also include the network nodes, color-coded by region
 p #plot color
 ```
 
+```{r, echo=F, fig.cap="*Lophocereus schottii*, via wikimedia commons"}
+knitr::include_graphics("assets/images/popgraph_google.jpg")
+```
+
 If you don't want to get an API key, you can use other databases supported in the `ggmap` package, such as `get_stamenmap()`. This will not let you do a satellite image, but you can make pretty graphs nonetheless.
 
 ```{r}
+location = c( mean(V(g)$x), mean(V(g)$y))
 map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source="stamen", maptype="watercolor")
 
 p=ggmap(map)

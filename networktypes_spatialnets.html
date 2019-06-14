@@ -323,20 +323,26 @@ library(ggmap)
 register_google(key=&quot; youhavetoenteryourkeyhere &quot;)</code></pre>
 <p>After you have registered your API key, you can run this:</p>
 <pre class="r"><code>location = c( mean(V(g)$x), mean(V(g)$y))
-map = get_map(location,maptype=&quot;satellite&quot;, zoom=6) #use ggmap to get a satellite image of the study area.
+map = get_map(location ,maptype=&quot;satellite&quot;, zoom=6) #use ggmap to get a satellite image of the study area.
 p = ggmap( map ) #plot will include this image
 p = p + geom_edgeset(aes(x=x, y=y), g, color=&quot;white&quot;) #plot will also include the network edges, in white
 p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=4) #plot will also include the network nodes, color-coded by region
 p #plot color</code></pre>
-<p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="figure" style="text-align: center">
+<img src="assets/images/popgraph_google.jpg" alt="*Lophocereus schottii*, via wikimedia commons" width="566" />
+<p class="caption">
+<em>Lophocereus schottii</em>, via wikimedia commons
+</p>
+</div>
 <p>If you don’t want to get an API key, you can use other databases supported in the <code>ggmap</code> package, such as <code>get_stamenmap()</code>. This will not let you do a satellite image, but you can make pretty graphs nonetheless.</p>
-<pre class="r"><code>map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source=&quot;stamen&quot;, maptype=&quot;watercolor&quot;)
+<pre class="r"><code>location = c( mean(V(g)$x), mean(V(g)$y))
+map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source=&quot;stamen&quot;, maptype=&quot;watercolor&quot;)
 
 p=ggmap(map)
 p = p + geom_edgeset(aes(x=x, y=y), g, color=&quot;black&quot;) #plot will also include the network edges, in white
 p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=4) #plot will also include the network nodes, color-coded by region
 p #plot color</code></pre>
-<p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="overlaying-a-spatial-network-on-a-plain-map" class="section level2">
 <h2>Overlaying a spatial network on a plain map</h2>
@@ -363,7 +369,7 @@ for(i in 1:nrow(edges))  {
 
 points(x=locations$Long, y=locations$Lat, pch=21, 
        cex=3, bg=c(&quot;tomato&quot;, &quot;turquoise2&quot;)[as.numeric(locations$Region)])</code></pre>
-<p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 
 
