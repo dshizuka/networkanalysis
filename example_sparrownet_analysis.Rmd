@@ -15,7 +15,11 @@ set.seed(2)
 
 ---
 
-In this exercise, we will use data from our ongoing study on social networks of flock membership in a wintering population of golden-crowned sparrows, **Zonotrichia atricapilla** (Shizuka et al. 2014)3. Golden-crowned sparrows are long distance migrants that breed in western Canada and Alaska and winter along the west coast of mainland US. This work is based at a small (~7 ha) field site in California (UC Santa Cruz Arboretum) where golden-crowned sparrows are abundant during the non-breeding season (October-March). Since 2009, my colleagues and I have been collecting data on which individually-marked sparrows are observed together in flocks (typically 2-10 birds), defined as a collection of individuals within a 5m radius during a given observation. Flock membership changes within minutes—some birds leave and other birds join. Each year, we built a social network based on flock co-membership. In this paper, we showed that the social networks of wintering sparrows are highly clustered, with ‘social communities’ of individuals that flock together throughout the season. These social communities are somewhat fluid and spatially overlapping. Nevertheless, they seem to be quite stable across years--i.e., all birds leave for the breeding season, but those that come back tend to form the same clusters again. Moreover, we show using MRQAP analysis that past association (association index from the previous year) is a better predictor of current flock associations than a metric of home range overlap. That is, given that two individuals overlap in space, they are more likely to flock together if they had flocked together often in the previous year--a potential signature of social fidelity that bridges years.
+```{r, echo=F, out.width="50%"}
+knitr::include_graphics("assets/images/sparrow_network.jpg")
+```
+
+In this exercise, we will use data from our ongoing study on social networks of flock membership in a wintering population of golden-crowned sparrows, *Zonotrichia atricapilla* (Shizuka et al. 2014)3. Golden-crowned sparrows are long distance migrants that breed in western Canada and Alaska and winter along the west coast of mainland US. This work is based at a small (~7 ha) field site in California (UC Santa Cruz Arboretum) where golden-crowned sparrows are abundant during the non-breeding season (October-March). Since 2009, my colleagues and I have been collecting data on which individually-marked sparrows are observed together in flocks (typically 2-10 birds), defined as a collection of individuals within a 5m radius during a given observation. Flock membership changes within minutes—some birds leave and other birds join. Each year, we built a social network based on flock co-membership. In this paper, we showed that the social networks of wintering sparrows are highly clustered, with ‘social communities’ of individuals that flock together throughout the season. These social communities are somewhat fluid and spatially overlapping. Nevertheless, they seem to be quite stable across years--i.e., all birds leave for the breeding season, but those that come back tend to form the same clusters again. Moreover, we show using MRQAP analysis that past association (association index from the previous year) is a better predictor of current flock associations than a metric of home range overlap. That is, given that two individuals overlap in space, they are more likely to flock together if they had flocked together often in the previous year--a potential signature of social fidelity that bridges years.
 
 
 I detail the process of making a network from raw observation data in another worked example [(Worked Example: Constructing Flock Network of Golden-crowned Sparrows)](example_make_sparrow_network.html). Let's consolidate the codes shown in that tutorial in one script here:
@@ -99,6 +103,8 @@ In both years, the network appears to be highly clustered. The colors of the clu
 **Note: Here and in the paper, we used a ‘fast and greedy’ community detection algorithm (Clauset, Newman & Moore 2004) because it performed best on our networks. More recently, I have confirmed that an alternative method called Simulated Annealing (which is reported to perform better on smaller networks: Guimerà and Amaral, 2005) yields nearly identical results.**
 
 
+
+
 ##Testing modularity of empirical network against randomized networks
 
 ####Randomized networks using group membership swaps
@@ -129,5 +135,86 @@ p
 ```
 
 ```{r, echo=F}
+p=0.00990099
+p
+```
+
+```{r, echo=F}
 knitr::include_graphics("assets/images/example_sparrownet_modswap1.jpeg")
+```
+
+Serial Method:
+
+```{r, eval=T}
+gbi2=t(m.list[[1]])
+assoc2=get_network(gbi2)
+net.perm=network_permutation(gbi2, permutations=10000, returns=1, association_matrix = assoc2)
+swap.g2=apply(net.perm, 1, function(x) graph_from_adjacency_matrix(x,"undirected", weighted=T))
+mod.swap2=sapply(swap.g2, function(x) modularity(cluster_fast_greedy(x))) 
+hist(mod.swap2,xlim=c(min(mod.swap2), mods[[1]]), main="Serial Method") 
+abline(v=mods[[1]], col="red", lty=2, lwd=2) 
+p=(length(which(mod.swap2>=mods[[1]]))+1)/100001
+p
+```
+
+
+
+```{r, echo=F, out.width="70%"}
+knitr::include_graphics("assets/images/example_sparrowanalysis_mswap2.png")
+```
+
+In either case, the empirical modularity value is much larger than what we expect from random. However, the P-values are different because we are comparing the empirical test statistic against a much larger pool of randomized values in the ‘serial method’ test (10,000 vs. 100).
+
+---
+
+##Bootstrapping to account for sampling error
+
+Above, we compared the single empirical value of modularity against a distribution of modularity values generated from randomizing the network. But what about the error around the empirical modularity value itself? Given that we did not sample all flocks existing throughout the season, there must be error associated with this empirical modularity value as well.
+One popular way to account for sampling error in all areas of ecology is *resampling*--i.e., randomly picking a subset of observations (e.g., jackknifing) or randomly resampling the data while holding sample size constant (e.g., bootstrapping). We can use a bootstrapping scheme to generate a distribution of modularity values associated with our empirical network. NOTE, however, that there are some inherent difficulties in using bootstrapping to estimate error in modularity--namely, the bootstrapped network may result in different numbers of communities, which affects the modularity value (discussed in Shizuka & Farine 2016). For now, I will simply demonstrate how to implement a bootstrapping procedure on the individual-by-group matrix and use this to generate a simple distribution of modularity values without getting into these confounding effects.
+To implement the bootstrapping procedure, we will resample with replacement the observed flocks (columns of the individual-by-group matrix) and recalculate the modularity value using the same community detection algorithm as we used on the empirical (and the randomization scheme above). We will repeat this 100 times.
+
+```{r, results=F}
+com.boot=vector(length=100) #set up empty vector 
+for (i in 1:100){
+s.col=sample(1:ncol(m.list[[1]]), ncol(m.list[[1]]), replace=T) #sample with replacement the columns
+nm1=m.list[[1]][,s.col] #create new matrix using resampled columns
+g.boot=graph_from_adjacency_matrix(get_network(t(nm1)), "undirected", weighted=T) #bootstrapped network
+com.boot[i]=modularity(cluster_fast_greedy(g.boot)) #calculate modularity using fast_greedy community detection
+}
+```
+```{r}
+boxplot(com.boot, ylab="Modularity", las=1)
+```
+
+We can compare the modularity values generated from this bootstrapping scheme against the modularity values generated from the randomization (i.e., group membership swap) presented above.
+```{r, eval=T}
+boxplot(mod.swap2[1000:10000], com.boot, col="gray", las=1, names=c("Null", "Empirical \n(bootstrap)"), ylab="Modularity")
+```
+
+
+*Note: In the actual study, we used a second type of randomization scheme, which we call the “spatial null model”, which accounts for the home ranges of each individual and the location of each flock observation (not presented here). Figure 2 from the Shizuka et al. (2014) paper presents the resulting distributions of modularity values from the two randomization schemes (group membership swap & spatial flock model) and the bootstrapped empirical values.*
+
+##Testing the consistency of association patterns between years
+
+One of the goals of this study was to determine whether flock association patterns were consistent across years--i.e., do birds re-create the social networks year to year? To test for this pattern for each pair of years, we filtered the networks to those individuals that were seen in both years and then conducted a Mantel Test to see if association indices were correlated across years. Here is one way to conduct this analysis using the ‘ecodist’ package for its Mantel test function:
+
+```{r, eval=T}
+library(ecodist)
+
+#restrict comparison to individuals that were seen in two sequential years 
+id12=rownames(adjs[[1]])[rownames(adjs[[1]])%in%rownames(adjs[[2]])] #get IDs of birds that were present in both networks
+ids.m1=match(id12,rownames(adjs[[1]])) #get row/columns of those individuals in matrix 1 
+ids.m2=match(id12,rownames(adjs[[2]])) #get row/colums of those individuals in matrix 2
+m12=adjs[[1]][ids.m1,ids.m1] #matrix 1 of association indices of only returning individuals
+m21=adjs[[2]][ids.m2,ids.m2] #matrix 2 of association indices of only returning individuals
+m12=m12[order(rownames(m12)),order(rownames(m12))] #reorder the rows/columns by alphanumeric order
+m21=m21[order(rownames(m21)),order(rownames(m21))] #reorder the rows/columns by alphanumeric order
+mantel12=mantel(as.dist(m12)~as.dist(m21)) 
+mantel12
+```
+
+So the Mantel r coefficient = 0.73, a very high correlation of association indices across years. One way to visualize this is to simply plot the association indices from Season 2 against those of Season 3. Here, I’m only going to plot the values for the upper triangle of the adjacency matrix, since the matrix is symmetrical. I’m also going to use the `rgb()` function to make transparent red circles to plot so that we can see the overlapping points.
+
+```{r}
+plot(m12[upper.tri(m12)], m21[upper.tri(m21)], pch=19, col=rgb(1,0,0,0.5), cex=2, xlab="Season 2 Association Index", ylab="Season 3 Association Index")
 ```

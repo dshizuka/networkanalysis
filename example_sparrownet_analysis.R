@@ -71,3 +71,47 @@ hist(mod.swap, xlim=c(min(mod.swap), mods[[1]]))
 abline(v=mods[[1]], col="red", lty=2, lwd=2) 
 p=(length(which(mod.swap>=mods[[1]]))+1)/(times+1)
 p
+
+
+gbi2=t(m.list[[1]])
+assoc2=get_network(gbi2)
+net.perm=network_permutation(gbi2, permutations=10000, returns=1, association_matrix = assoc2)
+swap.g2=apply(net.perm, 1, function(x) graph_from_adjacency_matrix(x,"undirected", weighted=T))
+mod.swap2=sapply(swap.g2, function(x) modularity(cluster_fast_greedy(x))) 
+hist(mod.swap2,xlim=c(min(mod.swap2), mods[[1]]), main="Serial Method") 
+abline(v=mods[[1]], col="red", lty=2, lwd=2) 
+p=(length(which(mod.swap2>=mods[[1]]))+1)/100001
+p
+
+
+com.boot=vector(length=100) #set up empty vector 
+for (i in 1:100){
+s.col=sample(1:ncol(m.list[[1]]), ncol(m.list[[1]]), replace=T) #sample with replacement the columns
+nm1=m.list[[1]][,s.col] #create new matrix using resampled columns
+g.boot=graph_from_adjacency_matrix(get_network(t(nm1)), "undirected", weighted=T) #bootstrapped network
+com.boot[i]=modularity(cluster_fast_greedy(g.boot)) #calculate modularity using fast_greedy community detection
+}
+boxplot(com.boot)
+
+
+boxplot(mod.swap, com.boot, col="gray", las=1, names=c("Null", "Empirical \n(bootstrap)"), ylab="Modularity")
+
+
+#Mantel Test of across-year consistency of associations
+library(ecodist)
+
+#restrict comparison to individuals that were seen in two sequential years 
+id12=rownames(adjs[[1]])[rownames(adjs[[1]])%in%rownames(adjs[[2]])] #get IDs of birds that were present in both networks
+ids.m1=match(id12,rownames(adjs[[1]])) #get row/columns of those individuals in matrix 1 
+ids.m2=match(id12,rownames(adjs[[2]])) #get row/colums of those individuals in matrix 2
+m12=adjs[[1]][ids.m1,ids.m1] #matrix 1 of association indices of only returning individuals
+m21=adjs[[2]][ids.m2,ids.m2] #matrix 2 of association indices of only returning individuals
+m12=m12[order(rownames(m12)),order(rownames(m12))] #reorder the rows/columns by alphanumeric order
+m21=m21[order(rownames(m21)),order(rownames(m21))] #reorder the rows/columns by alphanumeric order
+mantel12=mantel(as.dist(m12)~as.dist(m21)) 
+mantel12
+
+
+plot(m12[upper.tri(m12)], m21[upper.tri(m21)], pch=19, col=rgb(1,0,0,0.5), cex=2, xlab="Season 2 Association Index", ylab="Season 3 Association Index")
+
+length(mod.swap2)
