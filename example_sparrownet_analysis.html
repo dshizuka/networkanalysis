@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Dai Shizuka" />
+
+
+<title>Worked Example: Analyzing the Sparrow Flock Networks Across Two Years</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 60px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+
+.section h2 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h3 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h4 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h5 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+.section h6 {
+  padding-top: 65px;
+  margin-top: -65px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Network Analysis in R</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="tutorials.html">Tutorials</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Worked Example: Analyzing the Sparrow Flock Networks Across Two Years</h1>
+<h4 class="author"><em>Dai Shizuka</em></h4>
+<h4 class="date"><em>updated 06/14/19</em></h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#modularity-of-the-networks">Modularity of the networks</a></li>
+<li><a href="#testing-modularity-of-empirical-network-against-randomized-networks">Testing modularity of empirical network against randomized networks</a></li>
+</ul>
+</div>
+
+<hr />
+<p>In this exercise, we will use data from our ongoing study on social networks of flock membership in a wintering population of golden-crowned sparrows, <strong>Zonotrichia atricapilla</strong> (Shizuka et al. 2014)3. Golden-crowned sparrows are long distance migrants that breed in western Canada and Alaska and winter along the west coast of mainland US. This work is based at a small (~7 ha) field site in California (UC Santa Cruz Arboretum) where golden-crowned sparrows are abundant during the non-breeding season (October-March). Since 2009, my colleagues and I have been collecting data on which individually-marked sparrows are observed together in flocks (typically 2-10 birds), defined as a collection of individuals within a 5m radius during a given observation. Flock membership changes within minutes—some birds leave and other birds join. Each year, we built a social network based on flock co-membership. In this paper, we showed that the social networks of wintering sparrows are highly clustered, with ‘social communities’ of individuals that flock together throughout the season. These social communities are somewhat fluid and spatially overlapping. Nevertheless, they seem to be quite stable across years–i.e., all birds leave for the breeding season, but those that come back tend to form the same clusters again. Moreover, we show using MRQAP analysis that past association (association index from the previous year) is a better predictor of current flock associations than a metric of home range overlap. That is, given that two individuals overlap in space, they are more likely to flock together if they had flocked together often in the previous year–a potential signature of social fidelity that bridges years.</p>
+<p>I detail the process of making a network from raw observation data in another worked example <a href="example_make_sparrow_network.html">(Worked Example: Constructing Flock Network of Golden-crowned Sparrows)</a>. Let’s consolidate the codes shown in that tutorial in one script here:</p>
+<pre class="r"><code>library(tidyr) #or you can just load the whole tidyverse with library(tidyverse)
+library(asnipe)
+library(igraph)</code></pre>
+<pre class="r"><code>flock2=read.csv(&#39;https://datadryad.org/bitstream/handle/10255/dryad.63925/Flock_Season2_Dryad.csv&#39;)
+flock3=read.csv(&#39;https://datadryad.org/bitstream/handle/10255/dryad.63926/Flock_Season3_Dryad.csv&#39;)
+head(flock2)</code></pre>
+<pre><code>##         Date  Time Location Bird1 Bird2 Bird3 Bird4 Bird5 Bird6 Bird7
+## 1 10/12/2010 10:00      S29 23734    NA    NA    NA    NA    NA    NA
+## 2 10/12/2010 10:15      B19 23773 23862 23774    NA    NA    NA    NA
+## 3 10/12/2010 10:45      S29 23734    NA    NA    NA    NA    NA    NA
+## 4 10/12/2010 10:45      B19 23773 23862 23774    NA    NA    NA    NA
+## 5 10/13/2010  9:11      X28 23778 23809    NA    NA    NA    NA    NA
+## 6 10/13/2010  9:22      S23 23734    NA    NA    NA    NA    NA    NA
+##   Bird8 Bird9 Bird10
+## 1    NA    NA     NA
+## 2    NA    NA     NA
+## 3    NA    NA     NA
+## 4    NA    NA     NA
+## 5    NA    NA     NA
+## 6    NA    NA     NA</code></pre>
+<pre class="r"><code>flock.list=list(flock2, flock3)</code></pre>
+<pre class="r"><code>m.list=lapply(flock.list, function(x) {
+  birdcols=grep(&quot;Bird&quot;,colnames(x))
+  ids=unique(gather(x[,birdcols])$value)
+  ids=ids[is.na(ids)==F&amp;ids!=&quot;&quot;&amp;ids!=&quot; &quot;]
+  m1=apply(x[,birdcols],1,function(y) match(ids,y))
+  m1[is.na(m1)]=0
+  m1[m1&gt;0]=1
+  rownames(m1)=ids #rows are bird ids
+  colnames(m1)=paste(&#39;flock&#39;, 1:ncol(m1), sep=&quot;_&quot;) #columns are flock IDs (just &quot;flock_#&quot;)
+  m2=m1[which(rowSums(m1)&gt;3),]
+  m2
+})
+
+adjs=lapply(m.list, function(x) get_network(t(x), data_format=&quot;GBI&quot;, association_index = &quot;SRI&quot;)) # the adjacency matrix</code></pre>
+<pre><code>## Generating  39  x  39  matrix
+## Generating  26  x  26  matrix</code></pre>
+<pre class="r"><code>gs=lapply(adjs, function(x) graph_from_adjacency_matrix(x, &quot;undirected&quot;, weighted=T))#the igraph object
+
+gs</code></pre>
+<pre><code>## [[1]]
+## IGRAPH 14a8be9 UNW- 39 312 -- 
+## + attr: name (v/c), weight (e/n)
+## + edges from 14a8be9 (vertex names):
+##  [1] 23734--23778 23734--23809 23734--23772 23734--7623  23734--7614 
+##  [6] 23773--23778 23773--23732 23773--23774 23773--23862 23773--7615 
+## [11] 23773--7636  23773--23891 23773--23772 23773--23777 23773--7627 
+## [16] 23773--23781 23773--23762 23773--23815 23773--23978 23773--23770
+## [21] 23773--23771 23773--23758 23778--23809 23778--23774 23778--23862
+## [26] 23778--7615  23778--23772 23778--23777 23778--7627  23778--23781
+## [31] 23778--23762 23778--23815 23778--23761 23778--7614  23778--7619 
+## [36] 23778--7609  23778--23771 23778--7633  23778--23831 23732--23774
+## + ... omitted several edges
+## 
+## [[2]]
+## IGRAPH b051726 UNW- 26 143 -- 
+## + attr: name (v/c), weight (e/n)
+## + edges from b051726 (vertex names):
+##  [1] 7660 --23815 7660 --23853 7660 --7635  7660 --7673  7660 --23862
+##  [6] 7660 --23854 7660 --7658  7660 --7609  7660 --7615  7660 --23778
+## [11] 7660 --23770 7660 --7680  7668 --23815 7668 --23774 7668 --7673 
+## [16] 7668 --23862 7668 --23773 7668 --7636  7668 --23778 7668 --23770
+## [21] 7668 --7667  7668 --7637  23815--7635  23815--23774 23815--7673 
+## [26] 23815--23862 23815--23854 23815--23773 23815--7609  23815--7615 
+## [31] 23815--7636  23815--23778 23815--23770 23815--7667  23815--7637 
+## [36] 7659 --23853 7659 --7635  7659 --7612  7659 --7609  7659 --7684 
+## + ... omitted several edges</code></pre>
+<p>Now, let’s plot these networks side-by-side.</p>
+<pre class="r"><code>seasons=c(&quot;Season 2&quot;, &quot;Season 3&quot;) # save for plot title 
+default=par() #save default graphical parameters first 
+par(mfrow=c(1,2)) #set up to plot networks side-by-side 
+for(i in 1:2){
+plot(gs[[i]], edge.width=E(gs[[i]])$weight*10, vertex.label=&quot;&quot;, vertex.color=&quot;gold1&quot;, vertex.size=10,edge.color=&quot;gray10&quot;, main=paste(seasons[i]))
+}</code></pre>
+<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(default)</code></pre>
+<hr />
+<div id="modularity-of-the-networks" class="section level2">
+<h2>Modularity of the networks</h2>
+<p>One of the first things we did in this study is to determine whether there were discrete clusters in this network that would suggest that there are multiple social communities within this small study area.</p>
+<pre class="r"><code>coms=lapply(gs, function(x) cluster_fast_greedy(x)) #apply community detection function to each network
+mods=sapply(coms, modularity) #calculate modularity based on community assignments
+com.colors=list(c(&quot;blue&quot;, &quot;yellow&quot;, &quot;green&quot;, &quot;red&quot;), c(&quot;green&quot;, &quot;blue&quot;, &quot;red&quot;, &quot;yellow&quot;)) # assign colors to communities. Community colors are in different order for each year because community ID number depends on the order of nodes that belong to them.
+set.seed(10) #make plots reproducible 
+par(mfrow=c(1,2))
+for(i in 1:2){ 
+  l=layout_with_fr(gs[[i]])
+  V(gs[[i]])$color=com.colors[[i]][membership(coms[[i]])]
+  plot(gs[[i]], layout=l, edge.width=E(gs[[i]])$weight*10, vertex.label=&quot;&quot;, vertex.size=10,edge.color=&quot;gray10&quot;, main=paste(seasons[i], &quot;: Modularity=&quot;, round(mods[[i]], 2)))
+}</code></pre>
+<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>par(default)</code></pre>
+<p>In both years, the network appears to be highly clustered. The colors of the clusters are assigned based on the consistency of the home ranges of each community across years (see Shizuka et al. 2014 for details).</p>
+<p><strong>Note: Here and in the paper, we used a ‘fast and greedy’ community detection algorithm (Clauset, Newman &amp; Moore 2004) because it performed best on our networks. More recently, I have confirmed that an alternative method called Simulated Annealing (which is reported to perform better on smaller networks: Guimerà and Amaral, 2005) yields nearly identical results.</strong></p>
+</div>
+<div id="testing-modularity-of-empirical-network-against-randomized-networks" class="section level2">
+<h2>Testing modularity of empirical network against randomized networks</h2>
+<div id="randomized-networks-using-group-membership-swaps" class="section level4">
+<h4>Randomized networks using group membership swaps</h4>
+<p>To see whether this pattern of network clustering is meaningful, we want to compare this against some kind of null model. For networks based on association data (e.g., individuals in groups), the basic null model should be constructed using a ‘group membership swap’ method first proposed by Manly (1995) and adapted to animal social data by Bejder (1998). The method is reviewed in detail in Whitehead et al. (2005). See the earlier section on group membership swaps in this handbook (Section 5.3). This swapping algorithm is available in two different functions within the <code>asnipe</code> package: <code>network_swap()</code> and <code>network_permutation()</code>. The two function are slightly different in how their outputs and are useful for different reasons.</p>
+<p>There are generally two ways to generate a P-value using the group membership swapping algorithm. First, one could repeat the swaps until the test statistic of interest stabilizes to a range of values corresponding to a randomized matrix, and then repeat this procedure a large number of times to calculate a distribution of the test statistic under the null model (let’s call it the ‘global test’). Alternatively, one can run a large number of swaps from a single initial matrix, calculating a test statistic after each ‘swap’ of the matrix, and compare this distribution against the empirical test statistic (‘serial test’). Manly (1995) discusses why the serial method is a valid method for testing whether the empirical matrix is non-random as long as we conduct a very large number of swaps. The ‘serial test’ method is much more computationally efficient than the ‘global test’. In the paper, we used the ‘global method’ in which we conducted a large number of swaps and repeated this procedure 1,000 times. Below, I will show how to generate P-values using both the ‘global’ and ‘serial’ methods.</p>
+<p>Global test: Let’s do 100 runs of the group membership swapping, with 500 swaps per run (in the paper, we conducted 1,000 runs of ~5,000 swaps). We will calculate modularity at the end of each iteration and then generate a histogram.</p>
+<pre class="r"><code>gbi=t(m.list[[1]]) 
+swap.m=list() 
+times=100
+for (k in 1:times){
+  swap.m[[k]]=network_swap(gbi, swaps=500)$Association_index }
+
+swap.g=lapply(swap.m, function(x) graph_from_adjacency_matrix(x, &quot;undirected&quot;, weighted=T)) 
+mod.swap=sapply(swap.g, function(x) modularity(cluster_fast_greedy(x)))</code></pre>
+<pre class="r"><code>hist(mod.swap, xlim=c(min(mod.swap), mods[[1]]))
+abline(v=mods[[1]], col=&quot;red&quot;, lty=2, lwd=2) 
+p=(length(which(mod.swap&gt;=mods[[1]]))+1)/(times+1)
+p</code></pre>
+<p><img src="assets/images/example_sparrownet_modswap1.jpeg" width="638" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
