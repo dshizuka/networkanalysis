@@ -206,7 +206,7 @@ $(document).ready(function () {
 <li>Measuring Networks Part 1: Centrality and Global Measures</li>
 </ol></h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/12/19</em></h4>
+<h4 class="date"><em>updated 06/14/19</em></h4>
 
 </div>
 
@@ -232,7 +232,7 @@ $(document).ready(function () {
 <hr />
 <p>Now that we have a handle on visualizing a network and the basics of relevant types of networks, we will go about the task of quantitatively describing its characteristics.</p>
 <p>Generally speaking, you can measure network properties at the level of nodes (aka, ‘centrality measures’) or at the level of the network (aka, ‘global measures’). That is, if you are interested in the position of nodes within a system, then you are measuring something at the node-level. Conversely, if you want to understand the structure of the system as a whole, you are measuring something at the network-level. Network analysis often combines both.</p>
-<p>Let’s start by loading the sample social network we introduced in <a href="04.1_socialnetworks.html">section 4.1</a>. Here, we are going to be using both the <code>igraph</code> and <code>asnipe</code> packages.</p>
+<p>Let’s start by loading the sample social network we introduced in <a href="networktypes_socialnetworks.html">the intro to animal social networks</a>. Here, we are going to be using both the <code>igraph</code> and <code>asnipe</code> packages.</p>
 <pre class="r"><code>library(asnipe)
 library(igraph)
 degree=igraph::degree
@@ -424,16 +424,16 @@ mean(paths[upper.tri(paths)], na.rm=T)</code></pre>
 <pre class="r"><code>comps=decompose(g)
 comps # a list object consisting of each component as graph object</code></pre>
 <pre><code>## [[1]]
-## IGRAPH 99c410e UNW- 5 10 -- 
+## IGRAPH f2f4f8e UNW- 5 10 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 99c410e (vertex names):
+## + edges from f2f4f8e (vertex names):
 ##  [1] 23820--23726 23820--23831 23726--23831 23820--23763 23726--23763
 ##  [6] 23831--23763 23820--23853 23726--23853 23831--23853 23763--23853
 ## 
 ## [[2]]
-## IGRAPH 5992005 UNW- 20 60 -- 
+## IGRAPH 50096c5 UNW- 20 60 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 5992005 (vertex names):
+## + edges from 50096c5 (vertex names):
 ##  [1] 23772--23770 23772--23771 23772--23777 23772--23774 23772--23860
 ##  [6] 23772--23734 23770--23771 23770--23777 23770--23774 23770--23860
 ## [11] 23770--23781 23770--23815 23770--23809 23771--23777 23771--23774

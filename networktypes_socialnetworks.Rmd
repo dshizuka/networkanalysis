@@ -61,7 +61,7 @@ Association networks are created by connecting nodes that belong to the same ‘
 
 Typically, association data would be first be gathered as an individual-by-group matrix (or group-by-individual matrix). That is, individuals are listed in rows and groups (e.g., flocks/herds/schools) listed in columns (or vice-versa). The cell value is 1 if that individual is in that group, and 0 if not.
 
-![*Sample individual-by-group matrix*](https://www.dropbox.com/s/0suulftm2762l41/flocktable1.png?dl=0)
+![*Sample individual-by-group matrix*](assets/images/flocktable1.png)
 
 Let’s play with a sample dataset (*Sample_association.csv*), which is a snippet of real data from a study on Golden-crowned Sparrows. My colleagues and I collected some data on which individually-marked sparrow was observed together in flocks (typically 2-10 birds), defined as a collection of individuals within a 5m radius during a given observation (Shizuka et al. 2014). Flock membership changes within minutes—some birds leave and other birds join. Here, each individual is presented in the rows, and each flock is presented in columns (‘individual-by-group matrix’). The cell value is 1 if that individual was seen in that flock, and 0 if not.. Let’s take a look at a slice of the data (output not shown):
 
@@ -81,6 +81,8 @@ where
 * $|A \cap B|$ is the number of times A and B were seen together
 * $|A|$ is the total number of times A was seen (together or separate from B)
 * $|B|$ is the total number of times B was seen (together or separate from A)
+
+---
 
 ###Construct social network from associations using the `asnipe` package
 

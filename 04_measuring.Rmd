@@ -25,7 +25,7 @@ Now that we have a handle on visualizing a network and the basics of relevant ty
 
 Generally speaking, you can measure network properties at the level of nodes (aka, 'centrality measures') or at the level of the network (aka, 'global measures'). That is, if you are interested in the position of nodes within a system, then you are measuring something at the node-level. Conversely, if you want to understand the structure of the system as a whole, you are measuring something at the network-level. Network analysis often combines both.
 
-Let's start by loading the sample social network we introduced in [section 4.1](04.1_socialnetworks.html). Here, we are going to be using both the `igraph` and `asnipe` packages.
+Let's start by loading the sample social network we introduced in [the intro to animal social networks](networktypes_socialnetworks.html). Here, we are going to be using both the `igraph` and `asnipe` packages.
 
 ```{r, message=F, results='hide'}
 library(asnipe)
