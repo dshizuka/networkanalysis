@@ -138,20 +138,25 @@ p #plot color
 ```
 
 
-##Overlaying a spatial network on a plain map
+##4. Overlaying a spatial network on a plain map
 
 Alternatively, you can use a combination of `mapproj` and `geosphere` package to overlay a spatial network on a simple map. This is based on code posted by Dr. Katya Ognyanova on her [website.](http://kateto.net/network-visualization)
 
-```{r, fig.height=12}
+```{r, fig.height=8}
 library(maps)
 library(geosphere)
 library(mapproj)
 
 par(mar=c(2,2,2,2))
+
+#make an edge list where you store all the edge information
 edges=as_data_frame(g)
 colnames(edges)=c("v1", "v2")
+
+#plot a map, focusing in on Baja California
 map(database="world", xlim=c(-118,-108), ylim=c(20, 35), col="gray",fill=T)
 
+#now add edges iteratively using the `gcIntermediate()` function in `geosphere`
 for(i in 1:nrow(edges))  {
   node1 <- locations[locations$Population == edges[i,"v1"],]
   node2 <- locations[locations$Population == edges[i,"v2"],]
@@ -163,6 +168,7 @@ for(i in 1:nrow(edges))  {
   lines(arc, lwd=2)
 }
 
+#now add the nodes (adding the nodes second plots it on top of the lines, making it look nicer).
 points(x=locations$Long, y=locations$Lat, pch=21, 
        cex=3, bg=c("tomato", "turquoise2")[as.numeric(locations$Region)])
 ```

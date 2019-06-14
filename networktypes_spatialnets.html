@@ -213,7 +213,7 @@ $(document).ready(function () {
 <li><a href="#importing-and-visualizing-the-network">1. Importing and visualizing the network</a></li>
 <li><a href="#using-spatial-data-to-plot-networks">2. Using spatial data to plot networks</a></li>
 <li><a href="#making-it-a-lot-prettier-using-popgraph">3. Making it a lot prettier using <code>popgraph</code></a></li>
-<li><a href="#overlaying-a-spatial-network-on-a-plain-map">Overlaying a spatial network on a plain map</a></li>
+<li><a href="#overlaying-a-spatial-network-on-a-plain-map">4. Overlaying a spatial network on a plain map</a></li>
 </ul>
 </div>
 
@@ -341,17 +341,22 @@ p #plot color</code></pre>
 <p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="overlaying-a-spatial-network-on-a-plain-map" class="section level2">
-<h2>Overlaying a spatial network on a plain map</h2>
+<h2>4. Overlaying a spatial network on a plain map</h2>
 <p>Alternatively, you can use a combination of <code>mapproj</code> and <code>geosphere</code> package to overlay a spatial network on a simple map. This is based on code posted by Dr. Katya Ognyanova on her <a href="http://kateto.net/network-visualization">website.</a></p>
 <pre class="r"><code>library(maps)
 library(geosphere)
 library(mapproj)
 
 par(mar=c(2,2,2,2))
+
+#make an edge list where you store all the edge information
 edges=as_data_frame(g)
 colnames(edges)=c(&quot;v1&quot;, &quot;v2&quot;)
+
+#plot a map, focusing in on Baja California
 map(database=&quot;world&quot;, xlim=c(-118,-108), ylim=c(20, 35), col=&quot;gray&quot;,fill=T)
 
+#now add edges iteratively using the `gcIntermediate()` function in `geosphere`
 for(i in 1:nrow(edges))  {
   node1 &lt;- locations[locations$Population == edges[i,&quot;v1&quot;],]
   node2 &lt;- locations[locations$Population == edges[i,&quot;v2&quot;],]
@@ -363,6 +368,7 @@ for(i in 1:nrow(edges))  {
   lines(arc, lwd=2)
 }
 
+#now add the nodes (adding the nodes second plots it on top of the lines, making it look nicer).
 points(x=locations$Long, y=locations$Lat, pch=21, 
        cex=3, bg=c(&quot;tomato&quot;, &quot;turquoise2&quot;)[as.numeric(locations$Region)])</code></pre>
 <p><img src="networktypes_spatialnets_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
