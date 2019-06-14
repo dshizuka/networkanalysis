@@ -219,6 +219,7 @@ $(document).ready(function () {
 
 <hr />
 <p>With spatial networks, the nodes represent spatial locations and the edges represent connections between those locations, e.g., <strong><em>habitat connectivity</em></strong> (<em>‘landscape connectivity networks’</em>: Urban &amp; Keitt 2001, Urban et al. 2009), <strong><em>movements of individuals</em></strong> (<strong>‘movement networks’</strong>: Jacoby &amp; Freeman 2016), <strong><em>genetic covariance among populations</em></strong> (<strong>‘population graphs’</strong>: Dyer &amp; Nason 2004, Dyer 2015), <strong><em>migration pathways</em></strong> (<strong>‘migratory flow networks’</strong>: Taylor &amp; Norris 2010, Knight et al. 2018). Such networks of connectivity between populations are important in a variety of fields including conservation biology, population genetics, evolution and metapopulation ecology.</p>
+<p>Most concepts from other types of networks are transferrable to spatial networks. The main characteristic is that the spatial location of nodes are explicit here. However, also note that social networks will almost always have a spatial component to it, as social interactions happen in space.</p>
 <p>To explore this type of data, we will be demonstrating the construction of space-based networks using a dataset on genetic connectivity (‘population graph’) of the cactus <strong>Lophocereus schottii</strong> from Dyer &amp; Nason (2004). We will be using an R package called <code>popgraph</code>, written by Rodney Dyer. A nice tutorial is available online (<a href="http://dyerlab.github.io/popgraph/" class="uri">http://dyerlab.github.io/popgraph/</a>), and the codes here are mostly adapted from this site.</p>
 <div class="figure" style="text-align: center">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/P%C3%A1jara_La_Lajita_-_Oasis_Park_-_Pachycereus_schottii_01_ies.jpg/640px-P%C3%A1jara_La_Lajita_-_Oasis_Park_-_Pachycereus_schottii_01_ies.jpg" alt="*Lophocereus schottii*, via wikimedia commons"  />
@@ -328,12 +329,7 @@ p = ggmap( map ) #plot will include this image
 p = p + geom_edgeset(aes(x=x, y=y), g, color=&quot;white&quot;) #plot will also include the network edges, in white
 p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=4) #plot will also include the network nodes, color-coded by region
 p #plot color</code></pre>
-<div class="figure" style="text-align: center">
-<img src="assets/images/popgraph_google.jpg" alt="*Lophocereus schottii*, via wikimedia commons" width="566" />
-<p class="caption">
-<em>Lophocereus schottii</em>, via wikimedia commons
-</p>
-</div>
+<p><img src="assets/images/popgraph_google.jpg" width="566" style="display: block; margin: auto;" /></p>
 <p>If you don’t want to get an API key, you can use other databases supported in the <code>ggmap</code> package, such as <code>get_stamenmap()</code>. This will not let you do a satellite image, but you can make pretty graphs nonetheless.</p>
 <pre class="r"><code>location = c( mean(V(g)$x), mean(V(g)$y))
 map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source=&quot;stamen&quot;, maptype=&quot;watercolor&quot;)

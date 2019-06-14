@@ -18,6 +18,8 @@ set.seed(2)
 
 With spatial networks, the nodes represent spatial locations and the edges represent connections between those locations, e.g., ***habitat connectivity*** (*‘landscape connectivity networks’*: Urban & Keitt 2001, Urban et al. 2009), ***movements of individuals*** (**‘movement networks’**: Jacoby & Freeman 2016), ***genetic covariance among populations*** (**‘population graphs’**: Dyer & Nason 2004, Dyer 2015), ***migration pathways*** (**‘migratory flow networks’**: Taylor & Norris 2010, Knight et al. 2018). Such networks of connectivity between populations are important in a variety of fields including conservation biology, population genetics, evolution and metapopulation ecology.
 
+Most concepts from other types of networks are transferrable to spatial networks. The main characteristic is that the spatial location of nodes are explicit here. However, also note that social networks will almost always have a spatial component to it, as social interactions happen in space. 
+
 To explore this type of data, we will be demonstrating the construction of space-based networks using a dataset on genetic connectivity (‘population graph’) of the cactus **Lophocereus schottii** from Dyer & Nason (2004). We will be using an R package called `popgraph`, written by Rodney Dyer. A nice tutorial is available online (http://dyerlab.github.io/popgraph/), and the codes here are mostly adapted from this site.
 
 ```{r, echo=F, fig.cap="*Lophocereus schottii*, via wikimedia commons"}
@@ -119,7 +121,7 @@ p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=4) #plot will also incl
 p #plot color
 ```
 
-```{r, echo=F, fig.cap="*Lophocereus schottii*, via wikimedia commons"}
+```{r, echo=F}
 knitr::include_graphics("assets/images/popgraph_google.jpg")
 ```
 
