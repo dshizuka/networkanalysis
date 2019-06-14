@@ -1,11 +1,10 @@
-require(devtools)
-install_github("popgraph","dyerlab")
+#require(devtools)
+#install_github("popgraph","dyerlab")
 
-require(devtools)
-install_github("dkahle/ggmap", ref = "tidyup")
+#require(devtools)
+#install_github("dkahle/ggmap", ref = "tidyup")
 
 library(popgraph)
-library(help="popgraph")
 library(igraph)
 
 lopnet=as.matrix(read.csv("https://dshizuka.github.io/NAOC2016/lopho_network.csv", header=T, row.names=1)) #From Dyer et al. 2004
@@ -34,21 +33,41 @@ plot(g, layout=l, main="Spatial Layout")
 plot(g, layout=layout_with_fr(g), main="Force-directed layout")
 
 library(ggmap)
-register_google(key=" AIzaSyA3VUtWgt2rYUmoGaRpj3kcd7OEAA6J6D4 ")
+#register_google(key=" AIzaSyA3VUtWgt2rYUmoGaRpj3kcd7OEAA6J6D4 ")
 
 location = c( mean(V(g)$x), mean(V(g)$y))
-map = get_map(location,maptype="satellite", zoom=6) #use ggmap to get a satellite image of the study area.
-p = ggmap( map ) #plot will include this image
-p = p + geom_edgeset(aes(x=x, y=y), g, color="white") #plot will also include the network edges, in white
-p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=6) #plot will also include the network nodes, color-coded by region
-p #plot color
 
+#map = get_map(location,maptype="satellite", zoom=6) #use ggmap to get a satellite image of the study area.
+#p = ggmap( map ) #plot will include this image
+#p = p + geom_edgeset(aes(x=x, y=y), g, color="white") #plot will also include the network edges, in white
+#p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=6) #plot will also include the network nodes, color-coded by region
+#p #plot color
+
+###
 map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source="stamen", maptype="watercolor")
 
 p=ggmap(map)
 p = p + geom_edgeset(aes(x=x, y=y), g, color="black") #plot will also include the network edges, in white
 p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=6) #plot will also include the network nodes, color-coded by region
 p #plot color
+
+?get_stamenmap
+
+###
+map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source="stamen", maptype="terrain-background")
+
+p=ggmap(map)
+p = p + geom_edgeset(aes(x=x, y=y), g, color="black") #plot will also include the network edges, in white
+p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=6) #plot will also include the network nodes, color-coded by region
+p #plot color
+###
+map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source="stamen", maptype="watercolor")
+
+p=ggmap(map)
+p = p + geom_edgeset(aes(x=x, y=y), g, color="black") #plot will also include the network edges, in white
+p = p + geom_nodeset(aes(x=x, y=y, color=color), g, size=6) #plot will also include the network nodes, color-coded by region
+p #plot color
+
 
 
 library(maps)

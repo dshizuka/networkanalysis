@@ -129,7 +129,7 @@ If you don't want to get an API key, you can use other databases supported in th
 
 ```{r}
 location = c( mean(V(g)$x), mean(V(g)$y))
-map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source="stamen", maptype="watercolor")
+map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source="stamen", maptype="terrain-background")
 
 p=ggmap(map)
 p = p + geom_edgeset(aes(x=x, y=y), g, color="black") #plot will also include the network edges, in white

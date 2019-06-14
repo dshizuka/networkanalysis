@@ -332,7 +332,7 @@ p #plot color</code></pre>
 <p><img src="assets/images/popgraph_google.jpg" width="566" style="display: block; margin: auto;" /></p>
 <p>If you don’t want to get an API key, you can use other databases supported in the <code>ggmap</code> package, such as <code>get_stamenmap()</code>. This will not let you do a satellite image, but you can make pretty graphs nonetheless.</p>
 <pre class="r"><code>location = c( mean(V(g)$x), mean(V(g)$y))
-map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source=&quot;stamen&quot;, maptype=&quot;watercolor&quot;)
+map=get_stamenmap(location, bbox=c(left=-118, bottom=20, right=-108, top=35), zoom=6, source=&quot;stamen&quot;, maptype=&quot;terrain-background&quot;)
 
 p=ggmap(map)
 p = p + geom_edgeset(aes(x=x, y=y), g, color=&quot;black&quot;) #plot will also include the network edges, in white
