@@ -211,6 +211,7 @@ $(document).ready(function () {
 <li><a href="#testing-modularity-of-empirical-network-against-randomized-networks">Testing modularity of empirical network against randomized networks</a></li>
 <li><a href="#bootstrapping-to-account-for-sampling-error">Bootstrapping to account for sampling error</a></li>
 <li><a href="#testing-the-consistency-of-association-patterns-between-years">Testing the consistency of association patterns between years</a></li>
+<li><a href="#using-mrqap-to-test-for-the-effects-of-spatial-overlap-and-previous-years-association">Using MRQAP to test for the effects of spatial overlap and previous year’s association</a></li>
 </ul>
 </div>
 
@@ -259,9 +260,9 @@ adjs=lapply(m.list, function(x) get_network(t(x), data_format=&quot;GBI&quot;, a
 
 gs</code></pre>
 <pre><code>## [[1]]
-## IGRAPH 9b2b136 UNW- 39 312 -- 
+## IGRAPH c5a47fc UNW- 39 312 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 9b2b136 (vertex names):
+## + edges from c5a47fc (vertex names):
 ##  [1] 23734--23778 23734--23809 23734--23772 23734--7623  23734--7614 
 ##  [6] 23773--23778 23773--23732 23773--23774 23773--23862 23773--7615 
 ## [11] 23773--7636  23773--23891 23773--23772 23773--23777 23773--7627 
@@ -273,9 +274,9 @@ gs</code></pre>
 ## + ... omitted several edges
 ## 
 ## [[2]]
-## IGRAPH 16fe1e1 UNW- 26 143 -- 
+## IGRAPH 79a7c0c UNW- 26 143 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 16fe1e1 (vertex names):
+## + edges from 79a7c0c (vertex names):
 ##  [1] 7660 --23815 7660 --23853 7660 --7635  7660 --7673  7660 --23862
 ##  [6] 7660 --23854 7660 --7658  7660 --7609  7660 --7615  7660 --23778
 ## [11] 7660 --23770 7660 --7680  7668 --23815 7668 --23774 7668 --7673 
@@ -348,7 +349,6 @@ abline(v=mods[[1]], col=&quot;red&quot;, lty=2, lwd=2) </code></pre>
 <pre class="r"><code>p=(length(which(mod.swap2&gt;=mods[[1]]))+1)/100001
 p</code></pre>
 <pre><code>## [1] 9.9999e-06</code></pre>
-<p><img src="assets/images/example_sparrowanalysis_mswap2.png" width="70%" style="display: block; margin: auto;" /></p>
 <p>In either case, the empirical modularity value is much larger than what we expect from random. However, the P-values are different because we are comparing the empirical test statistic against a much larger pool of randomized values in the ‘serial method’ test (10,000 vs. 100).</p>
 <hr />
 </div>
@@ -364,10 +364,10 @@ g.boot=graph_from_adjacency_matrix(get_network(t(nm1)), &quot;undirected&quot;, 
 com.boot[i]=modularity(cluster_fast_greedy(g.boot)) #calculate modularity using fast_greedy community detection
 }</code></pre>
 <pre class="r"><code>boxplot(com.boot, ylab=&quot;Modularity&quot;, las=1)</code></pre>
-<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>We can compare the modularity values generated from this bootstrapping scheme against the modularity values generated from the randomization (i.e., group membership swap) presented above.</p>
 <pre class="r"><code>boxplot(mod.swap2[1000:10000], com.boot, col=&quot;gray&quot;, las=1, names=c(&quot;Null&quot;, &quot;Empirical \n(bootstrap)&quot;), ylab=&quot;Modularity&quot;)</code></pre>
-<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-16-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p><em>Note: In the actual study, we used a second type of randomization scheme, which we call the “spatial null model”, which accounts for the home ranges of each individual and the location of each flock observation (not presented here). Figure 2 from the Shizuka et al. (2014) paper presents the resulting distributions of modularity values from the two randomization schemes (group membership swap &amp; spatial flock model) and the bootstrapped empirical values.</em></p>
 </div>
 <div id="testing-the-consistency-of-association-patterns-between-years" class="section level2">
@@ -387,9 +387,61 @@ mantel12=mantel(as.dist(m12)~as.dist(m21))
 mantel12</code></pre>
 <pre><code>##    mantelr      pval1      pval2      pval3  llim.2.5% ulim.97.5% 
 ##  0.7393206  0.0010000  1.0000000  0.0010000  0.6370620  0.8402951</code></pre>
-<p>So the Mantel r coefficient = 0.73, a very high correlation of association indices across years. One way to visualize this is to simply plot the association indices from Season 2 against those of Season 3. Here, I’m only going to plot the values for the upper triangle of the adjacency matrix, since the matrix is symmetrical. I’m also going to use the <code>rgb()</code> function to make transparent red circles to plot so that we can see the overlapping points.</p>
+<p>So the Mantel r coefficient = 0.74, a very high correlation of association indices across years. One way to visualize this is to simply plot the association indices from Season 2 against those of Season 3. Here, I’m only going to plot the values for the upper triangle of the adjacency matrix, since the matrix is symmetrical. I’m also going to use the <code>rgb()</code> function to make transparent red circles to plot so that we can see the overlapping points.</p>
 <pre class="r"><code>plot(m12[upper.tri(m12)], m21[upper.tri(m21)], pch=19, col=rgb(1,0,0,0.5), cex=2, xlab=&quot;Season 2 Association Index&quot;, ylab=&quot;Season 3 Association Index&quot;)</code></pre>
+<p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="using-mrqap-to-test-for-the-effects-of-spatial-overlap-and-previous-years-association" class="section level2">
+<h2>Using MRQAP to test for the effects of spatial overlap and previous year’s association</h2>
+<p>The Mantel Test and the plot above shows us that there is significant correlation between the association indices across years–i.e., birds flock with the same individuals each year. However, this effect could simply be driven by the fact that these birds are faithful to their home ranges rather than their social associates. This is important because there is no doubt that spatial overlap influences social associations (it has to, since associations are measured as co-occurrence in time and space). For example, if we import a matrix of spatial overlap between each pair of each individual (measured as the proportion of joint home range that is shared) and plot the association index relative to this measure, we get this:</p>
+<pre class="r"><code>s3=as.matrix(read.csv(&quot;GCSPspaceoverlap3.csv&quot;, header=T, row.names=1))
+ids.s3=match(rownames(s3), rownames(adjs[[2]]))
+ids.s3=na.omit(ids.s3)
+ids.adj2=match(rownames(adjs[[2]]), rownames(s3) )
+ids.adj2=na.omit(ids.adj2)
+
+s3.use=s3[ids.s3, ids.s3]
+adj.use=adjs[[2]][ids.adj2, ids.adj2]
+s3.use=s3.use[order(rownames(s3.use)),order(rownames(s3.use))]
+adj.use=adj.use[order(rownames(adj.use)),order(rownames(adj.use))]
+plot(s3.use[upper.tri(s3.use)], adj.use[upper.tri(adj.use)], pch=19, cex=2, col=rgb(0,0,1, 0.5), xlab=&quot;Spatial Overlap&quot;, ylab=&quot;Association Index&quot;)</code></pre>
 <p><img src="example_sparrownet_analysis_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>So how can we test for the effect of the previous year’s association on the current year’s association while taking into account the amount of spatial overlap in home ranges? This is where MRQAP (aka ‘network regression’) comes in. Here, we can use the ‘spatial overlap matrix’ and ‘previous year’s adjacency matrix’ as covariates to test their effects on the ‘current year adjacency matrix’. Briefly, the MRQAP with Double-Semipartialing (Krackhardt 1988; Dekker et al. 2007) is related to the Mantel Test, but permutes the residual matrix from each independent variable to calculate the effect of each variable on the response variable matrix. I recommend reading Dekker et al. (2007) for details on the method. We can implement MRQAP in ‘asnipe’ or ‘sna’ packages. Here, I will demonstrate its application with the ‘asnipe’ package. First, let’s make the spatial overlap matrix restricted to the individuals that are included in both seasons, and sorted in the same way as the adjacency matrices:</p>
+<pre class="r"><code>s3.match=s3.use[match(rownames(m21),rownames(s3.use)), match(rownames(m21),rownames(s3.use))] #sort rows and columns to match the adjacency matrix</code></pre>
+<p>Now we have already made the relevant matrices: adjacency matrix of Season 3 (dependent variable), adjacency matrix of Season 2 (independent variable 1), spatial overlap matrix of Season 3 (independent variable 2), each with only birds that are in both seasons. We can now run the MRQAP model:</p>
+<pre class="r"><code>mrqap.dsp(m21~m12 + s3.match)</code></pre>
+<pre><code>## MRQAP with Double-Semi-Partialing (DSP)
+## 
+## Formula:  m21 ~ m12 + s3.match 
+## 
+## Coefficients:
+##           Estimate    P(β&gt;=r) P(β&lt;=r) P(|β|&lt;=|r|)
+## intercept -0.01749305 0.068   0.932   0.069      
+## m12        0.45328523 1.000   0.000   0.000      
+## s3.match   0.12343038 1.000   0.000   0.000      
+## 
+## Residual standard error: 0.04051 on 88 degrees of freedom
+## F-statistic: 98.65 on 2 and 88 degrees of freedom, p-value:     0 
+## Multiple R-squared: 0.6915   Adjusted R-squared: 0.6845 
+## AIC: -35.74197</code></pre>
+<p>You can see that both of the independent variables, spatial overlap (s3.match) and the adjacency matrix of the previous year (m12) are significant predictors of the current year’s adjacency matrix. The overall fit of the model is very good (adjusted <span class="math inline">\(R^2 = 0.67\)</span>), which suggests that these two variables explain a great deal of the variation in pairwise flock associations. We can’t really compare the magnitudes of effect here (despite what we said in the paper…) because we did not scale the two independnet matrices before running the model…</p>
+<p>But we can try it here!</p>
+<pre class="r"><code>mrqap.dsp(scale(m21)~scale(m12) + scale(s3.match))</code></pre>
+<pre><code>## MRQAP with Double-Semi-Partialing (DSP)
+## 
+## Formula:  scale(m21) ~ scale(m12) + scale(s3.match) 
+## 
+## Coefficients:
+##                 Estimate   P(β&gt;=r) P(β&lt;=r) P(|β|&lt;=|r|)
+## intercept       0.01269215 0.551   0.449   0.722      
+## scale(m12)      0.43393270 1.000   0.000   0.000      
+## scale(s3.match) 0.53650775 1.000   0.000   0.000      
+## 
+## Residual standard error: 0.6302 on 88 degrees of freedom
+## F-statistic: 83.06 on 2 and 88 degrees of freedom, p-value:     0 
+## Multiple R-squared: 0.6537   Adjusted R-squared: 0.6458 
+## AIC: -88.04498</code></pre>
+<p>Now, these results suggest that the effect of home range overlap (0.54) is slightly greater than the effect of previous year’s associations (0.43), but still, there is quite a significant pattern for preferentially flocking with last year’s flock-mates.</p>
 </div>
 
 

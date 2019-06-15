@@ -114,4 +114,23 @@ mantel12
 
 plot(m12[upper.tri(m12)], m21[upper.tri(m21)], pch=19, col=rgb(1,0,0,0.5), cex=2, xlab="Season 2 Association Index", ylab="Season 3 Association Index")
 
-length(mod.swap2)
+s3=as.matrix(read.csv("GCSPspaceoverlap3.csv", header=T, row.names=1))
+ids.s3=match(rownames(s3), rownames(adjs[[2]]))
+ids.s3=na.omit(ids.s3)
+ids.adj2=match(rownames(adjs[[2]]), rownames(s3) )
+ids.adj2=na.omit(ids.adj2)
+
+s3.use=s3[ids.s3, ids.s3]
+adj.use=adjs[[2]][ids.adj2, ids.adj2]
+s3.use=s3.use[order(rownames(s3.use)),order(rownames(s3.use))]
+adj.use=adj.use[order(rownames(adj.use)),order(rownames(adj.use))]
+plot(s3.use[upper.tri(s3.use)], adj.use[upper.tri(adj.use)], pch=19, cex=2, col=rgb(0,0,1, 0.5), xlab="Spatial Overlap", ylab="Association Index")
+
+
+s3.match=s3.use[match(rownames(m21),rownames(s3.use)), match(rownames(m21),rownames(s3.use))] #sort rows and columns to match the adjacency matrix
+
+
+mrqap.dsp(m21~m12 + s3.match)
+
+
+mrqap.dsp(scale(m21)~scale(m12) + scale(s3.match))

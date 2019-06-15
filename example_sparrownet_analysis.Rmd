@@ -158,11 +158,6 @@ p
 ```
 
 
-
-```{r, echo=F, out.width="70%"}
-knitr::include_graphics("assets/images/example_sparrowanalysis_mswap2.png")
-```
-
 In either case, the empirical modularity value is much larger than what we expect from random. However, the P-values are different because we are comparing the empirical test statistic against a much larger pool of randomized values in the ‘serial method’ test (10,000 vs. 100).
 
 ---
@@ -213,8 +208,52 @@ mantel12=mantel(as.dist(m12)~as.dist(m21))
 mantel12
 ```
 
-So the Mantel r coefficient = 0.73, a very high correlation of association indices across years. One way to visualize this is to simply plot the association indices from Season 2 against those of Season 3. Here, I’m only going to plot the values for the upper triangle of the adjacency matrix, since the matrix is symmetrical. I’m also going to use the `rgb()` function to make transparent red circles to plot so that we can see the overlapping points.
+So the Mantel r coefficient = 0.74, a very high correlation of association indices across years. One way to visualize this is to simply plot the association indices from Season 2 against those of Season 3. Here, I’m only going to plot the values for the upper triangle of the adjacency matrix, since the matrix is symmetrical. I’m also going to use the `rgb()` function to make transparent red circles to plot so that we can see the overlapping points.
 
 ```{r}
 plot(m12[upper.tri(m12)], m21[upper.tri(m21)], pch=19, col=rgb(1,0,0,0.5), cex=2, xlab="Season 2 Association Index", ylab="Season 3 Association Index")
 ```
+
+##Using MRQAP to test for the effects of spatial overlap and previous year’s association
+
+The Mantel Test and the plot above shows us that there is significant correlation between the association indices across years--i.e., birds flock with the same individuals each year. However, this effect could simply be driven by the fact that these birds are faithful to their home ranges rather than their social associates. This is important because there is no doubt that spatial overlap influences social associations (it has to, since associations are measured as co-occurrence in time and space). For example, if we import a matrix of spatial overlap between each pair of each individual (measured as the proportion of joint home range that is shared) and plot the association index relative to this measure, we get this:
+
+```{r}
+s3=as.matrix(read.csv("GCSPspaceoverlap3.csv", header=T, row.names=1))
+ids.s3=match(rownames(s3), rownames(adjs[[2]]))
+ids.s3=na.omit(ids.s3)
+ids.adj2=match(rownames(adjs[[2]]), rownames(s3) )
+ids.adj2=na.omit(ids.adj2)
+
+s3.use=s3[ids.s3, ids.s3]
+adj.use=adjs[[2]][ids.adj2, ids.adj2]
+s3.use=s3.use[order(rownames(s3.use)),order(rownames(s3.use))]
+adj.use=adj.use[order(rownames(adj.use)),order(rownames(adj.use))]
+plot(s3.use[upper.tri(s3.use)], adj.use[upper.tri(adj.use)], pch=19, cex=2, col=rgb(0,0,1, 0.5), xlab="Spatial Overlap", ylab="Association Index")
+```
+
+So how can we test for the effect of the previous year’s association on the current year’s association while taking into account the amount of spatial overlap in home ranges? This is where MRQAP (aka ‘network regression’) comes in. Here, we can use the ‘spatial overlap matrix’ and ‘previous year’s adjacency matrix’ as covariates to test their effects on the ‘current year adjacency matrix’. Briefly, the MRQAP with Double-Semipartialing (Krackhardt 1988; Dekker et al. 2007) is related to the Mantel Test, but permutes the residual matrix from each independent variable to calculate the effect of each variable on the response variable matrix. I recommend reading Dekker et al. (2007) for details on the method. We can implement MRQAP in ‘asnipe’ or ‘sna’ packages. Here, I will demonstrate its application with the ‘asnipe’ package.
+First, let’s make the spatial overlap matrix restricted to the individuals that are included in both seasons, and sorted in the same way as the adjacency matrices:
+
+```{r}
+s3.match=s3.use[match(rownames(m21),rownames(s3.use)), match(rownames(m21),rownames(s3.use))] #sort rows and columns to match the adjacency matrix
+```
+
+
+Now we have already made the relevant matrices: adjacency matrix of Season 3 (dependent variable), adjacency matrix of Season 2 (independent variable 1), spatial overlap matrix of Season 3 (independent variable 2), each with only birds that are in both seasons. We can now run the MRQAP model:
+
+```{r}
+mrqap.dsp(m21~m12 + s3.match)
+```
+
+You can see that both of the independent variables, spatial overlap (s3.match) and the adjacency matrix of the previous year (m12) are significant predictors of the current year’s adjacency matrix. The overall fit of the model is very good (adjusted $R^2 = 0.67$), which suggests that these two variables explain a great deal of the variation in pairwise flock associations. We can't really compare the magnitudes of effect here (despite what we said in the paper...) because we did not scale the two independnet matrices before running the model...
+
+But we can try it here!
+
+```{r}
+mrqap.dsp(scale(m21)~scale(m12) + scale(s3.match))
+
+```
+
+Now, these results suggest that the effect of home range overlap (0.54) is slightly greater than the effect of previous year's associations (0.43), but still, there is quite a significant pattern for preferentially flocking with last year's flock-mates.
+
