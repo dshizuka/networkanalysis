@@ -201,7 +201,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Worked Example: Centrality and Community Structure of US Air Transportation Network</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/12/19</em></h4>
+<h4 class="date"><em>updated 06/16/19</em></h4>
 
 </div>
 
@@ -312,7 +312,18 @@ par(mar=c(1,1,1,1))
 plot(usair, layout=longlat, vertex.label=&quot;&quot;, vertex.size=3)</code></pre>
 <p><img src="example_usairports_files/figure-html/unnamed-chunk-10-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>You can see the outline of the US here. Now note how many airports there are in Alaska alone! This makes sense because there are so few roads in Alaska relative to landmass that flying is the main mode of transportation between remote towns. Thus, the airports in Alaska are not well connected in terms of the number of places you can get to by direct flight, but the hubs that connect Alaska to the rest of the U.S. (e.g., Anchorage and Seattle) are disproportionately important in terms of betweenness centrality.</p>
-<p>The main point of this exercise is to consider what different indices of centrality are measuring and make sure you consider the complex structure of the network so that you can make sense of what that index is telling you.</p>
+<p>Now, we can use the <code>popgraph</code> package to make this spatial network prettier by overlaying it on a map:</p>
+<pre class="r"><code>library(popgraph)
+library(ggmap)
+
+location = c( mean(V(usair)$long), mean(V(usair)$lat))
+map=get_stamenmap(location, bbox=c(left=-179, bottom=15, right=-65, top=75), zoom=2, source=&quot;stamen&quot;, maptype=&quot;terrain-background&quot;, filetype=&quot;png&quot;)
+
+p=ggmap(map)
+p = p + geom_edgeset(aes(x=long, y=lat), usair, colour=gray(0.1, 0.3), size=1) #plot will also include the network edges, in white
+p = p + geom_nodeset(aes(x=long, y=lat), usair, size=1, colour=&quot;tomato&quot;) #plot will also include the network nodes, color-coded by region
+p #plot color</code></pre>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-11-1.png" width="576" style="display: block; margin: auto;" /></p>
 <hr />
 </div>
 <div id="community-structure-in-the-u.s.-air-transportation-network" class="section level2">
@@ -329,7 +340,7 @@ fgmembership=membership(fg)
 colors.fg=c(brewer.pal(12, name=&quot;Paired&quot;), rep(&quot;white&quot;,2)) #first 12 colors from RColorBrewer, last 2 communities are white
 par(mar=c(1,1,1,1))
 plot(usair, layout=longlat, vertex.label=&quot;&quot;, vertex.color=colors.fg[fgmembership], vertex.size=5)</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-12-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-13-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>What you can see in these figures is that the U.S. transportation system is broken up into several communities that make some geographic sense: Alaska, West Coast/Hawaii, Eastern/Puerto Rico. There are also a few small, very local subnetworks like the Kenai Peninsula and Southern Alaska or the Northern Great Plains. If you look carefully, there are even a few small clusters that don’t make much geographic sense–some of these are subnetworks of private/corporate airports or Air Force bases.</p>
 <p>Guimerà et al. (2005) proposed that we can use this community structure to identify the roles that nodes play within and across their networks. They propose two measures in particular: Within-Community Degree (z) and Participation Coefficient (P). They define them as follows:</p>
 <p>The Within-community Degree of node <span class="math inline">\(i\)</span> is:</p>
@@ -360,7 +371,7 @@ p[i]=1-sum((tab/sum(tab))^2)
 dat=data.frame(name=V(usair)$name, z=z[match(V(usair)$name,names(z))], p=p)</code></pre>
 <p>Let’s plot the z-P phase-space, as in Figure 4a of Guimerà et al. (2005):</p>
 <pre class="r"><code>plot(dat$p, dat$z, pch=19, ylab=&quot;Within-Community Degree (z)&quot;, xlab=&quot;Participation Coefficient (p)&quot;)</code></pre>
-<p><img src="example_usairports_files/figure-html/unnamed-chunk-14-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_usairports_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>In the paper, Guimerà and colleagues heuristically into several parts. Here is a simplified version of what they do:</p>
 <p><img src="assets/USair_pxz_colorsections.jpg" width="50%" style="display: block; margin: auto;" /></p>
 <p>Under this framework, we can identify several different types of roles.</p>

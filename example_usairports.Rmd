@@ -128,7 +128,19 @@ plot(usair, layout=longlat, vertex.label="", vertex.size=3)
 
 You can see the outline of the US here. Now note how many airports there are in Alaska alone! This makes sense because there are so few roads in Alaska relative to landmass that flying is the main mode of transportation between remote towns. Thus, the airports in Alaska are not well connected in terms of the number of places you can get to by direct flight, but the hubs that connect Alaska to the rest of the U.S. (e.g., Anchorage and Seattle) are disproportionately important in terms of betweenness centrality.
 
-The main point of this exercise is to consider what different indices of centrality are measuring and make sure you consider the complex structure of the network so that you can make sense of what that index is telling you.
+Now, we can use the `popgraph` package to make this spatial network prettier by overlaying it on a map:
+```{r}
+library(popgraph)
+library(ggmap)
+
+location = c( mean(V(usair)$long), mean(V(usair)$lat))
+map=get_stamenmap(location, bbox=c(left=-179, bottom=15, right=-65, top=75), zoom=2, source="stamen", maptype="terrain-background", filetype="png")
+
+p=ggmap(map)
+p = p + geom_edgeset(aes(x=long, y=lat), usair, colour=gray(0.1, 0.3), size=1) #plot will also include the network edges, in white
+p = p + geom_nodeset(aes(x=long, y=lat), usair, size=1, colour="tomato") #plot will also include the network nodes, color-coded by region
+p #plot color
+```
 
 ---
 

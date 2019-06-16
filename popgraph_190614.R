@@ -1,7 +1,7 @@
-#require(devtools)
-#install_github("popgraph","dyerlab")
+require(devtools)
+install_github("dyerlab/popgraph")
 
-#require(devtools)
+11#require(devtools)
 #install_github("dkahle/ggmap", ref = "tidyup")
 
 library(popgraph)
