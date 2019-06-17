@@ -62,6 +62,6 @@ map=get_stamenmap(location, bbox=c(left=-179, bottom=15, right=-65, top=75), zoo
 ggmap(map)
 
 p=ggmap(map)
-p = p + geom_edgeset(aes(x=long, y=lat), usair, color="black") #plot will also include the network edges, in white
-p = p + geom_nodeset(aes(x=long, y=lat, color=color), usair, size=4) #plot will also include the network nodes, color-coded by region
+p = p + geom_edgeset(aes(x=long, y=lat), usair, colour=gray(0.1, 0.3), size=1) #plot will also include the network edges, in white
+p = p + geom_nodeset(aes(x=long, y=lat), usair, size=2, colour="tomato") #plot will also include the network nodes, color-coded by region
 p #plot color
