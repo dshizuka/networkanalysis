@@ -9,7 +9,8 @@ output:
 ---
 
 This exercise will based on a study by Firth & Sheldon (2015) using several species of birds in Wytham Woods, Oxford. This is a fantastic system in which great tits (*Parus major*), blue tits (*Cyanistes caeruleus*), marsh tits (*Poecile palustris*), coal tits (*Periparus ater*) and Eurasian nuthatches (*Sitta europaea*) have been tagged with RFID tags, and they are given access to feeders that are connected to RFID readers. In this study, Firth & Sheldon manipulated access to feeders based on an arbitrary criterion (odd vs. even-numbered RFID tags) and observed that this artificial segregation of co-feeding birds lead to corresponding assortment of birds that feed at those sites. Moreover, this new segregation of co-feeding relationships bled over to other contexts (‘ephemeral’ open feeding sites and nestbox inspections).
-Here, we will take the opportunity to re-create a part of Figure 2 of this study, which plots the assortativity coefficient of the networks at different time periods and contexts and compares these values to the expected values based on permutation method called ‘node-label permutation’.
+
+Here, we will take the opportunity to re-create a part of Figure 2 of this study, which plots the assortment coefficient of the networks at different time periods and contexts and compares these values to the expected values based on permutation method called ‘node-label permutation’.
 
 ##Importing and using .RData file
 
@@ -177,4 +178,147 @@ hist(r.during.permutation, xlim=c(-0.06, 0.15)) #NOTE: you will need to use the 
 abline(v=r.during$r, lty=2, col="red", lwd=3)
 p.during=(length(which(r.during.permutation>r.during$r))+1)/(t+1) 
 p.during
+```
+
+We see that the empirical assortment coefficient we see during the experimental phase is significantly different than what we would expect from random.
+
+Now, let's do this again for the assortment value observed at feeders in the post-experimental phase:
+
+```{r}
+
+#start by extracting the post-experiment feeder network. 
+g.post=graph_from_adjacency_matrix(whole.networks[[3]], mode="undirected", weighted=T) 
+V(g.post)$oddeven=rfid.dat[match(V(g.post)$name, rfid.dat$id), "oddeven"] 
+r.post=assortment.discrete(whole.networks[[3]], V(g.post)$oddeven) 
+r.post$r #the empirical value
+
+t=1000 
+r.post.permutation=vector(length=t) 
+for (i in 1:t){
+  s=sample(V(g.post)$oddeven, length(V(g.post)$oddeven), replace=F)
+  r.post.permutation[i]=assortment.discrete(whole.networks[[3]], s)$r 
+}
+
+hist(r.post.permutation, xlim=c(-0.10, 0.15)) #NOTE: you will need to use the xlim= argument to adjust the x-axis limits so that the empirical assortativity value will show up! 
+abline(v=r.post$r, lty=2, col="red", lwd=3)
+p.post=(length(which(r.post.permutation>r.post$r))+1)/(t+1) 
+p.post
+```
+
+So, what we see is that the empirical assortment value ($r_{post}=0.016) is not different from what we'd expect by chance. 
+
+
+Let's summarize the results so far--at feeders, we see significant assortment during the experiment, but not pre- or post-experiment. Here, I am plotting boxplots to show the assortment coefficient from our node-label permutations. We then put the empirical values as red "*"
+
+```{r}
+boxplot(r.pre.permutation, r.during.permutation, r.post.permutation, col=c("yellow", "tomato", "slateblue"), ylim=c(-0.1, 0.2), names=c("pre", "during", "post"))
+abline(h=0, lty=2)
+points(1,r.pre$r, pch="*", cex=5, col="red")
+points(2,r.during$r, pch="*", cex=5, col="red")
+points(3, r.post$r, pch="*", cex=5, col="red")
+```
+
+Basically, this tells us that the distribution of the expected values of assortativity index is similar in the pre-, during-, and post-treatment networks, but the observed value (red asterisk) far exceeds the expected values during the treatment. This is evidence that the experimental treatment caused assortment by RFID tag type.
+
+##Testing the carry-over of experimental assortment into different contexts: Recreating Figure 2
+
+So far, we've shown that the experiment works--by restricting access to feeders based on odd- or even-RFID IDs, the researchers were able to force assortment of individuals at feeders by the arbitrary criterion. But the really interesting part of the story comes from looking at assortment of individuals during these time periods at other contexts: (a) unrestricted food patches (*patches*) where RFID tags are read, but where all individuals have access, and (b) nest boxes (*nests*), where individuals come by for nest prospecting during early spring (corresponding to the during- and post-experimental period).
+
+These results are summarized in Figure 2:
+
+```{r}
+knitr::include_graphics("assets/images/Firth2015_Fig2.jpg")
+```
+
+The data for these contexts are all stored in the `whole.networks` object. So here, we can repeat the entire routine again for the rest of the networks stored in here. To simplify this process, let' create a function that runs through the permutation routine we ran for the feeder site networks and saves the following things:
+
+* the network, `g`
+* the empirical assortment coefficient, `r`
+* the assortment coefficients from 1,000 runs of the permutation, `r.permutation`
+* the 95% confidence interval--i.e., the 0.025 and 0.975th quantiles, `r.permutation.quants`
+
+We will simply call this function `run_analysis()`
+```{r}
+run_analysis=function(x) {
+  g=graph_from_adjacency_matrix(x, mode="undirected", weighted=T)
+  V(g)$oddeven=rfid.dat[match(V(g)$name, rfid.dat$id), "oddeven"]
+  r=assortment.discrete(x, V(g)$oddeven)$r
+  t=1000
+  r.permutation=vector(length=t)
+  for (i in 1:t){
+    s=sample(V(g)$oddeven, length(V(g)),replace=F) 
+    r.permutation[i]=assortment.discrete(x, s)$r 
+    r.permutation.quants=quantile(r.permutation, c(0.025, 0.975))
+  }
+  list(g=g, r=r, r.permutation=r.permutation, r.permutation.quants=r.permutation.quants) #this is the output
+}
+```
+
+Let's just go ahead and run this function for all items in the `whole.networks` list. This will end up re-running the analysis for the feeder site networks we already did, but that's fine (it only takes a few seconds):
+
+```{r}
+all.results=lapply(whole.networks, run_analysis)
+```
+
+Use the `str()` function to look at what we have here. This is a list within a list... The top level is the treament, and within each treatment, we have saved the network, the observed assortment coefficient, the assortment coefficients from permuted networks, and the confidence interval of those permuted assortment coefficients. 
+
+```{r}
+str(all.results, max.level=2) #max.level=2 because there are more items nested within this list and it gets long...
+```
+
+From this `all.results` object, we will now extract just the data we need to plot Figure 2, which are: 
+(1) the observed assortment coefficient
+(2) the lower and upper quantiles that define the confidence intervals
+
+```{r}
+r=sapply(all.results, function(x) x$r)
+lower.q=sapply(all.results, function(x) x$r.permutation.quants[1])
+upper.q=sapply(all.results, function(x) x$r.permutation.quants[2])
+```
+
+Now let's look along the x-axis of Figure 2. What you need to notice that the order here is not the same order as the items in the `whole.networks` (and hence `all.results`) list. Check out that order here:
+
+```{r}
+names(whole.networks)
+```
+
+In contrast, the order of treatments in the figure is:
+
+(1) Pre-experiment period at the feeder site (network 1 in `whole.networks`)
+(2) Pre-experiment period at unrestricted food patch (network 4)
+(3) During-experiment period at unrestricted food patch (network 5)
+(4) During-experiment period at feeder site (network 2)
+(5) During-experiment period at nest boxes (network 6)
+(6) Post-experiment period at nest boxes (network 7)
+(7) Post-experiment period at feeder sites (network 3)
+
+Thus, the order in which we want to plot the results are 1, 4, 5, 2, 6, 7, 3. Let's save that as an object. While we're at it, let's also save the order of colors and shapes in Figure 2:
+
+```{r}
+treatment.order=c(1,4,5,2,6,7,3)
+color.order=c("purple", "darkgreen", "darkgreen", "purple", "blue", "blue", "purple")
+shape.order=c("circle", "triangle", "triangle", "circle", "asterisk", "asterisk", "circle")
+```
+
+Now, let's create a data frame that aligns the data we need in the order that we need them:
+
+```{r}
+df=data.frame(lower=lower.q[treatment.order], upper=upper.q[treatment.order], Assortment=r[treatment.order], Treatments=c("pre.site", "pre.patch", "during.patch", "during.site", "during.nest", "post.nest", "post.site"), color.order=color.order, shape.order=shape.order)
+
+df
+```
+
+Finally, we will use ggplot2 to make the plot:
+
+```{r, message=F}
+library(ggplot2) #load ggplot2 package
+
+p = ggplot(df, aes(x = Treatments, y = Assortment))  #define the main plot axes
+p = p + theme_bw() #make simpler background
+p = p + geom_linerange(aes(ymax = upper, ymin = lower), colour=color.order) #add linee for confidence interval of assortment coefficients from  permutations
+p = p+ geom_point(colour=color.order, size=3, shape=shape.order) #add points for empirical assortment
+p = p+ scale_x_discrete(limits=df$Treatments) #add treatment name to the x=axis
+p = p+ scale_y_continuous(limits=c(-0.3, 0.3)) #define y-axis range
+p = p+ geom_hline(aes(yintercept=0), linetype="dashed") #add dashed horizontal line at 0
+p #plot the figure
 ```

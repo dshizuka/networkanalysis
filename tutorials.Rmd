@@ -50,8 +50,10 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[Example: Small World and Scale-free Networks](example1_smallworld.html)
 
+###[Example: Analyzing the US Air Transportation Network](example_usairports.html)
+
 ###[Example: Constructing a sparrow flock network](example_make_sparrow_network.html)
 
 ###[Example: Analyzing the sparrow flock network across years](example_sparrownet_analysis.html)
 
-###[Example: Analyzing the US Air Transportation Network](example_usairports.html)
+###[Example: Experimental assortment of birds at Wytham Woods](example_assortment_wytham.html)

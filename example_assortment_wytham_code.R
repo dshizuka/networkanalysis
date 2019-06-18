@@ -74,7 +74,7 @@ p.pre=(length(which(r.pre.permutation>r.pre$r))+1)/(t+1)
 p.pre
 
 
-t+1000 
+t=1000 
 r.during.permutation=vector(length=t) 
 for (i in 1:t){
   s=sample(V(g.during)$oddeven, length(V(g.during)$oddeven), replace=F)
@@ -85,4 +85,67 @@ hist(r.during.permutation, xlim=c(0.05, 0.15)) #NOTE: you will need to use the x
 abline(v=r.during$r, lty=2, col="red", lwd=3)
 p.during=(length(which(r.during.permutation>r.during$r))+1)/(t+1) 
 p.during
+
+
+##post
+g.post=graph_from_adjacency_matrix(whole.networks[[3]], mode="undirected", weighted=T) 
+V(g.post)$oddeven=rfid.dat[match(V(g.post)$name, rfid.dat$id), "oddeven"] 
+r.post=assortment.discrete(whole.networks[[3]], V(g.post)$oddeven) 
+
+t=1000 
+r.post.permutation=vector(length=t) 
+for (i in 1:t){
+  s=sample(V(g.post)$oddeven, length(V(g.post)$oddeven), replace=F)
+  r.post.permutation[i]=assortment.discrete(whole.networks[[3]], s)$r 
+}
+
+hist(r.post.permutation, xlim=c(-0.10, 0.15)) #NOTE: you will need to use the xlim= argument to adjust the x-axis limits so that the empirical assortativity value will show up! 
+abline(v=r.post$r, lty=2, col="red", lwd=3)
+p.post=(length(which(r.post.permutation>r.post$r))+1)/(t+1) 
+p.post
+
+
+boxplot(r.pre.permutation, r.during.permutation, r.post.permutation, col=c("gold", "tomato", "slateblue"), ylim=c(-0.1, 0.2), names=c("pre", "during", "post"))
+abline(h=0, lty=2)
+points(1,r.pre$r, pch="*", cex=5, col="gold")
+points(2,r.during$r, pch="*", cex=5, col="tomato")
+points(3, r.post$r, pch="*", cex=5, col="slateblue")
+
+##function
+run_analysis=function(x) {
+  g=graph_from_adjacency_matrix(x, mode="undirected", weighted=T)
+  V(g)$oddeven=rfid.dat[match(V(g)$name, rfid.dat$id), "oddeven"]
+  r=assortment.discrete(x, V(g)$oddeven)$r
+  t=1000
+  r.permutation=vector(length=t)
+  for (i in 1:t){
+    s=sample(V(g)$oddeven, length(V(g)),replace=F) 
+    r.permutation[i]=assortment.discrete(x, s)$r 
+    r.permutation.quants=quantile(r.permutation, c(0.025, 0.975))
+  }
+  list(g=g, r=r, r.permutation=r.permutation, r.permutation.quants=r.permutation.quants)
+}
+
+all.results=lapply(whole.networks, run_analysis)
+
+str(all.results, max.level=2)
+
+lower.q=sapply(all.results, function(x) x$r.permutation.quants[1])
+upper.q=sapply(all.results, function(x) x$r.permutation.quants[2])
+r=sapply(all.results, function(x) x$r)
+
+treatment.order=c(1,4,5,2,6,7,3)
+
+
+df=data.frame(lower=lower.q[treatment.order], upper=upper.q[treatment.order], Assortment=r[treatment.order], treatments=c("pre.site", "pre.patch", "during.patch", "during.site", "during.nest", "post.nest", "post.site"))
+
+
+library(ggplot2)
+p = ggplot(df, aes(x = treatments, y = Assortment)) + geom_linerange(aes(ymax = upper, ymin = lower), colour=c("purple", "darkgreen", "darkgreen", "purple", "blue", "blue", "purple"))
+p = p + theme_bw() 
+p=p+ geom_point(colour=c("purple", "darkgreen", "darkgreen", "purple", "blue", "blue", "purple"), size=3, shape=c("circle", "triangle", "triangle", "circle", "asterisk", "asterisk", "circle")) 
+p=p+ scale_x_discrete(limits=df$treatments) 
+p=p+ scale_y_continuous(limits=c(-0.3, 0.3)) 
+p=p+ geom_hline(aes(yintercept=0), linetype="dashed")
+p
 
