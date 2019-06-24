@@ -12,7 +12,7 @@
 <meta name="author" content="Dai Shizuka" />
 
 
-<title>Worked Example: Analyzing the Sparrow Flock Networks Across Two Years</title>
+<title>Worked Example: Experimental Assortment of Wild Birds in Wytham Woods</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -199,9 +199,9 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Worked Example: Analyzing the Sparrow Flock Networks Across Two Years</h1>
+<h1 class="title toc-ignore">Worked Example: Experimental Assortment of Wild Birds in Wytham Woods</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/17/19</em></h4>
+<h4 class="date"><em>updated 06/24/19</em></h4>
 
 </div>
 
@@ -214,8 +214,16 @@ $(document).ready(function () {
 </ul>
 </div>
 
-<p>This exercise will based on a study by Firth &amp; Sheldon (2015) using several species of birds in Wytham Woods, Oxford. This is a fantastic system in which great tits (<em>Parus major</em>), blue tits (<em>Cyanistes caeruleus</em>), marsh tits (<em>Poecile palustris</em>), coal tits (<em>Periparus ater</em>) and Eurasian nuthatches (<em>Sitta europaea</em>) have been tagged with RFID tags, and they are given access to feeders that are connected to RFID readers. In this study, Firth &amp; Sheldon manipulated access to feeders based on an arbitrary criterion (odd vs. even-numbered RFID tags) and observed that this artificial segregation of co-feeding birds lead to corresponding assortment of birds that feed at those sites. Moreover, this new segregation of co-feeding relationships bled over to other contexts (‘ephemeral’ open feeding sites and nestbox inspections).</p>
+<div class="figure" style="text-align: center">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Hungry_Birds._Great_Tit_%2819234094613%29.jpg/320px-Hungry_Birds._Great_Tit_%2819234094613%29.jpg" alt="Flock of great tits. Magnus Johansson, via Wikimedia Commons"  />
+<p class="caption">
+Flock of great tits. Magnus Johansson, via Wikimedia Commons
+</p>
+</div>
+<hr />
+<p>This exercise will based on a study by <a href="%22https://royalsocietypublishing.org/doi/full/10.1098/rspb.2014.2350%22">Firth &amp; Sheldon (2015)</a> using several species of birds in Wytham Woods, Oxford. This is a fantastic system in which great tits (<em>Parus major</em>), blue tits (<em>Cyanistes caeruleus</em>), marsh tits (<em>Poecile palustris</em>), coal tits (<em>Periparus ater</em>) and Eurasian nuthatches (<em>Sitta europaea</em>) have been tagged with RFID tags, and they are given access to feeders that are connected to RFID readers. In this study, Firth &amp; Sheldon manipulated access to feeders based on an arbitrary criterion (odd vs. even-numbered RFID tags) and observed that this artificial segregation of co-feeding birds lead to corresponding assortment of birds that feed at those sites. Moreover, this new segregation of co-feeding relationships bled over to other contexts (‘ephemeral’ open feeding sites and nestbox inspections).</p>
 <p>Here, we will take the opportunity to re-create a part of Figure 2 of this study, which plots the assortment coefficient of the networks at different time periods and contexts and compares these values to the expected values based on permutation method called ‘node-label permutation’.</p>
+<hr />
 <div id="importing-and-using-.rdata-file" class="section level2">
 <h2>Importing and using .RData file</h2>
 <p>To do this, we will first have to import the publicly-accessible dataset associated with the Firth &amp; Sheldon (2015) study. This is available on the Dryad Data Repository. You can load R Data Files using the <code>load()</code> function. Here, we will just load it straight from the dryad website:</p>
@@ -258,21 +266,12 @@ $(document).ready(function () {
 ##   .. ..$ : chr [1:68] &quot;90&quot; &quot;199&quot; &quot;233&quot; &quot;330&quot; ...
 ##   .. ..$ : chr [1:68] &quot;90&quot; &quot;199&quot; &quot;233&quot; &quot;330&quot; ...</code></pre>
 <p>So, there are 7 components and each component is a matrix of slightly different dimensions (e.g., ‘pre.site.whole.network’ is 203 x 203, while ‘during.site.whole.network’ is 336 x 336). Let’s take a look at one of the networks. We’ll take the first adjacency matrix (the pre-experimental network for the whole site), convert it into an igraph object, and then plot it:</p>
-<pre class="r"><code>library(igraph)</code></pre>
-<pre><code>## Warning: package &#39;igraph&#39; was built under R version 3.5.2</code></pre>
-<pre><code>## 
-## Attaching package: &#39;igraph&#39;</code></pre>
-<pre><code>## The following objects are masked from &#39;package:stats&#39;:
-## 
-##     decompose, spectrum</code></pre>
-<pre><code>## The following object is masked from &#39;package:base&#39;:
-## 
-##     union</code></pre>
-<pre class="r"><code>g.pre=graph_from_adjacency_matrix(whole.networks[[1]], mode=&quot;undirected&quot;, weighted=T)
+<pre class="r"><code>library(igraph)
+g.pre=graph_from_adjacency_matrix(whole.networks[[1]], mode=&quot;undirected&quot;, weighted=T)
 set.seed(2)
 lay.pre=layout_with_fr(g.pre) # this will say a layout that we can use in subsequent versions of the network plot
 plot(g.pre, edge.width=E(g.pre)$weight*10, vertex.label=&quot;&quot;, vertex.size=5, layout=lay.pre)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, let’s try to add whether the individual had an odd- or even-numbered tag. To do this, we have to link the <code>id.info</code> information with the node names. The node names in the adjacency matrices corresponds to the order of individuals in the id.info vector. What we will do is first create a separate data frame object that links the node name to the RFID tag type. We can then use this information to create a node attribute for the network by matching the node name with the id name in this data frame we created:</p>
 <pre class="r"><code>#create a data frame in which the first column is the &quot;id number&quot; and the second column is 1-odd or 0-even. **Note that we can name the columns within the `data.frame()` function 
 rfid.dat=data.frame(id=as.factor(1:339), oddeven=id.info)
@@ -293,14 +292,14 @@ V(g.pre)$node.color=c(&quot;red&quot;,&quot;lightblue&quot;)[V(g.pre)$oddeven+1]
 
 #plot the network using the node colors
 plot(g.pre, vertex.color=V(g.pre)$node.color, edge.width=E(g.pre)$weight*10, vertex.label=&quot;&quot;, vertex.size=5, edge.color=&quot;black&quot;, layout=lay.pre)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Try doing this with the other networks, such as the “during experiment” network (the second element in the <code>whole.networks</code> list object).</p>
 <pre class="r"><code>g.during=graph_from_adjacency_matrix(whole.networks[[2]], mode=&quot;undirected&quot;, weighted=T) 
 V(g.during)$oddeven=rfid.dat[match(V(g.during)$name, rfid.dat$id), &quot;oddeven&quot;] 
 V(g.during)$node.color=c(&quot;red&quot;, &quot;lightblue&quot;)[V(g.during)$oddeven+1]
 
 plot(g.during, vertex.color=V(g.during)$node.color, edge.width=E(g.during)$weight*20, vertex.label=&quot;&quot;, vertex.size=5, edge.color=&quot;black&quot;) </code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, you might notice some visual differences in this network, but it’s actually quite difficult to get any sense of definitive differences here. We now want to directly measure the network metric of interest: assortativity.</p>
 <hr />
 </div>
@@ -353,7 +352,7 @@ for (i in 1:t){
 <p>The resulting <code>r.pre.permutation</code> object will now contain 1000 values. You can plot this as a histogram to visualize the data. In addition, you can draw a vertical line corresponding to the observed assortativity value and see where it falls in the distribution of these values:</p>
 <pre class="r"><code>hist(r.pre.permutation)
 abline(v=r.pre$r, lty=2, col=&quot;red&quot;, lwd=3) #arguments: lty = line type (2 = dashed line); col = color; lwd = line width</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>You can visually tell that the observed assortativity value falls well within the distribution of the permuted assortativity values. The corresponding p-value based on a one-tailed test would be the number of times the permuted values exceeded the observed value (r.pre$r), divided the number of permutations (<em>note</em>: some people prefer to calculate p-value from permutations by adding 1 to both numerator and denominator. There are some theoretical arguments for that. I will skip that here.):</p>
 <pre class="r"><code>p.pre=(length(which(r.pre.permutation&gt;r.pre$r))+1)/(t+1) 
 p.pre</code></pre>
@@ -369,7 +368,7 @@ for (i in 1:t){
 
 hist(r.during.permutation, xlim=c(-0.06, 0.15)) #NOTE: you will need to use the xlim= argument to adjust the x-axis limits so that the empirical assortativity value will show up! 
 abline(v=r.during$r, lty=2, col=&quot;red&quot;, lwd=3)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p.during=(length(which(r.during.permutation&gt;r.during$r))+1)/(t+1) 
 p.during</code></pre>
 <pre><code>## [1] 0.000999001</code></pre>
@@ -390,7 +389,7 @@ for (i in 1:t){
 
 hist(r.post.permutation, xlim=c(-0.10, 0.15)) #NOTE: you will need to use the xlim= argument to adjust the x-axis limits so that the empirical assortativity value will show up! 
 abline(v=r.post$r, lty=2, col=&quot;red&quot;, lwd=3)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p.post=(length(which(r.post.permutation&gt;r.post$r))+1)/(t+1) 
 p.post</code></pre>
 <pre><code>## [1] 0.2117882</code></pre>
@@ -401,7 +400,7 @@ abline(h=0, lty=2)
 points(1,r.pre$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)
 points(2,r.during$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)
 points(3, r.post$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Basically, this tells us that the distribution of the expected values of assortativity index is similar in the pre-, during-, and post-treatment networks, but the observed value (red asterisk) far exceeds the expected values during the treatment. This is evidence that the experimental treatment caused assortment by RFID tag type.</p>
 </div>
 <div id="testing-the-carry-over-of-experimental-assortment-into-different-contexts-recreating-figure-2" class="section level2">
@@ -409,7 +408,7 @@ points(3, r.post$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)</code></pre>
 <p>So far, we’ve shown that the experiment works–by restricting access to feeders based on odd- or even-RFID IDs, the researchers were able to force assortment of individuals at feeders by the arbitrary criterion. But the really interesting part of the story comes from looking at assortment of individuals during these time periods at other contexts: (a) unrestricted food patches (<em>patches</em>) where RFID tags are read, but where all individuals have access, and (b) nest boxes (<em>nests</em>), where individuals come by for nest prospecting during early spring (corresponding to the during- and post-experimental period).</p>
 <p>These results are summarized in Figure 2:</p>
 <pre class="r"><code>knitr::include_graphics(&quot;assets/images/Firth2015_Fig2.jpg&quot;)</code></pre>
-<p><img src="assets/images/Firth2015_Fig2.jpg" width="548" /></p>
+<p><img src="assets/images/Firth2015_Fig2.jpg" width="548" style="display: block; margin: auto;" /></p>
 <p>The data for these contexts are all stored in the <code>whole.networks</code> object. So here, we can repeat the entire routine again for the rest of the networks stored in here. To simplify this process, let’ create a function that runs through the permutation routine we ran for the feeder site networks and saves the following things:</p>
 <ul>
 <li>the network, <code>g</code></li>
@@ -530,9 +529,9 @@ df</code></pre>
 ## post.nest.whole.network.2.5%       post.nest        blue    asterisk
 ## post.site.whole.network.2.5%       post.site      purple      circle</code></pre>
 <p>Finally, we will use ggplot2 to make the plot:</p>
-<pre class="r"><code>library(ggplot2) #load ggplot2 package</code></pre>
-<pre><code>## Warning: package &#39;ggplot2&#39; was built under R version 3.5.2</code></pre>
-<pre class="r"><code>p = ggplot(df, aes(x = Treatments, y = Assortment))  #define the main plot axes
+<pre class="r"><code>library(ggplot2) #load ggplot2 package
+
+p = ggplot(df, aes(x = Treatments, y = Assortment))  #define the main plot axes
 p = p + theme_bw() #make simpler background
 p = p + geom_linerange(aes(ymax = upper, ymin = lower), colour=color.order) #add linee for confidence interval of assortment coefficients from  permutations
 p = p+ geom_point(colour=color.order, size=3, shape=shape.order) #add points for empirical assortment
@@ -540,7 +539,7 @@ p = p+ scale_x_discrete(limits=df$Treatments) #add treatment name to the x=axis
 p = p+ scale_y_continuous(limits=c(-0.3, 0.3)) #define y-axis range
 p = p+ geom_hline(aes(yintercept=0), linetype=&quot;dashed&quot;) #add dashed horizontal line at 0
 p #plot the figure</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-28-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 
 

@@ -1,5 +1,5 @@
 ---
-title: 'Worked Example: Analyzing the Sparrow Flock Networks Across Two Years'
+title: 'Worked Example: Experimental Assortment of Wild Birds in Wytham Woods'
 author: "Dai Shizuka"
 date: "updated `r format(Sys.time(), '%m/%d/%y')` "
 output: 
@@ -8,9 +8,22 @@ output:
     toc_depth: 3
 ---
 
-This exercise will based on a study by Firth & Sheldon (2015) using several species of birds in Wytham Woods, Oxford. This is a fantastic system in which great tits (*Parus major*), blue tits (*Cyanistes caeruleus*), marsh tits (*Poecile palustris*), coal tits (*Periparus ater*) and Eurasian nuthatches (*Sitta europaea*) have been tagged with RFID tags, and they are given access to feeders that are connected to RFID readers. In this study, Firth & Sheldon manipulated access to feeders based on an arbitrary criterion (odd vs. even-numbered RFID tags) and observed that this artificial segregation of co-feeding birds lead to corresponding assortment of birds that feed at those sites. Moreover, this new segregation of co-feeding relationships bled over to other contexts (‘ephemeral’ open feeding sites and nestbox inspections).
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.width=6, fig.height=4, fig.align='center',warning=F, message = F)
+set.seed(2)
+```
+
+```{r, echo=F, fig.cap="Flock of great tits. Magnus Johansson, via Wikimedia Commons"}
+knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Hungry_Birds._Great_Tit_%2819234094613%29.jpg/320px-Hungry_Birds._Great_Tit_%2819234094613%29.jpg")
+```
+
+---
+
+This exercise will based on a study by [Firth & Sheldon (2015)]("https://royalsocietypublishing.org/doi/full/10.1098/rspb.2014.2350") using several species of birds in Wytham Woods, Oxford. This is a fantastic system in which great tits (*Parus major*), blue tits (*Cyanistes caeruleus*), marsh tits (*Poecile palustris*), coal tits (*Periparus ater*) and Eurasian nuthatches (*Sitta europaea*) have been tagged with RFID tags, and they are given access to feeders that are connected to RFID readers. In this study, Firth & Sheldon manipulated access to feeders based on an arbitrary criterion (odd vs. even-numbered RFID tags) and observed that this artificial segregation of co-feeding birds lead to corresponding assortment of birds that feed at those sites. Moreover, this new segregation of co-feeding relationships bled over to other contexts (‘ephemeral’ open feeding sites and nestbox inspections).
 
 Here, we will take the opportunity to re-create a part of Figure 2 of this study, which plots the assortment coefficient of the networks at different time periods and contexts and compares these values to the expected values based on permutation method called ‘node-label permutation’.
+
+---
 
 ##Importing and using .RData file
 
