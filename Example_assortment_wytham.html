@@ -201,7 +201,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Worked Example: Experimental Assortment of Wild Birds in Wytham Woods</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/24/19</em></h4>
+<h4 class="date"><em>updated 06/25/19</em></h4>
 
 </div>
 
@@ -271,7 +271,7 @@ g.pre=graph_from_adjacency_matrix(whole.networks[[1]], mode=&quot;undirected&quo
 set.seed(2)
 lay.pre=layout_with_fr(g.pre) # this will say a layout that we can use in subsequent versions of the network plot
 plot(g.pre, edge.width=E(g.pre)$weight*10, vertex.label=&quot;&quot;, vertex.size=5, layout=lay.pre)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-5-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, let’s try to add whether the individual had an odd- or even-numbered tag. To do this, we have to link the <code>id.info</code> information with the node names. The node names in the adjacency matrices corresponds to the order of individuals in the id.info vector. What we will do is first create a separate data frame object that links the node name to the RFID tag type. We can then use this information to create a node attribute for the network by matching the node name with the id name in this data frame we created:</p>
 <pre class="r"><code>#create a data frame in which the first column is the &quot;id number&quot; and the second column is 1-odd or 0-even. **Note that we can name the columns within the `data.frame()` function 
 rfid.dat=data.frame(id=as.factor(1:339), oddeven=id.info)
@@ -292,14 +292,14 @@ V(g.pre)$node.color=c(&quot;red&quot;,&quot;lightblue&quot;)[V(g.pre)$oddeven+1]
 
 #plot the network using the node colors
 plot(g.pre, vertex.color=V(g.pre)$node.color, edge.width=E(g.pre)$weight*10, vertex.label=&quot;&quot;, vertex.size=5, edge.color=&quot;black&quot;, layout=lay.pre)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-7-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Try doing this with the other networks, such as the “during experiment” network (the second element in the <code>whole.networks</code> list object).</p>
 <pre class="r"><code>g.during=graph_from_adjacency_matrix(whole.networks[[2]], mode=&quot;undirected&quot;, weighted=T) 
 V(g.during)$oddeven=rfid.dat[match(V(g.during)$name, rfid.dat$id), &quot;oddeven&quot;] 
 V(g.during)$node.color=c(&quot;red&quot;, &quot;lightblue&quot;)[V(g.during)$oddeven+1]
 
 plot(g.during, vertex.color=V(g.during)$node.color, edge.width=E(g.during)$weight*20, vertex.label=&quot;&quot;, vertex.size=5, edge.color=&quot;black&quot;) </code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-8-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now, you might notice some visual differences in this network, but it’s actually quite difficult to get any sense of definitive differences here. We now want to directly measure the network metric of interest: assortativity.</p>
 <hr />
 </div>
@@ -352,7 +352,7 @@ for (i in 1:t){
 <p>The resulting <code>r.pre.permutation</code> object will now contain 1000 values. You can plot this as a histogram to visualize the data. In addition, you can draw a vertical line corresponding to the observed assortativity value and see where it falls in the distribution of these values:</p>
 <pre class="r"><code>hist(r.pre.permutation)
 abline(v=r.pre$r, lty=2, col=&quot;red&quot;, lwd=3) #arguments: lty = line type (2 = dashed line); col = color; lwd = line width</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-15-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>You can visually tell that the observed assortativity value falls well within the distribution of the permuted assortativity values. The corresponding p-value based on a one-tailed test would be the number of times the permuted values exceeded the observed value (r.pre$r), divided the number of permutations (<em>note</em>: some people prefer to calculate p-value from permutations by adding 1 to both numerator and denominator. There are some theoretical arguments for that. I will skip that here.):</p>
 <pre class="r"><code>p.pre=(length(which(r.pre.permutation&gt;r.pre$r))+1)/(t+1) 
 p.pre</code></pre>
@@ -368,7 +368,7 @@ for (i in 1:t){
 
 hist(r.during.permutation, xlim=c(-0.06, 0.15)) #NOTE: you will need to use the xlim= argument to adjust the x-axis limits so that the empirical assortativity value will show up! 
 abline(v=r.during$r, lty=2, col=&quot;red&quot;, lwd=3)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-17-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p.during=(length(which(r.during.permutation&gt;r.during$r))+1)/(t+1) 
 p.during</code></pre>
 <pre><code>## [1] 0.000999001</code></pre>
@@ -389,7 +389,7 @@ for (i in 1:t){
 
 hist(r.post.permutation, xlim=c(-0.10, 0.15)) #NOTE: you will need to use the xlim= argument to adjust the x-axis limits so that the empirical assortativity value will show up! 
 abline(v=r.post$r, lty=2, col=&quot;red&quot;, lwd=3)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-18-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>p.post=(length(which(r.post.permutation&gt;r.post$r))+1)/(t+1) 
 p.post</code></pre>
 <pre><code>## [1] 0.2117882</code></pre>
@@ -400,7 +400,7 @@ abline(h=0, lty=2)
 points(1,r.pre$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)
 points(2,r.during$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)
 points(3, r.post$r, pch=&quot;*&quot;, cex=5, col=&quot;red&quot;)</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-19-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Basically, this tells us that the distribution of the expected values of assortativity index is similar in the pre-, during-, and post-treatment networks, but the observed value (red asterisk) far exceeds the expected values during the treatment. This is evidence that the experimental treatment caused assortment by RFID tag type.</p>
 </div>
 <div id="testing-the-carry-over-of-experimental-assortment-into-different-contexts-recreating-figure-2" class="section level2">
@@ -539,7 +539,7 @@ p = p+ scale_x_discrete(limits=df$Treatments) #add treatment name to the x=axis
 p = p+ scale_y_continuous(limits=c(-0.3, 0.3)) #define y-axis range
 p = p+ geom_hline(aes(yintercept=0), linetype=&quot;dashed&quot;) #add dashed horizontal line at 0
 p #plot the figure</code></pre>
-<p><img src="Example_assortment_wytham_files/figure-html/unnamed-chunk-28-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="example_assortment_wytham_files/figure-html/unnamed-chunk-28-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 
 
