@@ -31,7 +31,7 @@ To do this, we will first have to import the publicly-accessible dataset associa
 You can load R Data Files using the `load()` function. Here, we will just load it straight from the dryad website:
 
 ```{r, eval=F}
-load(url("http://datadryad.org/bitstream/handle/10255/dryad.71301/figure2data_wholenetworks. RData"))
+load(url("http://datadryad.org/bitstream/handle/10255/dryad.71301/figure2data_wholenetworks.RData"))
 ```
 
 ```{r, echo=F}
