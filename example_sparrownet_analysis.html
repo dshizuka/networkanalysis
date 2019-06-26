@@ -201,7 +201,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Worked Example: Analyzing the Sparrow Flock Networks Across Two Years</h1>
 <h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/14/19</em></h4>
+<h4 class="date"><em>updated 06/25/19</em></h4>
 
 </div>
 
@@ -260,9 +260,9 @@ adjs=lapply(m.list, function(x) get_network(t(x), data_format=&quot;GBI&quot;, a
 
 gs</code></pre>
 <pre><code>## [[1]]
-## IGRAPH c5a47fc UNW- 39 312 -- 
+## IGRAPH 5f011ef UNW- 39 312 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from c5a47fc (vertex names):
+## + edges from 5f011ef (vertex names):
 ##  [1] 23734--23778 23734--23809 23734--23772 23734--7623  23734--7614 
 ##  [6] 23773--23778 23773--23732 23773--23774 23773--23862 23773--7615 
 ## [11] 23773--7636  23773--23891 23773--23772 23773--23777 23773--7627 
@@ -274,9 +274,9 @@ gs</code></pre>
 ## + ... omitted several edges
 ## 
 ## [[2]]
-## IGRAPH 79a7c0c UNW- 26 143 -- 
+## IGRAPH ea9c29d UNW- 26 143 -- 
 ## + attr: name (v/c), weight (e/n)
-## + edges from 79a7c0c (vertex names):
+## + edges from ea9c29d (vertex names):
 ##  [1] 7660 --23815 7660 --23853 7660 --7635  7660 --7673  7660 --23862
 ##  [6] 7660 --23854 7660 --7658  7660 --7609  7660 --7615  7660 --23778
 ## [11] 7660 --23770 7660 --7680  7668 --23815 7668 --23774 7668 --7673 
@@ -394,7 +394,7 @@ mantel12</code></pre>
 <div id="using-mrqap-to-test-for-the-effects-of-spatial-overlap-and-previous-years-association" class="section level2">
 <h2>Using MRQAP to test for the effects of spatial overlap and previous year’s association</h2>
 <p>The Mantel Test and the plot above shows us that there is significant correlation between the association indices across years–i.e., birds flock with the same individuals each year. However, this effect could simply be driven by the fact that these birds are faithful to their home ranges rather than their social associates. This is important because there is no doubt that spatial overlap influences social associations (it has to, since associations are measured as co-occurrence in time and space). For example, if we import a matrix of spatial overlap between each pair of each individual (measured as the proportion of joint home range that is shared) and plot the association index relative to this measure, we get this:</p>
-<pre class="r"><code>s3=as.matrix(read.csv(&quot;GCSPspaceoverlap3.csv&quot;, header=T, row.names=1))
+<pre class="r"><code>s3=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/GCSPspaceoverlap3.csv&quot;, header=T, row.names=1))
 ids.s3=match(rownames(s3), rownames(adjs[[2]]))
 ids.s3=na.omit(ids.s3)
 ids.adj2=match(rownames(adjs[[2]]), rownames(s3) )

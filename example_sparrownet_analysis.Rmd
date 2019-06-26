@@ -219,7 +219,7 @@ plot(m12[upper.tri(m12)], m21[upper.tri(m21)], pch=19, col=rgb(1,0,0,0.5), cex=2
 The Mantel Test and the plot above shows us that there is significant correlation between the association indices across years--i.e., birds flock with the same individuals each year. However, this effect could simply be driven by the fact that these birds are faithful to their home ranges rather than their social associates. This is important because there is no doubt that spatial overlap influences social associations (it has to, since associations are measured as co-occurrence in time and space). For example, if we import a matrix of spatial overlap between each pair of each individual (measured as the proportion of joint home range that is shared) and plot the association index relative to this measure, we get this:
 
 ```{r}
-s3=as.matrix(read.csv("GCSPspaceoverlap3.csv", header=T, row.names=1))
+s3=as.matrix(read.csv("https://dshizuka.github.io/networkanalysis/SampleData/GCSPspaceoverlap3.csv", header=T, row.names=1))
 ids.s3=match(rownames(s3), rownames(adjs[[2]]))
 ids.s3=na.omit(ids.s3)
 ids.adj2=match(rownames(adjs[[2]]), rownames(s3) )
