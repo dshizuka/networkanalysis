@@ -56,4 +56,4 @@ I'm posting two different types of tutorials. First, the "Basic Tutorials" are g
 
 ###[Example: Analyzing the sparrow flock network across years](example_sparrownet_analysis.html)
 
-###[Example: Experimental assortment of birds at Wytham Woods](example_assortment_wytham.html)
+###[Example: Experimental assortment of birds at Wytham Woods](example_assortment_in_wytham.html)

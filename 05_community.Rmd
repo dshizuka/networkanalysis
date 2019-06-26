@@ -223,9 +223,15 @@ assortment.discrete(adj, V(g)$size.discrete)
 
 ##Worked Examples
 
+***Community Structure***
+
 * ####[Constructing Flock Networks in Golden-crowned Sparrows]("example_make_sparrow_network.html")
 
 * ####[Analyzing the US air transportation network]("example_usairports.html")
+
+***Assortment***
+
+* ####[Analyzing the US air transportation network]("example_assortment_in_wytham.html")
 
 ----
 
