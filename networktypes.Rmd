@@ -17,7 +17,7 @@ There are dozens of different types of biological networks. This is an extremely
 
 ----
 
-###Social networks
+### Social networks
 Social networks describe the dynamics of social interactions and associations (edges) between individuals (nodes). Examples of the types of interactions/associations involved include direct interactions (e.g., aggression, grooming), co-membership in groups such as herds and flocks, or co-use of spatial locations (e.g., roosts, refuges). The analysis of such social networks can be used to understand the structure of societies, the dynamics of social structure across time and space, and the flow of information/disease/etc through these connections.
 
 ![*Example of a social network: Grooming and play networks of pigtail macaques (Macaca nemestrina). Photo by Frank Vincentz via wikimedia, Networks from from* [*Flack et al. (2006)*](https://www.nature.com/articles/nature04326).](./assets/images/ASN_fig1.png)
@@ -30,11 +30,14 @@ Go to a specific tutorial for how to construct social networks [here](networktyp
 
 ----
 
-###Ecological Networks
+### Ecological Networks
 
 In many ecological networks, nodes represent species and edges represents some sort of species interaction. Two prominent examples include food webs and mutualism networks. 
-* In *food webs*, the edges represent trophic interactions. 
+
+* In *food webs*, the edges represent trophic interactions--i.e., when one species consumes another species.
+
 * In *mutualism networks*, the edges may represent interactions such as plant-pollinator relations. In mutualism networks in particular, the network may be *bipartite*: that is, there are two types of nodes (e.g., plants and pollinators), and interactions only occur between two different types of nodes.
+
 * In *species co-occurrence networks*, edges represent the frequency or probability of two species co-occurring in a given space and/or time. 
 
 
@@ -48,7 +51,7 @@ For an introductory tutorial for constructing ecological networks [here](network
 
 ----
 
-###Spatial Networks
+### Spatial Networks
 
 Spatial networks are distinguished by the fact that nodes represent some point in space, e.g., habitats within a landscape, or populations across a region. The edges may represent connectivity of these sites or populations, e.g., predicted or actual movements of individuals or measures of genetic connectivity. Defining edges in these type of networks tend to be a challenge because of the inherent difficulties in observing movements, especially since rare dispersal events can have important impacts in ecological patterns and evolutionary processes.
 
@@ -62,7 +65,7 @@ You will find introductory tutorial matrial for constructing spatial networks [h
 
 -----
 
-###Architecture of Signals in Animal Communication
+### Architecture of Signals in Animal Communication
 
 Recenly, there has been an increase in interest in using networks to describe the architecture of a complex suite of traits such as multicomponent signals in animals. This can be thought of as a *systems biology approach to animal communication* [see Hebets et al. (2016)](http://rspb.royalsocietypublishing.org/content/283/1826/20152889). For example, we can describe the architecture of the complex suite of plumage, acoustic and morphological traits involved in sexual signaling in barn swallows (Wilkins et al. 2015).
 
