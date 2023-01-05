@@ -10,50 +10,58 @@ output:
 
 I'm posting two different types of tutorials. First, the "Basic Tutorials" are general lessons for understanding the basics of network analysis. The "Worked Examples" section are exercises based on published studies--e.g., re-creating the analysis or simulations. 
 
-###[Brief Overview of Network Types in Ecology & Behavioral Ecology](networktypes.html)
+### [Brief Overview of Network Types in Ecology & Behavioral Ecology](networktypes.html)
 
 * [Intro to Animal Social Networks](networktypes_socialnetworks.html)
+
 * [Intro to Ecological Networks](networktypes_ecolnets.html)
+
 * [Intro to Spatial Networks](networktypes_spatialnets.html)
 
 ---
 
-##Basic Tutorials
+### [Glossary of Network Terms (in development)](glossary.html)
+
+---
+
+## Basic Tutorials
 <br>
 
-###[0. Before you start](00_before_you_start.html)
+### [0. Before you start](00_before_you_start.html)
 
-###[1. Introduction to Networks](01_intro.html)
+### [1. Introduction to Networks](01_intro.html)
 
-###[2. Data Formats for Networks](02_dataformats.html)
+### [2. Data Formats for Networks](02_dataformats.html)
 
-###[3. Plotting Basics](03_plots.html)
+### [3. Plotting Basics](03_plots.html)
 
-###[4. Measuring Networks Part 1: Centrality and Global Measures](04_measuring.html)
+### [4. Measuring Networks Part 1: Centrality and Global Measures](04_measuring.html)
 
-###[5. Measuring Networks Part 2: Community structure and Assortment](05_community.html)
+### [5. Measuring Networks Part 2: Community structure and Assortment](05_community.html)
 
-###[6. Testing Your Network: Permuations and Randomizations](06_permutations.html)
+### [6. Testing Your Network: Permuations and Randomizations](06_permutations.html)
 
-###[7. Intro to Network Regression (MRQAP)](07_mrqap.html)
+### [7. Intro to Network Regression (MRQAP)](07_mrqap.html)
 
-###[8. Diffusion in Networks](08_diffusion.html)
+### [8. Diffusion in Networks](08_diffusion.html)
 
-###[9. Random Graphs](09_randomnets.html)
+### [9. Random Graphs](09_randomnets.html)
 
-###[10. Simulating Networks](10_simulations.html)
+### [10. Simulating Networks](10_simulations.html)
 
 --------
 
-##Worked Examples
+## Worked Examples
 <br>
 
-###[Example: Small World and Scale-free Networks](example1_smallworld.html)
+### [Example: Small World and Scale-free Networks](example1_smallworld.html)
 
-###[Example: Analyzing the US Air Transportation Network](example_usairports.html)
+### [Example: Analyzing the US Air Transportation Network](example_usairports.html)
 
-###[Example: Constructing a sparrow flock network](example_make_sparrow_network.html)
+### [Example: Constructing a sparrow flock network](example_make_sparrow_network.html)
 
-###[Example: Analyzing the sparrow flock network across years](example_sparrownet_analysis.html)
+### [Example: Analyzing the sparrow flock network across years](example_sparrownet_analysis.html)
 
-###[Example: Experimental assortment of birds at Wytham Woods](example_assortment_in_wytham.html)
+### [Example: Experimental assortment of birds at Wytham Woods](example_assortment_in_wytham.html)
+
+
