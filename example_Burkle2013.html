@@ -486,22 +486,22 @@ ne.old=nestedtemp(old.bip)$statistic
 nm=vegan::nullmodel(old.bip, method=&quot;swap&quot;)
 nulls=simulate(nm, nsim=100)
 null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
-hist(null.nest, xlim=c(min(null.nest)-0.5, max(null.nest)+0.5))
+hist(null.nest, xlim=c(min(null.nest)-0.5, max(null.nest)+0.5), breaks=20)
 abline(v=ne.old, col=&quot;red&quot;, lty=2)</code></pre>
 <p><img src="example_Burkle2013_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
 <pre class="r"><code>p.old=(length(which(null.nest&lt;=ne.old))+1)/101 
 p.old</code></pre>
-<pre><code>## [1] 0.00990099</code></pre>
+<pre><code>## [1] 0.1683168</code></pre>
 <pre class="r"><code>ne.new=nestedtemp(new.bip)$statistic
 nm=vegan::nullmodel(new.bip, method=&quot;swap&quot;)
 nulls=simulate(nm, nsim=100)
 null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
-hist(null.nest)
+hist(null.nest, breaks=20)
 abline(v=ne.new, col=&quot;red&quot;, lty=2)</code></pre>
 <p><img src="example_Burkle2013_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
 <pre class="r"><code>p.new=(length(which(null.nest&lt;=ne.new))+1)/101 
 p.new</code></pre>
-<pre><code>## [1] 0.00990099</code></pre>
+<pre><code>## [1] 0.1683168</code></pre>
 </div>
 
 
