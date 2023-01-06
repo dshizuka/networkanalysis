@@ -14,7 +14,7 @@
 
 <title>Worked Example: Change in plant-pollinator network over 120 years</title>
 
-<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.13/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
@@ -142,15 +142,11 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark the anchor link active (and if it's in a dropdown, also mark that active)
-  var dropdown = menuAnchor.closest('li.dropdown');
-  if (window.bootstrap) { // Bootstrap 4+
-    menuAnchor.addClass('active');
-    dropdown.find('> .dropdown-toggle').addClass('active');
-  } else { // Bootstrap 3
-    menuAnchor.parent().addClass('active');
-    dropdown.addClass('active');
-  }
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -280,10 +276,8 @@ network over 120 years</h1>
 
 <div id="TOC">
 <ul>
-<li><a href="#recreating-figure-1"
-id="toc-recreating-figure-1">Recreating Figure 1</a></li>
-<li><a href="#recreating-figure-2"
-id="toc-recreating-figure-2">Recreating Figure 2</a></li>
+<li><a href="#recreating-figure-1">Recreating Figure 1</a></li>
+<li><a href="#recreating-figure-2">Recreating Figure 2</a></li>
 </ul>
 </div>
 
@@ -439,9 +433,9 @@ linecols[which(linecols==&quot;yellow&quot;)]=7
 linecols=matrix(as.numeric(linecols), nrow=nrow(old.bip), ncol=ncol(old.bip), dimnames=dimnames(old.bip))</code></pre>
 <p>Finally, we want to re­order the rows and columns here to match the
 figure, which is based on their “nestedness position” (Figure 2
-caption). I actually could not re­create this because they do not explain
-this ordering any further­­so I will have to cheat and simply import the
-species order here as a separate .csv file:</p>
+caption). I actually could not re­create this because they do not
+explain this ordering any further­­so I will have to cheat and simply
+import the species order here as a separate .csv file:</p>
 <pre class="r"><code>fig.order=read.csv(&quot;SampleData/Burkle2013/Fig2_order.csv&quot;) 
 row.order=fig.order[match(rownames(linecols),fig.order$species), &quot;order&quot;]
 col.order=fig.order[match(colnames(linecols),fig.order$species), &quot;order&quot;] 
@@ -475,6 +469,39 @@ networks (outputs not shown):</p>
 <pre class="r"><code>table(linecols)[5]/sum(table(linecols)[c(2,5)]) #proportion of new network links that were new.</code></pre>
 <pre><code>##     7 
 ## 0.516</code></pre>
+<p>###mComparing nestedness of old and new networks</p>
+<p>In the paper, Burkle et al. (2013) found that the plant-bee network
+that existed 120 years ago was significantly nested, while the current
+plant-bee network is not. Given a series of previous work suggesting
+that nestedness can promote stability and biodiversity in mutualism
+networks (Bascompte &amp; Jordano 2007; Bastolla et al. 2009), this
+could have important implications.</p>
+<p>Below is a sample code that one might use to conduct this comparison.
+Note that the results are not going to be exactly the same as in the
+published paper because my networks do not include edge weights (due to
+lack of edge weight data for the old dataset in the supplemental
+materials).</p>
+<pre class="r"><code>library(vegan) 
+ne.old=nestedtemp(old.bip)$statistic
+nm=vegan::nullmodel(old.bip, method=&quot;swap&quot;)
+nulls=simulate(nm, nsim=100)
+null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
+hist(null.nest, xlim=c(min(null.nest)-0.5, max(null.nest)+0.5))
+abline(v=ne.old, col=&quot;red&quot;, lty=2)</code></pre>
+<p><img src="example_Burkle2013_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<pre class="r"><code>p.old=(length(which(null.nest&lt;=ne.old))+1)/101 
+p.old</code></pre>
+<pre><code>## [1] 0.00990099</code></pre>
+<pre class="r"><code>ne.new=nestedtemp(new.bip)$statistic
+nm=vegan::nullmodel(new.bip, method=&quot;swap&quot;)
+nulls=simulate(nm, nsim=100)
+null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
+hist(null.nest)
+abline(v=ne.new, col=&quot;red&quot;, lty=2)</code></pre>
+<p><img src="example_Burkle2013_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
+<pre class="r"><code>p.new=(length(which(null.nest&lt;=ne.new))+1)/101 
+p.new</code></pre>
+<pre><code>## [1] 0.00990099</code></pre>
 </div>
 
 
