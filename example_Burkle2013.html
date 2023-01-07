@@ -270,7 +270,7 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">Worked Example: Change in plant-pollinator
 network over 120 years</h1>
 <h4 class="author">Dai Shizuka</h4>
-<h4 class="date">updated 01/06/23</h4>
+<h4 class="date">updated 01/07/23</h4>
 
 </div>
 
@@ -469,39 +469,6 @@ networks (outputs not shown):</p>
 <pre class="r"><code>table(linecols)[5]/sum(table(linecols)[c(2,5)]) #proportion of new network links that were new.</code></pre>
 <pre><code>##     7 
 ## 0.516</code></pre>
-<p>###mComparing nestedness of old and new networks</p>
-<p>In the paper, Burkle et al. (2013) found that the plant-bee network
-that existed 120 years ago was significantly nested, while the current
-plant-bee network is not. Given a series of previous work suggesting
-that nestedness can promote stability and biodiversity in mutualism
-networks (Bascompte &amp; Jordano 2007; Bastolla et al. 2009), this
-could have important implications.</p>
-<p>Below is a sample code that one might use to conduct this comparison.
-Note that the results are not going to be exactly the same as in the
-published paper because my networks do not include edge weights (due to
-lack of edge weight data for the old dataset in the supplemental
-materials).</p>
-<pre class="r"><code>library(vegan) 
-ne.old=nestedtemp(old.bip)$statistic
-nm=vegan::nullmodel(old.bip, method=&quot;swap&quot;)
-nulls=simulate(nm, nsim=100)
-null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
-hist(null.nest, xlim=c(min(null.nest)-0.5, max(null.nest)+0.5), breaks=20)
-abline(v=ne.old, col=&quot;red&quot;, lty=2)</code></pre>
-<p><img src="example_Burkle2013_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
-<pre class="r"><code>p.old=(length(which(null.nest&lt;=ne.old))+1)/101 
-p.old</code></pre>
-<pre><code>## [1] 0.1683168</code></pre>
-<pre class="r"><code>ne.new=nestedtemp(new.bip)$statistic
-nm=vegan::nullmodel(new.bip, method=&quot;swap&quot;)
-nulls=simulate(nm, nsim=100)
-null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
-hist(null.nest, breaks=20)
-abline(v=ne.new, col=&quot;red&quot;, lty=2)</code></pre>
-<p><img src="example_Burkle2013_files/figure-html/unnamed-chunk-14-2.png" width="672" /></p>
-<pre class="r"><code>p.new=(length(which(null.nest&lt;=ne.new))+1)/101 
-p.new</code></pre>
-<pre><code>## [1] 0.1683168</code></pre>
 </div>
 
 

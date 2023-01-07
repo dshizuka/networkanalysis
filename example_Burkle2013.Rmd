@@ -154,28 +154,3 @@ table(linecols)[5] #number of new interactions
 table(linecols)[5]/sum(table(linecols)[c(2,5)]) #proportion of new network links that were new.
 ```
 
-###mComparing nestedness of old and new networks
-
-In the paper, Burkle et al. (2013) found that the plant-bee network that existed 120 years ago was significantly nested, while the current plant-bee network is not. Given a series of previous work suggesting that nestedness can promote stability and biodiversity in mutualism networks (Bascompte & Jordano 2007; Bastolla et al. 2009), this could have important implications.
-
-Below is a sample code that one might use to conduct this comparison. Note that the results are not going to be exactly the same as in the published paper because my networks do not include edge weights (due to lack of edge weight data for the old dataset in the supplemental materials).
-
-```{r}
-library(vegan) 
-ne.old=nestedtemp(old.bip)$statistic
-nm=vegan::nullmodel(old.bip, method="swap")
-nulls=simulate(nm, nsim=100)
-null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
-hist(null.nest, xlim=c(min(null.nest)-0.5, max(null.nest)+0.5), breaks=20)
-abline(v=ne.old, col="red", lty=2)
-p.old=(length(which(null.nest<=ne.old))+1)/101 
-p.old
-ne.new=nestedtemp(new.bip)$statistic
-nm=vegan::nullmodel(new.bip, method="swap")
-nulls=simulate(nm, nsim=100)
-null.nest=apply(nulls, 3, function(x) nestedtemp(x)$statistic)
-hist(null.nest, breaks=20)
-abline(v=ne.new, col="red", lty=2)
-p.new=(length(which(null.nest<=ne.new))+1)/101 
-p.new
-```
