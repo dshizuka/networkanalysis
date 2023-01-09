@@ -15,21 +15,23 @@ set.seed(2)
 
 ------------
 
-##2.1 Basic Data Formats For Networks
+## 2.1 Basic Data Formats For Networks
 
 There are three basic data formats that can be used to describe networks: *adjacency matrix*, *edge list*, and *adjacency list*. Each format has its pros and cons. There are other variations on these (e.g., a *biadjacency matrix* for bipartite networks).
 
-###2.1.1 Adjacency Matrix
+### 2.1.1 Adjacency Matrix
 
-An ***adjacency matrix*** is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the  edges (i.e., lines) are represented by 0 or 1, with indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).
+An ***adjacency matrix*** is a matrix in which the rows and columns represent different nodes. In an unweighted adjacency matrix, the  edges (i.e., lines) are represented by 0 or 1, with 1 indicating that these two nodes are connected. If two nodes are connected, they are said to be adjacent (hence the name, adjacency matrix). In a weighted matrix, however, you can have different values, indicating different edge qualities (or tie strengths).
 
 Let's start by loading the `igraph` package and setting up a toy network (same as in [Lesson 1: Intro](01_intro.html))
+
 ```{r message=FALSE}
 library(igraph)
 g=make_graph(~A-B-C-A, D-E-F-D, A-F) 
 V(g)$color=c("white", "red", "green", "blue", "orange", "yellow")
 E(g)$weight=1:7
 E(g)$color=rainbow(7)
+plot(g)
 ```
 
 We can now extract the adjacency matrix of the network we created, called `g`:
@@ -41,7 +43,7 @@ as_adjacency_matrix(g, sparse=F)
 
 Also note that, because the network is undirected and unweighted, the corresponding adjacency matrix is symmetrical (value for row A, column B is identical to row B, column A) and binary (values are 0 or 1).
 
-###2.1.2 Edge List
+### 2.1.2 Edge List
 
 An **edge list** is a two-column list of the two nodes that are connected in a network. In the case of a directed network, the convention is that the edge goes from the vertex in the first column to the vertex in the second column. In an undirected network, the order of the vertices don’t matter. For weighted networks, you may have a third column that indicates the edge weight.
 
@@ -51,7 +53,7 @@ You can get the edgelist of any igraph object as well:
 as_edgelist(g)
 ```
 
-###2.1.3 Affiliation Matrix (aka individual-by-group matrix)
+### 2.1.3 Affiliation Matrix (aka, Incidence Matrix, or individual-by-group matrix)
 
 In many cases, we will construct social networks from co-membership in groups. For example, we would draw edges between individuals based on their patterns of co-occurrence in a flock. Similarly, we could construct networks of species co-occurrences in populations, etc. 
 
@@ -83,7 +85,7 @@ g2=graph_from_adjacency_matrix(m2, "undirected", weighted=T, diag=F)
 plot(g2, edge.width=E(g2)$weight)
 ```
 
-###2.1.4 Adjacency List
+### 2.1.4 Adjacency List
 
 An **adjacency list**, also known as a node list, presents the 'focal' node on the first column, and then all the other nodes that are connected to it (i.e., adjacent to it) as columns to the right of it. In a spreadsheet, would be a table with rows with different number of columns, which is often very awkward to deal with, like this:
 
@@ -105,10 +107,10 @@ as_adj_list(g)
 
 ----
 
-##2.2 Data formats for directed and weighted networks
+## 2.2 Data formats for directed and weighted networks
 Let’s consider some important aspects of data formats that come with networks that are directed or weighted. I will keep this short by listing some important things to consider, and a line of code that will display this.
 
-###2.2.1 Directed networks
+### 2.2.1 Directed networks
 
 Let's create an igraph object for a *directed network* called `dir.g`.
 For directed networks, the adjacency matrix is not symmetrical. Rather, the cell value is 1 if the edge goes from the *row vertex* to the *column vertex*.
@@ -130,7 +132,7 @@ as_edgelist(dir.g)
 
 You can see that, since the `dir.g` network object contains one mutual edge (A<->F), the edge list has 8 rows, while the edgelist for the undirected version of the network has 7 rows.
 
-###2.2.1 Weighted networks
+### 2.2.1 Weighted networks
 Let’s now consider what the data formats would look like. To do this, let’s go back to our original network, `g`. Let’s say that the edge widths that we added represent edge weights or values. Then, the adjacency matrix for this network can be shown by using the `attr=` argument within the function to call the adjacency matrix to specify the edge weights:
 
 ```{r}
@@ -152,11 +154,11 @@ as_data_frame(g)[,c("from", "to", "weight")]
 
 -----
 
-##2.3 Going from Data to Networks
+## 2.3 Going from Data to Networks
 
 <br>
 
-###2.3.1 Creating a network from your edge list
+### 2.3.1 Creating a network from your edge list
 
 Creating a network from an edgelist that you have created is easy. First, import the .csv file called "sample_edgelist.csv".
 
@@ -174,7 +176,7 @@ eg
 plot(eg, edge.width=E(eg)$weight)
 ```
 
-###2.3.2 Creating a network from your adjacency matrix
+### 2.3.2 Creating a network from your adjacency matrix
 
 Importing an adjacency matrix written in .csv format is just slightly trickier. This is because you want R to know that first row is a header AND the first row contains row names rather than data. You also want R to recognize this data as a “matrix object”. We can use just one line of code to do this:
 
@@ -191,7 +193,7 @@ g=graph_from_adjacency_matrix(am, mode="undirected", weighted=T)
 plot(g, edge.width=E(g)$weight)
 ```
 
-###2.3.3 Creating a network from group or site associations
+### 2.3.3 Creating a network from group or site associations
 
 There are two common instances when you might make a network from an affiliation matrix--that is, a matrix in which rows are individuals (or whatever element will be your node) and columns are 'groups' that these individuals belong to. We often build ***social networks*** out of data on co-membership in groups (flocks, herds, shoals, pods, etc.) across time and space. Most often, we apply a 'gambit of the group'--that is, we assume that individuals that occur together in group are "associated". Typically, an association index is calculated using the group membership data. For more detailed tutorial on this, see [this page on social networks](https://dshizuka.github.io/networkanalysis/networktypes_socialnetworks.html)
 
