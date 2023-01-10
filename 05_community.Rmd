@@ -235,7 +235,7 @@ assortment.discrete(adj, V(g)$size.discrete)
 
 ----
 
-##Next: [6. Random Graphs](06_randomnets.html)
+##Next: [6. Permutations](06_permutations.html)
 
 
 

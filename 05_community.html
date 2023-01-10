@@ -1,35 +1,49 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Dai Shizuka" />
 
 
-<title></title>
+<title>5. Measuring Networks Part 2: Community Structure and Assortment</title>
 
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/flatly.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 
-<style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
-  pre:not([class]) {
-    background-color: white;
-  }
-</style>
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
 <script type="text/javascript">
 if (window.hljs) {
   hljs.configure({languages: []});
@@ -42,37 +56,11 @@ if (window.hljs) {
 
 
 
-<style type="text/css">
-h1 {
-  font-size: 34px;
-}
-h1.title {
-  font-size: 38px;
-}
-h2 {
-  font-size: 30px;
-}
-h3 {
-  font-size: 24px;
-}
-h4 {
-  font-size: 18px;
-}
-h5 {
-  font-size: 16px;
-}
-h6 {
-  font-size: 12px;
-}
-.table th:not([align]) {
-  text-align: left;
-}
-</style>
 
 
-</head>
 
-<body>
+
+
 
 <style type = "text/css">
 .main-container {
@@ -80,58 +68,71 @@ h6 {
   margin-left: auto;
   margin-right: auto;
 }
-code {
-  color: inherit;
-  background-color: rgba(0, 0, 0, 0.04);
-}
 img {
   max-width:100%;
-  height: auto;
 }
 .tabbed-pane {
   padding-top: 12px;
 }
+.html-widget {
+  margin-bottom: 20px;
+}
 button.code-folding-btn:focus {
   outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
 }
 </style>
 
 
 <style type="text/css">
-/* padding for bootstrap navbar */
-body {
-  padding-top: 60px;
-  padding-bottom: 40px;
+.dropdown-submenu {
+  position: relative;
 }
-/* offset scroll position for anchor links (for fixed navbar)  */
-.section h1 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
 }
-
-.section h2 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
 }
-.section h3 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
 }
-.section h4 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
 }
-.section h5 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left {
+  float: none;
 }
-.section h6 {
-  padding-top: 65px;
-  margin-top: -65px;
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
 }
 </style>
 
-<script>
+<script type="text/javascript">
 // manage active state of menu based on current page
 $(document).ready(function () {
   // active menu anchor
@@ -141,27 +142,98 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.parent().addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
 });
 </script>
-
-
-<div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script>
-$(document).ready(function () {
-  window.buildTabsets("TOC");
-});
-</script>
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
 
 <!-- code folding -->
 
 
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
 
 
 
@@ -169,7 +241,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -195,77 +267,101 @@ $(document).ready(function () {
   </div><!--/.container -->
 </div><!--/.navbar -->
 
-<div class="fluid-row" id="header">
+<div id="header">
 
 
 
-<h1 class="title toc-ignore"><ol start="5" style="list-style-type: decimal">
-<li>Measuring Networks Part 2: Community Structure and Assortment</li>
-</ol></h1>
-<h4 class="author"><em>Dai Shizuka</em></h4>
-<h4 class="date"><em>updated 06/25/19</em></h4>
+<h1 class="title toc-ignore">5. Measuring Networks Part 2: Community
+Structure and Assortment</h1>
+<h4 class="author">Dai Shizuka</h4>
+<h4 class="date">updated 01/10/23</h4>
 
 </div>
 
-<div id="TOC">
-<ul>
-<li><a href="#community-structure-in-networks">5.1 Community Structure in Networks</a><ul>
-<li><a href="#modularity-and-community-detection">5.1.1 Modularity and Community Detection</a></li>
-<li><a href="#community-detection-in-igraph">5.1.2 Community detection in <code>igraph</code></a></li>
-<li><a href="#example-community-detection-with-sample-sparrow-network">5.1.4 Example: Community detection with sample sparrow network</a></li>
-</ul></li>
-<li><a href="#assortment">5.2 Assortment</a><ul>
-<li><a href="#the-assortment-coefficient">5.2.1 The Assortment Coefficient</a></li>
-<li><a href="#assortment-a-simple-example-with-igraph">5.2.2 Assortment: a simple example with <code>igraph</code></a></li>
-<li><a href="#using-the-assortnet-package">5.2.3 Using the <code>assortnet</code> package</a></li>
-</ul></li>
-<li><a href="#worked-examples">Worked Examples</a></li>
-<li><a href="#next-6.-random-graphs">Next: <a href="06_randomnets.html">6. Random Graphs</a></a></li>
-</ul>
-</div>
 
-<table style="width:7%;">
+<table style="width:8%;">
 <colgroup>
-<col width="6%" />
+<col width="8%" />
 </colgroup>
 <tbody>
 <tr class="odd">
 <td>Load packages you need for this tutorial:</td>
 </tr>
 <tr class="even">
-<td><code>r library(igraph)</code></td>
-</tr>
-<tr class="odd">
-<td><code>## Warning: package 'igraph' was built under R version 3.5.2</code></td>
-</tr>
-<tr class="even">
-<td><code>r library(assortnet)</code></td>
+<td><code>r library(igraph) library(assortnet)</code></td>
 </tr>
 </tbody>
 </table>
-<div id="community-structure-in-networks" class="section level2">
-<h2>5.1 Community Structure in Networks</h2>
+<p>##5.1 Community Structure in Networks</p>
 <div class="figure">
-<img src="assets/images/Newman2006_figure.png" alt="Figure 1: An example of a network with community structure. From Newman 2006-PNAS" />
-<p class="caption">Figure 1: An example of a network with community structure. From Newman 2006-PNAS</p>
+<img src="assets/images/Newman2006_figure.png" alt="" />
+<p class="caption">Figure 1: An example of a network with community
+structure. From Newman 2006-PNAS</p>
 </div>
-<p>One of the ubiquitous properties of networks is that they exhibit <em>community structure</em>, the presence of discrete clusters of nodes that are densely connected, which themselves are only loosely connected to other clusters (Figure 6.1). In ecological contexts, these may be clusters of individuals that form social groups, groups of populations that form cohesive genetic or ecological units, or sets of species that have intimate ecological and evolutionary interactions. The problem is, how do we detect the presence of such <em>clusters</em> or <em>communities</em>, and how can we quantify the degree of community structure?</p>
-<div id="modularity-and-community-detection" class="section level3">
-<h3>5.1.1 Modularity and Community Detection</h3>
-<p>In a series of papers, Mark Newman and colleagues presented a quantitative measure called <strong>modularity</strong>, which quantify the degree to which such clusters are discrete (Girvan &amp; Newman 2002; Newman &amp; Girvan 2004; Newman 2006). The modularity index, <em>Q</em>, is a measure of the proportion of edges that occur within communities , relative to the expected proportion if all edges were placed randomly.</p>
-<p><span class="math inline">\(Q = \frac{1}{2m} \left(A_{ij}-\frac{k_i k_j}{2m}\right)\delta\left(c_i,c_j\right)\)</span></p>
-<p>Where <span class="math inline">\(m\)</span> is the total number of edges in a network, <span class="math inline">\(A_ij\)</span> is the adjacency matrix, <span class="math inline">\(k_i\)</span> and <span class="math inline">\(k_j\)</span> are the degrees of node <span class="math inline">\(i\)</span> an <span class="math inline">\(j\)</span>, <span class="math inline">\(c_i\)</span> and <span class="math inline">\(c_j\)</span> refer to the communities to which <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> belong, and <span class="math inline">\(\delta\left(c_i,c_j)\right)\)</span> is the Kroenecker delta function, which equals 1 when <span class="math inline">\(c_i = c_j\)</span> and 0 otherwise. This value theoretically ranges from 0 to 1.</p>
-<p>One class of methods for community detection (often called ‘modularity-optimization method’) to find the partitions in the network that assigns nodes into communities such that <span class="math inline">\(Q\)</span> is maximized. The problem, however, is that there are too many possible partitions that can exist in a given network (ranging from 1 to n number of communities, with every possible combination of nodes), and so an exhaustive search is usually not feasible. Thus, modularity-optimization techniques rely on search algorithms that use different approaches (e.g., agglomerative versus divisive methods) with different strengths and weaknesses (we will hight a few below).</p>
-<p>One should also be aware that modularity-based methods of community detection is not fool-proof. In particular, there is a well-studied resolution limit to modularity optimization: these methods tend to miss small, well-defined communities when there are other large communities. They also suffer from the basic assumption that each node belongs to just one community. While other community detection methods exist that can overcome some of these shortfalls, they too often have their weaknesses. In short, there is no perfect approach to community detection. Useful references to these debates include Palla et al. (2005), Fortunato (2010), Lancichinetti &amp; Fortunato (2011), and countless others.</p>
-</div>
-<div id="community-detection-in-igraph" class="section level3">
-<h3>5.1.2 Community detection in <code>igraph</code></h3>
-<p>There are several functions available for community detection in <code>igraph</code> and other packages.</p>
-<table style="width:94%;">
+<p>One of the ubiquitous properties of networks is that they exhibit
+<em>community structure</em>, the presence of discrete clusters of nodes
+that are densely connected, which themselves are only loosely connected
+to other clusters (Figure 6.1). In ecological contexts, these may be
+clusters of individuals that form social groups, groups of populations
+that form cohesive genetic or ecological units, or sets of species that
+have intimate ecological and evolutionary interactions. The problem is,
+how do we detect the presence of such <em>clusters</em> or
+<em>communities</em>, and how can we quantify the degree of community
+structure?</p>
+<p>###5.1.1 Modularity and Community Detection</p>
+<p>In a series of papers, Mark Newman and colleagues presented a
+quantitative measure called <strong>modularity</strong>, which quantify
+the degree to which such clusters are discrete (Girvan &amp; Newman
+2002; Newman &amp; Girvan 2004; Newman 2006). The modularity index,
+<em>Q</em>, is a measure of the proportion of edges that occur within
+communities , relative to the expected proportion if all edges were
+placed randomly.</p>
+<p><span class="math inline">\(Q = \frac{1}{2m} \left(A_{ij}-\frac{k_i
+k_j}{2m}\right)\delta\left(c_i,c_j\right)\)</span></p>
+<p>Where <span class="math inline">\(m\)</span> is the total number of
+edges in a network, <span class="math inline">\(A_ij\)</span> is the
+adjacency matrix, <span class="math inline">\(k_i\)</span> and <span
+class="math inline">\(k_j\)</span> are the degrees of node <span
+class="math inline">\(i\)</span> an <span
+class="math inline">\(j\)</span>, <span
+class="math inline">\(c_i\)</span> and <span
+class="math inline">\(c_j\)</span> refer to the communities to which
+<span class="math inline">\(i\)</span> and <span
+class="math inline">\(j\)</span> belong, and <span
+class="math inline">\(\delta\left(c_i,c_j)\right)\)</span> is the
+Kroenecker delta function, which equals 1 when <span
+class="math inline">\(c_i = c_j\)</span> and 0 otherwise. This value
+theoretically ranges from 0 to 1.</p>
+<p>One class of methods for community detection (often called
+‘modularity-optimization method’) to find the partitions in the network
+that assigns nodes into communities such that <span
+class="math inline">\(Q\)</span> is maximized. The problem, however, is
+that there are too many possible partitions that can exist in a given
+network (ranging from 1 to n number of communities, with every possible
+combination of nodes), and so an exhaustive search is usually not
+feasible. Thus, modularity-optimization techniques rely on search
+algorithms that use different approaches (e.g., agglomerative versus
+divisive methods) with different strengths and weaknesses (we will hight
+a few below).</p>
+<p>One should also be aware that modularity-based methods of community
+detection is not fool-proof. In particular, there is a well-studied
+resolution limit to modularity optimization: these methods tend to miss
+small, well-defined communities when there are other large communities.
+They also suffer from the basic assumption that each node belongs to
+just one community. While other community detection methods exist that
+can overcome some of these shortfalls, they too often have their
+weaknesses. In short, there is no perfect approach to community
+detection. Useful references to these debates include Palla et
+al. (2005), Fortunato (2010), Lancichinetti &amp; Fortunato (2011), and
+countless others.</p>
+<p>###5.1.2 Community detection in <code>igraph</code></p>
+<p>There are several functions available for community detection in
+<code>igraph</code> and other packages.</p>
+<table>
 <colgroup>
-<col width="22%" />
-<col width="51%" />
-<col width="20%" />
+<col width="23%" />
+<col width="55%" />
+<col width="21%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -277,56 +373,76 @@ $(document).ready(function () {
 <tbody>
 <tr class="odd">
 <td><code>edge.betweenness.community()</code></td>
-<td>One of the first in the class of “modularity optimization” algorithms. It is a “divisive” method. Cut the edge with highest edge betweenness, and recalculate. Eventually, you end up cutting the network into different groups.</td>
+<td>One of the first in the class of “modularity optimization”
+algorithms. It is a “divisive” method. Cut the edge with highest edge
+betweenness, and recalculate. Eventually, you end up cutting the network
+into different groups.</td>
 <td>Newman &amp; Girvan 2004</td>
 </tr>
 <tr class="even">
 <td><code>fastgreedy.community()</code></td>
-<td>Hierarchical agglomerative method that is designed to run well in large networks. Creates “multigraphs” where you lump groups of nodes together in the process of agglomeration in order to save time on sparse graphs.</td>
-<td>Clauset et al. 2004</td>
+<td>Hierarchical agglomerative method that is designed to run well in
+large networks. Creates “multigraphs” where you lump groups of nodes
+together in the process of agglomeration in order to save time on sparse
+graphs.</td>
+<td>Clauset et al. 2004</td>
 </tr>
 <tr class="odd">
 <td><code>walktrap.community()</code></td>
-<td>Uses random walks to calculate distances, and then use agglomerative method to optimize modularity</td>
+<td>Uses random walks to calculate distances, and then use agglomerative
+method to optimize modularity</td>
 <td>Pons &amp; Latapy 2005</td>
 </tr>
 <tr class="even">
 <td><code>spinglass.community()</code></td>
-<td>This method uses the analogy of the lowest-energy state of a collection of magnets (a so-called spin glass model).</td>
+<td>This method uses the analogy of the lowest-energy state of a
+collection of magnets (a so-called spin glass model).</td>
 <td>Reichardt &amp; Bornholdt 2006</td>
 </tr>
 <tr class="odd">
 <td><code>leading.eigenvector.community()</code></td>
-<td>This is a “spectral partitioning” method. You first define a ‘modularity matrix’, which sums to 0 when there is no community structure. The leading eigenvector of this matrix ends up being useful as a community membership vector.</td>
+<td>This is a “spectral partitioning” method. You first define a
+‘modularity matrix’, which sums to 0 when there is no community
+structure. The leading eigenvector of this matrix ends up being useful
+as a community membership vector.</td>
 <td>Newman 2006</td>
 </tr>
 <tr class="even">
 <td><code>label.propagation.community()</code></td>
 <td>I have not used this one…</td>
-<td>Raghavan et al. 2007</td>
+<td>Raghavan et al. 2007</td>
 </tr>
 <tr class="odd">
 <td><code>cluster_louvain()</code></td>
-<td>The “Louvain” method, so-called because it was created by a group of researchers at Louvain University in Belgium. Community aggregation</td>
-<td>Blondel et al. 2008</td>
+<td>The “Louvain” method, so-called because it was created by a group of
+researchers at Louvain University in Belgium. Community aggregation</td>
+<td>Blondel et al. 2008</td>
 </tr>
 <tr class="even">
 <td><code>rnetcarto::netcarto()</code></td>
-<td>Simulated Annealing method. Thought to be useful for smaller networks. Available through ‘rnetcarto’ package (Doulcier 2015).</td>
+<td>Simulated Annealing method. Thought to be useful for smaller
+networks. Available through ‘rnetcarto’ package (Doulcier 2015).</td>
 <td>Guimera &amp; Amaral 2005</td>
 </tr>
 </tbody>
 </table>
-<div id="modularity-community-detection-a-simple-example" class="section level4">
-<h4>5.1.3 Modularity &amp; Community Detection: A Simple Example</h4>
-<p>To illustrate how to measure modularity and assortativity using igraph, let’s start by creating a simple graph with clear community structure. First, we’ll create a network consisting of two clusters that are completely connected, which themselves are loosely connected.</p>
+<p>####5.1.3 Modularity &amp; Community Detection: A Simple Example</p>
+<p>To illustrate how to measure modularity and assortativity using
+igraph, let’s start by creating a simple graph with clear community
+structure. First, we’ll create a network consisting of two clusters that
+are completely connected, which themselves are loosely connected.</p>
 <pre class="r"><code>g=make_graph(~A:B:C:D:E-A:B:C:D:E, F:G:H:I:J-F:G:H:I:J, A-F, B-G)
 
 set.seed(7)
 l=layout_with_fr(g)
 plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-2-1.png" width="384" /></p>
-<p>Let’s now apply a community detection algorithm to figure out the optimal division of this network into communities. Because the community division in this example is very clear, we can choose any of the community detection method in the table above and we are likely to come up with the same answer. Let’s use one called the edge betweenness method:</p>
+<p>Let’s now apply a community detection algorithm to figure out the
+optimal division of this network into communities. Because the community
+division in this example is very clear, we can choose any of the
+community detection method in the table above and we are likely to come
+up with the same answer. Let’s use one called the edge betweenness
+method:</p>
 <pre class="r"><code>eb=edge.betweenness.community(g) 
 eb</code></pre>
 <pre><code>## IGRAPH clustering edge betweenness, groups: 2, mod: 0.41
@@ -337,7 +453,11 @@ eb</code></pre>
 ##   $`2`
 ##   [1] &quot;F&quot; &quot;G&quot; &quot;H&quot; &quot;I&quot; &quot;J&quot;
 ## </code></pre>
-<p>The resulting object is a ‘communities object’, which includes a few pieces of information-the number of communities (groups), the modularity value based on the node assignments, and the membership of nodes to each community. We can call each of these values separately (outputs not shown):</p>
+<p>The resulting object is a ‘communities object’, which includes a few
+pieces of information-the number of communities (groups), the modularity
+value based on the node assignments, and the membership of nodes to each
+community. We can call each of these values separately (outputs not
+shown):</p>
 <pre class="r"><code>length(eb) #number of communities</code></pre>
 <pre><code>## [1] 2</code></pre>
 <pre class="r"><code>modularity(eb) #modularity</code></pre>
@@ -345,14 +465,17 @@ eb</code></pre>
 <pre class="r"><code>membership(eb) #assignment of nodes to communities</code></pre>
 <pre><code>## A B C D E F G H I J 
 ## 1 1 1 1 1 2 2 2 2 2</code></pre>
-<p>You can also use this communities object to produce a pretty network figure that shows the community structure by incorporating it into the <code>plot()</code> function.</p>
+<p>You can also use this communities object to produce a pretty network
+figure that shows the community structure by incorporating it into the
+<code>plot()</code> function.</p>
 <pre class="r"><code>plot(eb, g, layout=l)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-5-1.png" width="384" /></p>
-</div>
-</div>
-<div id="example-community-detection-with-sample-sparrow-network" class="section level3">
-<h3>5.1.4 Example: Community detection with sample sparrow network</h3>
-<p>Let’s try another example, this time with a more complex network. We can use the sample sparrow network that we’ve used in some other tutorials. Let’s import the association data (individual-by-group matrix) and use <code>asnipe</code> and <code>igraph</code> to create a network.</p>
+<p>###5.1.4 Example: Community detection with sample sparrow network</p>
+<p>Let’s try another example, this time with a more complex network. We
+can use the sample sparrow network that we’ve used in some other
+tutorials. Let’s import the association data (individual-by-group
+matrix) and use <code>asnipe</code> and <code>igraph</code> to create a
+network.</p>
 <pre class="r"><code>library(asnipe)
 library(igraph)
 assoc=as.matrix(read.csv(&quot;https://dshizuka.github.io/networkanalysis/SampleData/Sample_association.csv&quot;, header=T, row.names=1)) #import individual-by-group data
@@ -362,7 +485,8 @@ g.sparrow=graph_from_adjacency_matrix(mat, &quot;undirected&quot;, weighted=T) #
 <p>Plot the network to see:</p>
 <pre class="r"><code>plot(g.sparrow, edge.width=E(g.sparrow)$weight*5, vertex.label=&quot;&quot;)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-7-1.png" width="384" /></p>
-<p>Use one of the community detection algorithms. Here’s an example with the Louvain method:</p>
+<p>Use one of the community detection algorithms. Here’s an example with
+the Louvain method:</p>
 <pre class="r"><code>com=cluster_louvain(g.sparrow)
 com</code></pre>
 <pre><code>## IGRAPH clustering multi level, groups: 4, mod: 0.61
@@ -371,7 +495,7 @@ com</code></pre>
 ##   [1] &quot;23820&quot; &quot;23726&quot; &quot;23831&quot; &quot;23763&quot; &quot;23853&quot;
 ##   
 ##   $`2`
-##   [1] &quot;23777&quot; &quot;23774&quot; &quot;23779&quot; &quot;23773&quot; &quot;23862&quot; &quot;23732&quot;
+##   [1] &quot;23772&quot; &quot;23770&quot; &quot;23860&quot; &quot;23857&quot; &quot;23871&quot; &quot;23734&quot; &quot;23781&quot; &quot;23815&quot; &quot;23809&quot;
 ##   
 ##   $`3`
 ##   [1] &quot;23771&quot; &quot;23756&quot; &quot;23759&quot; &quot;23768&quot; &quot;23758&quot;
@@ -382,7 +506,8 @@ com</code></pre>
 <pre class="r"><code>set.seed(2)
 plot(com, g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-9-1.png" width="384" /></p>
-<p>… or if you don’t like the coloring scheme, you can customize it. Let’s get fancy and use RColorBrewer to assign colors.</p>
+<p>… or if you don’t like the coloring scheme, you can customize it.
+Let’s get fancy and use RColorBrewer to assign colors.</p>
 <pre class="r"><code>library(RColorBrewer)
 colors=brewer.pal(length(com),&#39;Accent&#39;) #make a color palette
 V(g.sparrow)$color=colors[membership(com)] #assign each vertex a color based on the community assignment
@@ -390,42 +515,77 @@ V(g.sparrow)$color=colors[membership(com)] #assign each vertex a color based on 
 set.seed(2)
 plot(g.sparrow, vertex.label=&quot;&quot;, edge.width=E(g.sparrow)$weight*5)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-10-1.png" width="384" /></p>
-</div>
-</div>
-<div id="assortment" class="section level2">
-<h2>5.2 Assortment</h2>
-<p>One major pattern common to many social networks (and other types of networks) is <em>homophily</em> or <em>assortment</em>—the tendency for nodes that share a trait to be connected. The assortment coefficient is a commonly used measurement of homophily. It is similar to the modularity index used in community detection, but the assortativity coefficient is used when we know a priori the ‘type’ or ‘value’ of nodes. For example, we can use the assortment coefficient to examine whether discrete node types (e.g., gender, ethnicity, species, etc.) are more or less connected to each other. Assortment coefficient can also be used with “scalar attributes” (i.e., continuously varying traits).</p>
+<p>##5.2 Assortment</p>
+<p>One major pattern common to many social networks (and other types of
+networks) is <em>homophily</em> or <em>assortment</em>—the tendency for
+nodes that share a trait to be connected. The assortment coefficient is
+a commonly used measurement of homophily. It is similar to the
+modularity index used in community detection, but the assortativity
+coefficient is used when we know a priori the ‘type’ or ‘value’ of
+nodes. For example, we can use the assortment coefficient to examine
+whether discrete node types (e.g., gender, ethnicity, species, etc.) are
+more or less connected to each other. Assortment coefficient can also be
+used with “scalar attributes” (i.e., continuously varying traits).</p>
 <div class="figure">
-<img src="assets/images/assortment.png" alt="Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity." />
-<p class="caption">Figure 2: Two networks with different patterns of assortment. Node color represents some discrete node value (e.g., male vs. female). Left, an assortative, or homophilous, network. Right, a network with no assortativity.</p>
+<img src="assets/images/assortment.png" alt="" />
+<p class="caption">Figure 2: Two networks with different patterns of
+assortment. Node color represents some discrete node value (e.g., male
+vs. female). Left, an assortative, or homophilous, network. Right, a
+network with no assortativity.</p>
 </div>
-<div id="the-assortment-coefficient" class="section level3">
-<h3>5.2.1 The Assortment Coefficient</h3>
+<p>###5.2.1 The Assortment Coefficient</p>
 <p>The assortment coefficient has a general form,</p>
-<p><span class="math inline">\(r = \frac{\sum_{ij} \left(A_{ij}-k_ik_j/2m\right)x_ix_j}{\sum_{ij} \left(k_i\delta_{ij}-k_ik_j/2m\right)x_ix_j}\)</span></p>
-<p>where <span class="math inline">\(k_i\delta_{ij}\)</span> is the degree of <span class="math inline">\(i\)</span> excluding its connection with <span class="math inline">\(j\)</span>. This is actually a form of the Pearson correlation coefficient. The coefficient is large (approaches 1) if nodes with similar values are more connected and small (approaches 1) when similar nodes are less connected. The value is 0 when edges are random with respect to node values.</p>
-<p>For more on the assortativity coefficient, I recommend reading the original paper on this by Newman (2002), and its extension by Farine (2014).</p>
-<p>There are at least two easy ways to calculate the assortment coefficient. In the <code>igraph</code> package, there is a function for <code>assortativity()</code>. One benefit to this function is that it can calculate assortment in directed or undirected network. However, the major downside is that it cannot handle weighted networks.</p>
-<p>To measure assortativity on weighted networks, use the <code>assortment.discrete()</code> or <code>assortment.continuous()</code> function in the <code>assortnet</code> library (Farine 2014). Here, I will first demonstrate how to use the <code>assortativity()</code> function in igraph, and then do the equivalent with the <code>assortnet</code> package functions.</p>
-</div>
-<div id="assortment-a-simple-example-with-igraph" class="section level3">
-<h3>5.2.2 Assortment: a simple example with <code>igraph</code></h3>
-<p>Let’s use the same example network to demonstrate how to calculate assortativity, and to compare the difference between modularity and assortativity.</p>
-<p>Let’s start by assigning each node a value–let’s say nodes vary in size.</p>
+<p><span class="math inline">\(r = \frac{\sum_{ij}
+\left(A_{ij}-k_ik_j/2m\right)x_ix_j}{\sum_{ij}
+\left(k_i\delta_{ij}-k_ik_j/2m\right)x_ix_j}\)</span></p>
+<p>where <span class="math inline">\(k_i\delta_{ij}\)</span> is the
+degree of <span class="math inline">\(i\)</span> excluding its
+connection with <span class="math inline">\(j\)</span>. This is actually
+a form of the Pearson correlation coefficient. The coefficient is large
+(approaches 1) if nodes with similar values are more connected and small
+(approaches 1) when similar nodes are less connected. The value is 0
+when edges are random with respect to node values.</p>
+<p>For more on the assortativity coefficient, I recommend reading the
+original paper on this by Newman (2002), and its extension by Farine
+(2014).</p>
+<p>There are at least two easy ways to calculate the assortment
+coefficient. In the <code>igraph</code> package, there is a function for
+<code>assortativity()</code>. One benefit to this function is that it
+can calculate assortment in directed or undirected network. However, the
+major downside is that it cannot handle weighted networks.</p>
+<p>To measure assortativity on weighted networks, use the
+<code>assortment.discrete()</code> or
+<code>assortment.continuous()</code> function in the
+<code>assortnet</code> library (Farine 2014). Here, I will first
+demonstrate how to use the <code>assortativity()</code> function in
+igraph, and then do the equivalent with the <code>assortnet</code>
+package functions.</p>
+<p>###5.2.2 Assortment: a simple example with <code>igraph</code></p>
+<p>Let’s use the same example network to demonstrate how to calculate
+assortativity, and to compare the difference between modularity and
+assortativity.</p>
+<p>Let’s start by assigning each node a value–let’s say nodes vary in
+size.</p>
 <pre class="r"><code>set.seed(3)
 V(g)$size=c(rnorm(5, mean=20, sd=5), rnorm(5, mean=30, sd=5)) #assign sizes to nodes using two normal distributions with different means
 
 plot(g, layout=l, edge.color=&quot;black&quot;)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-11-1.png" width="384" /></p>
-<p>Now, we can measure the degree to which this network exhibits assortment by node size.</p>
+<p>Now, we can measure the degree to which this network exhibits
+assortment by node size.</p>
 <pre class="r"><code>assortativity(g, V(g)$size, directed=F)</code></pre>
 <pre><code>## [1] 0.5708429</code></pre>
-<p>As you can see, this network exhibits high levels of assortativity by node size.</p>
-<p>We can also convert the size variable into a binary (i.e., discrete) trait and calculate the assortment coefficient.</p>
+<p>As you can see, this network exhibits high levels of assortativity by
+node size.</p>
+<p>We can also convert the size variable into a binary (i.e., discrete)
+trait and calculate the assortment coefficient.</p>
 <pre class="r"><code>V(g)$size.discrete=(V(g)$size&gt;25)+0 #shortcut to make the values = 1 if large individual and 0 if small individual, with cutoff at size = 25
 assortativity(g, V(g)$size.discrete, directed=F)</code></pre>
 <pre><code>## [1] 0.4358974</code></pre>
-<p>As a comparison, let’s create a node attribute that varies randomly across all nodes in the network, and then measure the assortativity coefficient based on this trait. We will plot the figure with square nodes, just to make it clear that we are plotting a different trait.</p>
+<p>As a comparison, let’s create a node attribute that varies randomly
+across all nodes in the network, and then measure the assortativity
+coefficient based on this trait. We will plot the figure with square
+nodes, just to make it clear that we are plotting a different trait.</p>
 <pre class="r"><code>set.seed(3)
 V(g)$random=rnorm(10, mean=20, sd=5) #create a node trait that varies randomly for all nodes 
 assortativity(g, V(g)$random, directed=F)</code></pre>
@@ -433,12 +593,18 @@ assortativity(g, V(g)$random, directed=F)</code></pre>
 <pre class="r"><code>plot(g, layout=l, edge.color=&quot;black&quot;, vertex.size=V(g)$random)</code></pre>
 <p><img src="05_community_files/figure-html/unnamed-chunk-14-1.png" width="384" /></p>
 <p>You can see that there is little assortment based on this trait.</p>
-<p>Just to be extra clear, this network is still exhibits community structure (A through E and F through J), but the trait we are measuring does not exhibit assortativity.</p>
-</div>
-<div id="using-the-assortnet-package" class="section level3">
-<h3>5.2.3 Using the <code>assortnet</code> package</h3>
-<p>Let’s now try to get the same result using the function in the <code>assortnet</code> package, and then measure the assortment coefficient in a weighted network.</p>
-<p>First, recreate the results from section 5.2.2. In the <code>assortnet</code> version of the functions, the input is an adjacency matrix rather than an igraph object. So what we need to do is generate the adjacency matrix and then run the <code>asssortment.continuous()</code> function:</p>
+<p>Just to be extra clear, this network is still exhibits community
+structure (A through E and F through J), but the trait we are measuring
+does not exhibit assortativity.</p>
+<p>###5.2.3 Using the <code>assortnet</code> package</p>
+<p>Let’s now try to get the same result using the function in the
+<code>assortnet</code> package, and then measure the assortment
+coefficient in a weighted network.</p>
+<p>First, recreate the results from section 5.2.2. In the
+<code>assortnet</code> version of the functions, the input is an
+adjacency matrix rather than an igraph object. So what we need to do is
+generate the adjacency matrix and then run the
+<code>asssortment.continuous()</code> function:</p>
 <pre class="r"><code>adj=as_adjacency_matrix(g, sparse=F)
 assortment.continuous(adj, V(g)$size)</code></pre>
 <pre><code>## $r
@@ -452,8 +618,15 @@ assortment.continuous(adj, V(g)$size)</code></pre>
 ## 0  0.4545455 0.1363636 0.5909091
 ## 1  0.1363636 0.2727273 0.4090909
 ## bi 0.5909091 0.4090909 1.0000000</code></pre>
-<p>You’ll notice that the <code>assortment_discrete()</code> function output includes a “mixing matrix”, which is useful if you want to know the cumulative edge weights that occur between individuals with the same vs. different vertex labels.</p>
-<p>With <code>assortnet</code>, we can also use weighted edges. So let’s add edge weights randomly and calculate the coefficient. Since the functions take adjacency matrix as input, we’ll have to regenerate the matrix with the <code>attr=&quot;weight&quot;</code> argument after adding edge weights.</p>
+<p>You’ll notice that the <code>assortment_discrete()</code> function
+output includes a “mixing matrix”, which is useful if you want to know
+the cumulative edge weights that occur between individuals with the same
+vs. different vertex labels.</p>
+<p>With <code>assortnet</code>, we can also use weighted edges. So let’s
+add edge weights randomly and calculate the coefficient. Since the
+functions take adjacency matrix as input, we’ll have to regenerate the
+matrix with the <code>attr="weight"</code> argument after adding edge
+weights.</p>
 <pre class="r"><code>E(g)$weight=runif(length(E(g)), min=0, max=1)
 adj=as_adjacency_matrix(g, sparse=F, attr=&quot;weight&quot;)
 assortment.continuous(adj, V(g)$size)</code></pre>
@@ -469,24 +642,22 @@ assortment.continuous(adj, V(g)$size)</code></pre>
 ## 1  0.1218816 0.2934038 0.4152854
 ## bi 0.5847146 0.4152854 1.0000000</code></pre>
 <hr />
-</div>
-</div>
-<div id="worked-examples" class="section level2">
-<h2>Worked Examples</h2>
+<p>##Worked Examples</p>
 <p><strong><em>Community Structure</em></strong></p>
 <ul>
-<li><h4 id="constructing-flock-networks-in-golden-crowned-sparrows"><a href="%22example_make_sparrow_network.html%22">Constructing Flock Networks in Golden-crowned Sparrows</a></h4></li>
-<li><h4 id="analyzing-the-us-air-transportation-network"><a href="%22example_usairports.html%22">Analyzing the US air transportation network</a></h4></li>
+<li><p>####<a
+href="%22example_make_sparrow_network.html%22">Constructing Flock
+Networks in Golden-crowned Sparrows</a></p></li>
+<li><p>####<a href="%22example_usairports.html%22">Analyzing the US air
+transportation network</a></p></li>
 </ul>
 <p><strong><em>Assortment</em></strong></p>
 <ul>
-<li><h4 id="analyzing-the-us-air-transportation-network-1"><a href="%22example_assortment_in_wytham.html%22">Analyzing the US air transportation network</a></h4></li>
+<li>####<a href="%22example_assortment_in_wytham.html%22">Analyzing the
+US air transportation network</a></li>
 </ul>
 <hr />
-</div>
-<div id="next-6.-random-graphs" class="section level2">
-<h2>Next: <a href="06_randomnets.html">6. Random Graphs</a></h2>
-</div>
+<p>##Next: <a href="06_permutations.html">6. Permutations</a></p>
 
 
 
@@ -497,7 +668,7 @@ assortment.continuous(adj, V(g)$size)</code></pre>
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();
@@ -505,6 +676,23 @@ $(document).ready(function () {
 
 
 </script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
