@@ -221,8 +221,14 @@ When you run this code, the GIF file should actually pop up on your screen. You 
 
 ![](./assets/images/sample_diffusion.gif)
  
- The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
+The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
  
+ 
+## 8.4 Effect of network structure on transmission dynamics
+
+Shah et al. (2017) effectively showed how the structure of networks influences transmission dynamics on networks. Here, we can play around with the modularity of the social network and observe its effects. 
+
+Let's start with making a network of 100 nodes with strong community structure. I'm going to assign 25 nodes each to four communities, and then set the probability of edges to be much higher within communities (0.5) compared to across communities (0.005)
 ```{r}
 set.seed(2)
 n=100
@@ -238,14 +244,18 @@ l3=layout_with_fr(g3)
 plot(g3, vertex.label="", vertex.size=3, layout=l3)
 ```
 
+Then, we'll select two random innovators.
 ```{r}
 V(g3)$status=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
 seed=sample(V(g3),2) #select 2 innovators
 V(g3)$status[seed]=1 #These 'seed' individuals get a status of 1 at the beginning.
 plot(g3, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g3)$status+1], layout=l3)
 ```
+
+We'll then run the simulation with the same tau parameter. 
+
 ```{r}
-tau = 0.05
+tau = 0.1
 t=30 #time steps to run the simulation
 g3.time=list() #empty list to store the output networks
 for(j in 1:t){
@@ -258,13 +268,14 @@ for(j in 1:t){
 
 ```
 
+When we look at the transmission dynamics, we see that there is faster spread overall. 
 
 ```{r}
 n.adopt.social=sapply(g3.time, function(x) length(which(V(x)$status==1))) #for each time step, count the number of adopters.
 
 plot(n.adopt.social, type="l", las=1, ylab="Cumulative number of nodes adopted", xlab="Time", ylim=c(0,100))
 ```
-
+But if we animate the network, we can see that the spread is highly influenced by community structure. 
 ```{r, eval=F}
 library(animation)
 
@@ -278,37 +289,41 @@ saveGIF(
 
 
 
-### NBDA
- 
+## 8.5 NBDA: Network-Based Diffusion Analysis
+
+Network-based Diffusion Analysis (NBDA) is a modelling approach to ask the question, does the order or timing of acquisition of a behavior or change state of an individual indicative of diffusion on a network? NBDA does this through maximum likelihood model fitting. 
+See Franz et al. (2011), Hoppitt et al. () and Hasenjager et al. (2021) for details on how this method works. 
+
+Here is a demo of NBDA on the social spread through the modular network. 
 ```{r, eval=T, warning=FALSE}
 library(NBDA)
-V(g2)$name=paste("indiv",1:vcount(g2),sep="")
-adj.mat=as_adj(g2, sparse=F)
+adj.mat=as_adj(g3, sparse=F)
 adj.array=array(dim=c(nrow(adj.mat), ncol(adj.mat), 1))
 adj.array[,,1]=adj.mat
 #get list of individuals that solved at each time
-solve.mat=sapply(g2.time, function(x){
+solve.mat=sapply(g3.time, function(x){
   V(x)$status
 })
 
 #time of acquisition
 ta=apply(solve.mat, 1, function(x) min(which(x==1)))
-ta[is.infinite(ta)]=300
+ta[is.infinite(ta)]=30
 #order of acquisition
 oa=order(ta)
 
 diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
 
-oa.fit_social=oadaFit(diffdat, type="social")
-oa.fit_social@outputPar
+# oa.fit_social=oadaFit(diffdat, type="social")
+# oa.fit_social@outputPar
 # oa.fit_social@aic
 # data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
 
 ta.fit_social=tadaFit(diffdat, type="social")
-ta.fit_social@outputPar
+#ta.fit_social@outputPar
 data.frame(Variable=ta.fit_social@varNames,MLE=round(ta.fit_social@outputPar,3),SE=round(ta.fit_social@se,3))
 
 ```
+... as opposed to the case of asocial learning presented in section 8.1
 
 ```{r, eval=T, warning=FALSE}
 
@@ -322,19 +337,20 @@ solve.mat=sapply(g.time, function(x){
 
 #time of acquisition
 ta=apply(solve.mat, 1, function(x) which.max(x==1))
+ta[is.infinite(ta)]=30
 #order of acquisition
-oa=rank(ta, ties.method="random")
+oa=order(ta)
 
 diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
 
-oa.fit_social=oadaFit(diffdat, type="social")
-oa.fit_social@outputPar
+# oa.fit_social=oadaFit(diffdat, type="social")
+# oa.fit_social@outputPar
 # oa.fit_social@aic
 # data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
 
 ta.fit_social2=tadaFit(diffdat, type="social")
-ta.fit_social2@outputPar
-data.frame(Variable=ta.fit_social2@varNames,MLE=ta.fit_social2@outputPar,SE=ta.fit_social2@se)
+#ta.fit_social2@outputPar
+data.frame(Variable=ta.fit_social2@varNames,MLE=round(ta.fit_social2@outputPar,3),SE=ta.fit_social2@se)
 
 ```
  ---
