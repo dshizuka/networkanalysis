@@ -127,6 +127,7 @@ First, we'll start over by creating a graph object, but we'll use the same `set.
 set.seed(4)
 n=100
 g2=erdos.renyi.game(n, p=0.05)
+l2=layout_with_fr(g2)
 ```
 
 Next, we will create the "status" vertex attribute. Everyone will start with state = 0. Then, we will randomly pick 2 nodes who will have state = 1
@@ -134,7 +135,7 @@ Next, we will create the "status" vertex attribute. Everyone will start with sta
 V(g2)$status=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
 seed=sample(V(g2),2) #select 2 innovators
 V(g2)$status[seed]=1 #These 'seed' individuals get a status of 1 at the beginning.
-plot(g2, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g2)$status+1], layout=l)
+plot(g2, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g2)$status+1], layout=l2)
 ```
 
 
@@ -159,7 +160,7 @@ Now we will simulate 30 time steps of the spread of this innovation. We will sav
 t=30 #time steps to run the simulation
 g2.time=list() #empty list to store the output networks
 for(j in 1:t){
-  nei.adopt=sapply(V(g2), function(x) sum(V(g2)$status[neighbors(g,x)]))
+  nei.adopt=sapply(V(g2), function(x) sum(V(g2)$status[neighbors(g2,x)]))
   p=(1-exp(-tau*nei.adopt))*abs(V(g2)$status-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
   adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
   V(g2)$status[which(adopters==1)]=1
@@ -199,7 +200,7 @@ layout(matrix(1:10, byrow=T, nrow=2))
 par(mar=c(1,1,1,1))
 for(i in 1:10){
   v.col=c("darkgray", "red")[V(g2.time[[i]])$status+1]
-  plot(g2.time[[i]], vertex.label="", vertex.color=v.col, layout=l, main=paste("Time",i))
+  plot(g2.time[[i]], vertex.label="", vertex.color=v.col, layout=l2, main=paste("Time",i))
 }
 par(def.par)
 ```
@@ -212,7 +213,7 @@ library(animation)
 
 saveGIF( 
   {for (i in 1:30) {
-  plot(g2.time[[i]], layout=l, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g2.time[[i]])$status+1], main=paste("time",i,sep=" "))
+  plot(g2.time[[i]], layout=l2, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g2.time[[i]])$status+1], main=paste("time",i,sep=" "))
   }
   }, movie.name="sample_diffusion.gif", interval=0.2, nmax=30, ani.width=600, ani.height=600)
 ```
@@ -220,8 +221,138 @@ When you run this code, the GIF file should actually pop up on your screen. You 
 
 ![](./assets/images/sample_diffusion.gif)
  
- The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
+The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
  
+ 
+## 8.4 Effect of network structure on transmission dynamics
+
+Shah et al. (2017) effectively showed how the structure of networks influences transmission dynamics on networks. Here, we can play around with the modularity of the social network and observe its effects. 
+
+Let's start with making a network of 100 nodes with strong community structure. I'm going to assign 25 nodes each to four communities, and then set the probability of edges to be much higher within communities (0.5) compared to across communities (0.005)
+```{r}
+set.seed(2)
+n=100
+mod.assign=c(rep(1,25), rep(2,25), rep(3,25), rep(4,25))
+same.mod=outer(mod.assign, mod.assign, FUN="==")
+p.mat=apply(same.mod, c(1,2), function(x) c(0.005, 0.5)[x+1])
+adj=apply(p.mat, c(1,2), function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
+adj[lower.tri(adj)]=0
+diag(adj)=0
+adj=adj+t(adj)
+g3=graph_from_adjacency_matrix(adj, "undirected")
+l3=layout_with_fr(g3)
+plot(g3, vertex.label="", vertex.size=3, layout=l3)
+```
+
+Then, we'll select two random innovators.
+```{r}
+V(g3)$status=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
+seed=sample(V(g3),2) #select 2 innovators
+V(g3)$status[seed]=1 #These 'seed' individuals get a status of 1 at the beginning.
+plot(g3, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g3)$status+1], layout=l3)
+```
+
+We'll then run the simulation with the same tau parameter. 
+
+```{r}
+tau = 0.1
+t=30 #time steps to run the simulation
+g3.time=list() #empty list to store the output networks
+for(j in 1:t){
+  nei.adopt=sapply(V(g3), function(x) sum(V(g3)$status[neighbors(g3,x)]))
+  p=(1-exp(-tau*nei.adopt))*abs(V(g3)$status-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
+  adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
+  V(g3)$status[which(adopters==1)]=1
+  g3.time[[j]]=g3
+}
+
+```
+
+When we look at the transmission dynamics, we see that there is faster spread overall. 
+
+```{r}
+n.adopt.social=sapply(g3.time, function(x) length(which(V(x)$status==1))) #for each time step, count the number of adopters.
+
+plot(n.adopt.social, type="l", las=1, ylab="Cumulative number of nodes adopted", xlab="Time", ylim=c(0,100))
+```
+But if we animate the network, we can see that the spread is highly influenced by community structure. 
+```{r, eval=F}
+library(animation)
+
+saveGIF( 
+  {for (i in 1:30) {
+  plot(g3.time[[i]], layout=l3, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g3.time[[i]])$status+1], main=paste("time",i,sep=" "))
+  }
+  }, movie.name="sample_diffusion2.gif", interval=0.2, nmax=30, ani.width=600, ani.height=600)
+```
+![](./assets/images/sample_diffusion2.gif)
+
+
+
+## 8.5 NBDA: Network-Based Diffusion Analysis
+
+Network-based Diffusion Analysis (NBDA) is a modelling approach to ask the question, does the order or timing of acquisition of a behavior or change state of an individual indicative of diffusion on a network? NBDA does this through maximum likelihood model fitting. 
+See Franz et al. (2011), Hoppitt et al. () and Hasenjager et al. (2021) for details on how this method works. 
+
+Here is a demo of NBDA on the social spread through the modular network. 
+```{r, eval=T, warning=FALSE}
+library(NBDA)
+adj.mat=as_adj(g3, sparse=F)
+adj.array=array(dim=c(nrow(adj.mat), ncol(adj.mat), 1))
+adj.array[,,1]=adj.mat
+#get list of individuals that solved at each time
+solve.mat=sapply(g3.time, function(x){
+  V(x)$status
+})
+
+#time of acquisition
+ta=apply(solve.mat, 1, function(x) min(which(x==1)))
+ta[is.infinite(ta)]=30
+#order of acquisition
+oa=order(ta)
+
+diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
+
+# oa.fit_social=oadaFit(diffdat, type="social")
+# oa.fit_social@outputPar
+# oa.fit_social@aic
+# data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
+
+ta.fit_social=tadaFit(diffdat, type="social")
+#ta.fit_social@outputPar
+data.frame(Variable=ta.fit_social@varNames,MLE=round(ta.fit_social@outputPar,3),SE=round(ta.fit_social@se,3))
+
+```
+... as opposed to the case of asocial learning presented in section 8.1
+
+```{r, eval=T, warning=FALSE}
+
+adj.mat=as_adj(g, sparse=F)
+adj.array=array(dim=c(nrow(adj.mat), ncol(adj.mat), 1))
+adj.array[,,1]=adj.mat
+#get list of individuals that solved at each time
+solve.mat=sapply(g.time, function(x){
+  V(x)$status
+})
+
+#time of acquisition
+ta=apply(solve.mat, 1, function(x) which.max(x==1))
+ta[is.infinite(ta)]=30
+#order of acquisition
+oa=order(ta)
+
+diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
+
+# oa.fit_social=oadaFit(diffdat, type="social")
+# oa.fit_social@outputPar
+# oa.fit_social@aic
+# data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
+
+ta.fit_social2=tadaFit(diffdat, type="social")
+#ta.fit_social2@outputPar
+data.frame(Variable=ta.fit_social2@varNames,MLE=round(ta.fit_social2@outputPar,3),SE=ta.fit_social2@se)
+
+```
  ---
  
 ##Next: [9. Random Graphs](09_randomnets.html)
