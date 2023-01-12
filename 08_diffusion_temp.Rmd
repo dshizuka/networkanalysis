@@ -62,7 +62,7 @@ plot(g, vertex.label="", vertex.size=8, vertex.color="darkgray", layout=l)
 Now, we will set the 'asocial learning' parameter, $x$ to be 0.1. This is the probability that any given individual will come up with the innovation--e.g., how to forage for a new prey item. 
 
 ```{r}
-x=0.1
+x=0.01
 ```
 
 Let's run one practice run of how this will work. In one time step, we flip a coin for each individual whether or not they will adopt the innovation. 
@@ -81,7 +81,7 @@ plot(g, vertex.label="", vertex.color=c("darkgray", "red")[V(g)$status+1], verte
 Now, we will repeat this simulation for 30 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can't go back). If you're thinking about this in terms of disease, it's like an 'SI model' in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.
 
 ```{r}
-t=30
+t=300
 g.time=list()
 V(g)$status=0
 for(j in 1:t){
@@ -156,7 +156,7 @@ Now we will simulate 30 time steps of the spread of this innovation. We will sav
 5. Return to step 1. 
 
 ```{r}
-t=30 #time steps to run the simulation
+t=300 #time steps to run the simulation
 g2.time=list() #empty list to store the output networks
 for(j in 1:t){
   nei.adopt=sapply(V(g2), function(x) sum(V(g2)$status[neighbors(g,x)]))
@@ -222,6 +222,63 @@ When you run this code, the GIF file should actually pop up on your screen. You 
  
  The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
  
+## NBDA
+ 
+```{r, eval=T, warning=FALSE}
+library(NBDA)
+V(g2)$name=paste("indiv",1:vcount(g2),sep="")
+adj.mat=as_adj(g2, sparse=F)
+adj.array=array(dim=c(nrow(adj.mat), ncol(adj.mat), 1))
+adj.array[,,1]=adj.mat
+#get list of individuals that solved at each time
+solve.mat=sapply(g2.time, function(x){
+  V(x)$status
+})
+
+#time of acquisition
+ta=apply(solve.mat, 1, function(x) which.max(x==1))
+#order of acquisition
+oa=rank(ta, ties.method="random")
+
+diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
+
+# oa.fit_social=oadaFit(diffdat, type="social")
+# oa.fit_social@outputPar
+# oa.fit_social@aic
+# data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
+
+ta.fit_social=tadaFit(diffdat, type="social")
+ta.fit_social@outputPar
+data.frame(Variable=ta.fit_social@varNames,MLE=round(ta.fit_social@outputPar,3),SE=round(ta.fit_social@se,3))
+
+```
+```{r, eval=T, warning=FALSE}
+
+adj.mat=as_adj(g, sparse=F)
+adj.array=array(dim=c(nrow(adj.mat), ncol(adj.mat), 1))
+adj.array[,,1]=adj.mat
+#get list of individuals that solved at each time
+solve.mat=sapply(g.time, function(x){
+  V(x)$status
+})
+
+#time of acquisition
+ta=apply(solve.mat, 1, function(x) which.max(x==1))
+#order of acquisition
+oa=rank(ta, ties.method="random")
+
+diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
+
+oa.fit_social=oadaFit(diffdat, type="social")
+oa.fit_social@outputPar
+# oa.fit_social@aic
+# data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
+
+ta.fit_social2=tadaFit(diffdat, type="social")
+ta.fit_social2@outputPar
+data.frame(Variable=ta.fit_social2@varNames,MLE=ta.fit_social2@outputPar,SE=ta.fit_social2@se)
+
+```
  ---
  
 ##Next: [9. Random Graphs](09_randomnets.html)
