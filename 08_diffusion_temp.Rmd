@@ -62,7 +62,7 @@ plot(g, vertex.label="", vertex.size=8, vertex.color="darkgray", layout=l)
 Now, we will set the 'asocial learning' parameter, $x$ to be 0.1. This is the probability that any given individual will come up with the innovation--e.g., how to forage for a new prey item. 
 
 ```{r}
-x=0.01
+x=0.1
 ```
 
 Let's run one practice run of how this will work. In one time step, we flip a coin for each individual whether or not they will adopt the innovation. 
@@ -81,7 +81,7 @@ plot(g, vertex.label="", vertex.color=c("darkgray", "red")[V(g)$status+1], verte
 Now, we will repeat this simulation for 30 time steps. Here, we need to consider that any given individual can only adopt an innovation once (it can't go back). If you're thinking about this in terms of disease, it's like an 'SI model' in which individuals do not recover or go back to a susceptible state. In practical terms, this means that we will just ignore coin flips for individuals whose status = 1.
 
 ```{r}
-t=300
+t=30
 g.time=list()
 V(g)$status=0
 for(j in 1:t){
@@ -127,6 +127,7 @@ First, we'll start over by creating a graph object, but we'll use the same `set.
 set.seed(4)
 n=100
 g2=erdos.renyi.game(n, p=0.05)
+l2=layout_with_fr(g2)
 ```
 
 Next, we will create the "status" vertex attribute. Everyone will start with state = 0. Then, we will randomly pick 2 nodes who will have state = 1
@@ -134,7 +135,7 @@ Next, we will create the "status" vertex attribute. Everyone will start with sta
 V(g2)$status=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
 seed=sample(V(g2),2) #select 2 innovators
 V(g2)$status[seed]=1 #These 'seed' individuals get a status of 1 at the beginning.
-plot(g2, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g2)$status+1], layout=l)
+plot(g2, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g2)$status+1], layout=l2)
 ```
 
 
@@ -156,10 +157,10 @@ Now we will simulate 30 time steps of the spread of this innovation. We will sav
 5. Return to step 1. 
 
 ```{r}
-t=300 #time steps to run the simulation
+t=30 #time steps to run the simulation
 g2.time=list() #empty list to store the output networks
 for(j in 1:t){
-  nei.adopt=sapply(V(g2), function(x) sum(V(g2)$status[neighbors(g,x)]))
+  nei.adopt=sapply(V(g2), function(x) sum(V(g2)$status[neighbors(g2,x)]))
   p=(1-exp(-tau*nei.adopt))*abs(V(g2)$status-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
   adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
   V(g2)$status[which(adopters==1)]=1
@@ -199,7 +200,7 @@ layout(matrix(1:10, byrow=T, nrow=2))
 par(mar=c(1,1,1,1))
 for(i in 1:10){
   v.col=c("darkgray", "red")[V(g2.time[[i]])$status+1]
-  plot(g2.time[[i]], vertex.label="", vertex.color=v.col, layout=l, main=paste("Time",i))
+  plot(g2.time[[i]], vertex.label="", vertex.color=v.col, layout=l2, main=paste("Time",i))
 }
 par(def.par)
 ```
@@ -212,7 +213,7 @@ library(animation)
 
 saveGIF( 
   {for (i in 1:30) {
-  plot(g2.time[[i]], layout=l, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g2.time[[i]])$status+1], main=paste("time",i,sep=" "))
+  plot(g2.time[[i]], layout=l2, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g2.time[[i]])$status+1], main=paste("time",i,sep=" "))
   }
   }, movie.name="sample_diffusion.gif", interval=0.2, nmax=30, ani.width=600, ani.height=600)
 ```
@@ -222,7 +223,62 @@ When you run this code, the GIF file should actually pop up on your screen. You 
  
  The speed of the animation can be set using the argument `interval=`. Other arguments can be found by going to `?ani.options`.
  
-## NBDA
+```{r}
+set.seed(2)
+n=100
+mod.assign=c(rep(1,25), rep(2,25), rep(3,25), rep(4,25))
+same.mod=outer(mod.assign, mod.assign, FUN="==")
+p.mat=apply(same.mod, c(1,2), function(x) c(0.005, 0.5)[x+1])
+adj=apply(p.mat, c(1,2), function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
+adj[lower.tri(adj)]=0
+diag(adj)=0
+adj=adj+t(adj)
+g3=graph_from_adjacency_matrix(adj, "undirected")
+l3=layout_with_fr(g3)
+plot(g3, vertex.label="", vertex.size=3, layout=l3)
+```
+
+```{r}
+V(g3)$status=0 # Create a vertex attribute for adoption status. 1 if the node has adopted the innovation. 0 if not.
+seed=sample(V(g3),2) #select 2 innovators
+V(g3)$status[seed]=1 #These 'seed' individuals get a status of 1 at the beginning.
+plot(g3, vertex.label="", vertex.size=8, vertex.color=c("darkgray", "red")[V(g3)$status+1], layout=l3)
+```
+```{r}
+tau = 0.05
+t=30 #time steps to run the simulation
+g3.time=list() #empty list to store the output networks
+for(j in 1:t){
+  nei.adopt=sapply(V(g3), function(x) sum(V(g3)$status[neighbors(g3,x)]))
+  p=(1-exp(-tau*nei.adopt))*abs(V(g3)$status-1) #here, we multiply the probabilities by 0 if node is already adopted, and 1 if not yet adopted
+  adopters=sapply(p, function(x) sample(c(1,0), 1, prob=c(x, 1-x)))
+  V(g3)$status[which(adopters==1)]=1
+  g3.time[[j]]=g3
+}
+
+```
+
+
+```{r}
+n.adopt.social=sapply(g3.time, function(x) length(which(V(x)$status==1))) #for each time step, count the number of adopters.
+
+plot(n.adopt.social, type="l", las=1, ylab="Cumulative number of nodes adopted", xlab="Time", ylim=c(0,100))
+```
+
+```{r, eval=F}
+library(animation)
+
+saveGIF( 
+  {for (i in 1:30) {
+  plot(g3.time[[i]], layout=l3, vertex.label="", vertex.size=5, vertex.color=c("darkgray", "red")[V(g3.time[[i]])$status+1], main=paste("time",i,sep=" "))
+  }
+  }, movie.name="sample_diffusion2.gif", interval=0.2, nmax=30, ani.width=600, ani.height=600)
+```
+![](./assets/images/sample_diffusion2.gif)
+
+
+
+### NBDA
  
 ```{r, eval=T, warning=FALSE}
 library(NBDA)
@@ -236,14 +292,15 @@ solve.mat=sapply(g2.time, function(x){
 })
 
 #time of acquisition
-ta=apply(solve.mat, 1, function(x) which.max(x==1))
+ta=apply(solve.mat, 1, function(x) min(which(x==1)))
+ta[is.infinite(ta)]=300
 #order of acquisition
-oa=rank(ta, ties.method="random")
+oa=order(ta)
 
 diffdat=nbdaData("try1",  assMatrix=adj.array, orderAcq=oa, timeAcq=ta)
 
-# oa.fit_social=oadaFit(diffdat, type="social")
-# oa.fit_social@outputPar
+oa.fit_social=oadaFit(diffdat, type="social")
+oa.fit_social@outputPar
 # oa.fit_social@aic
 # data.frame(Variable=oa.fit_social@varNames,MLE=oa.fit_social@outputPar,SE=oa.fit_social@se)
 
@@ -252,6 +309,7 @@ ta.fit_social@outputPar
 data.frame(Variable=ta.fit_social@varNames,MLE=round(ta.fit_social@outputPar,3),SE=round(ta.fit_social@se,3))
 
 ```
+
 ```{r, eval=T, warning=FALSE}
 
 adj.mat=as_adj(g, sparse=F)
