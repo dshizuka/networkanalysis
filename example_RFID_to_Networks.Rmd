@@ -15,9 +15,37 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ---
 
-# Load necessary packages
+# Setup
 
-First, let's load the necessary libraries for the rest of the tutorial:
+## Download the data folder, Create working directory, & start an R script
+
+You will also need the sample data. This involves a whole folder. Here is a simple way to download the sample data folder you need:
+
+* **Go to https://download-directory.github.io/**
+
+* **Paste this url into the bar: https://github.com/dshizuka/networkanalysis/tree/gh-pages/SampleData/RFIDdata_for_download**
+
+* **Unzip and rename the folder as "RFID_sample_data"**. *Don't skip this step! If the folder is not named correctly, the codes won't work!!**
+
+* **Put the folder in your working directory.** If you don't know how to make a working directory, I recommend using Rstudio projects. Here is a brief step-by-step:
+
+  + Create a folder somewhere on your computer and call it something like "RFID_tutorial"
+  
+  + Move the "RFID_sample_data" folder into the "RFID_tutorial" folder you just created.
+  
+  + Open RStudio
+  
+  + Go to File > New Project > Existing Directory
+  
+  + Click "Browse" and find the "RFID_tutorial" folder you just created. Click "Create Project". This will open a new Rstudio window. 
+  
+  + Go to File > New File > R Script. This will create a new R script file. You can then start copying & pasting the code chunks from this tutorial. 
+  
+  + **Whenever you want to come back to the R script, make sure to start by opening the .rproj file. This will make sure that the working directory is always the folder that this .rproj file is in.**
+  
+## Load necessary packages
+
+Now let's load the R packages that will be necessary for  the tutorial:
 
 ```{r, message=F}
 library(dplyr)
@@ -26,6 +54,8 @@ library(lubridate)
 library(asnipe)
 library(igraph)
 ```
+  
+  
 
 ---
 
@@ -98,7 +128,7 @@ There are three columns separated by a comma. The columns are:
 This is what it looks like when you import the file into R:
 
 ```{r, echo=F}
-rawdata=tibble(read.table("SampleData/RFIDdata/rawdata_example.txt", sep=",", header=F))
+rawdata=tibble(read.table("SampleData/RFID_sample_data/rawdata_example.txt", sep=",", header=F))
 rawdata
 ```
 
@@ -116,8 +146,8 @@ There are a few things to be aware of prior to importing the data into R.
 
 Because I go through the extra step of checking the date/time for each file and adding the sensor ID into the data prior to importing to R, this is what my raw data from one feeder looks like:
 
-```{r}
-feed05=read.csv("SampleData/RFIDdata/RFID_testdata/Feeder05.csv")
+```{r, echo=F}
+feed05=read.csv("SampleData/RFID_sample_data/RFID_testdata/Feeder05.csv")
 head(feed05)
 ```
 
@@ -133,9 +163,13 @@ Now that the data is clean, it is time to compile the data from different sites/
 For this example, I have a few test data files, which are data collected from 3 different feeders over about one week. 
 
 I can tell R where the files are located and save that as a character vector.
-```{r}
-file_locations=list.files("SampleData/RFIDdata/RFID_testdata",pattern=".csv", full.names=T)
-file_locations
+```{r, echo=F}
+## this one actually runs, but the tutorial shows the dummy path
+file_locations=list.files("SampleData/RFID_sample_data/RFID_testdata",pattern=".csv", full.names=T)
+```
+
+```{r, eval=F}
+file_locations=list.files("RFID_sample_data/RFID_testdata",pattern=".csv", full.names=T)
 ```
 
 Then, I can use an `lapply()` function to import all of those files and save them as items in a list called `files`.
@@ -196,7 +230,7 @@ data_count=compiled_data %>% group_by(RFID) %>% summarize(n=n())
 
 I'm importing the banding data here, and then simplifying it so that I just have the columns I might want.
 ```{r}
-band_dat=read.csv("SampleData/RFIDdata/allbirds_test.csv")
+band_dat=read.csv("SampleData/RFID_sample_data/allbirds_test.csv")
 band_dat_trim=band_dat %>% select(RFID_error, RFID_as_character, BAND_NUMBER, SPECIES, SEX)
 ```
 
@@ -312,21 +346,33 @@ use_dates
 We are going to run our machine learning algorithm for each day's data separately. We will save the outputs into a folder called "gmm_daily". To do this, we need to create that folder, so...
 
 If it doens't exist already, create a "gmm_daily" folder within your data folder. (If it already exists, do nothing).
-```{r}
-if(dir.exists("SampleData/RFIDdata/gmm_daily/")==F) dir.create("SampleData/RFIDdata/gmm_daily/")
+```{r, echo=F}
+if(dir.exists("SampleData/RFID_sample_data/gmm_daily/")==F) dir.create("SampleData/RFID_sample_data/gmm_daily/")
 ```
 
+```{r, eval=F}
+if(dir.exists("RFID_sample_data/gmm_daily/")==F) dir.create("RFID_sample_data/gmm_daily/")
+```
 ## 4.4. Try running GMM for one day
 
 Because RFID data can be very large and the `gmmevents()` function can take a while, let's try running the function on one day's data. But we will go ahead and structure this as a for-loop so that it'll be easier to expand it to multiple days.
 
+
+```{r, eval=F, echo=F}
+#test with one date
+for(i in 1){
+  data1=datastream%>% filter(date(datetime)==use_dates[i])
+  gmm_out=gmmevents(time=data1$time_num, identity=data1$BAND_NUMBER, location=data1$Feeder, global_ids = all_ids)
+  save(gmm_out, file=paste("SampleData/RFID_sample_data/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
+}
+```
 
 ```{r, eval=F}
 #test with one date
 for(i in 1){
   data1=datastream%>% filter(date(datetime)==use_dates[i])
   gmm_out=gmmevents(time=data1$time_num, identity=data1$BAND_NUMBER, location=data1$Feeder, global_ids = all_ids)
-  save(gmm_out, file=paste("SampleData/RFIDdata/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
+  save(gmm_out, file=paste("RFID_sample_data/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
 }
 ```
 
@@ -340,12 +386,21 @@ But this can take a while, so depending on the size of your data set. So you can
 
 Here, I'm running it for all dates because I have restricted my dataset to only a few days and a few feeders.
 
+```{r, eval=F, echo=F}
+#test with all dates
+for(i in 1:length(use_dates)){
+  data1=datastream%>% filter(date(datetime)==use_dates[i])
+  gmm_out=gmmevents(time=data1$time_num, identity=data1$BAND_NUMBER, location=data1$Feeder, global_ids = all_ids)
+  save(gmm_out, file=paste("SampleData/RFID_sample_data/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
+}
+```
+
 ```{r, eval=F}
 #test with all dates
 for(i in 1:length(use_dates)){
   data1=datastream%>% filter(date(datetime)==use_dates[i])
   gmm_out=gmmevents(time=data1$time_num, identity=data1$BAND_NUMBER, location=data1$Feeder, global_ids = all_ids)
-  save(gmm_out, file=paste("SampleData/RFIDdata/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
+  save(gmm_out, file=paste("RFID_sample_data/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
 }
 ```
 
@@ -366,24 +421,35 @@ detectCores()
 ```
 
 Run the gmmevents() routine using parallel computing by setting up a 'cluster' using the `registerDoParallel()` function and then using the `foreach()` function.
+```{r, eval=F, echo=F}
+numCores=2 #change to number of cores you have on your computer-1
+registerDoParallel(numCores)
+foreach(i = 1:length(use_dates)) %dopar% {
+  data1=datastream%>% filter(date(datetime)==use_dates[i])
+  gmm_out=gmmevents(data1$time_num, data1$BAND_NUMBER, data1$Feeder, global_ids=all_ids)
+  save(gmm_out, file=paste("SampleData/RFID_sample_data/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
+}
+```
+
 ```{r, eval=F}
 numCores=2 #change to number of cores you have on your computer-1
 registerDoParallel(numCores)
 foreach(i = 1:length(use_dates)) %dopar% {
   data1=datastream%>% filter(date(datetime)==use_dates[i])
   gmm_out=gmmevents(data1$time_num, data1$BAND_NUMBER, data1$Feeder, global_ids=all_ids)
-  save(gmm_out, file=paste("SampleData/RFIDdata/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
+  save(gmm_out, file=paste("RFID_sample_data/gmm_daily/","gmm_", use_dates[i], ".rdata", sep=""))
 }
 ```
-
 ---
 
 # 5. Creating networks from outputs of GMM events model
 
 Load all of the gmm_daily files. Add the names of the files so we don't lose track
+
+*Note: this will only run if you've already run the `gmmevents()` routine above*
 ```{r}
-gmm_filename_full=list.files("SampleData/RFIDdata/gmm_daily", full.names = T)
-gmm_filename_short=list.files("SampleData/RFIDdata/gmm_daily", full.names = F)
+gmm_filename_full=list.files("SampleData/RFID_sample_data/gmm_daily", full.names = T)
+gmm_filename_short=list.files("SampleData/RFID_sample_data/gmm_daily", full.names = F)
 gmm_list=list()
 for(i in 1:length(gmm_filename_full)){
   load(gmm_filename_full[[i]])

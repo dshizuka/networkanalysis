@@ -348,9 +348,50 @@ div.tocify {
 
 
 <hr />
-<div id="load-necessary-packages" class="section level1">
-<h1>Load necessary packages</h1>
-<p>First, let’s load the necessary libraries for the rest of the
+<div id="setup" class="section level1">
+<h1>Setup</h1>
+<div
+id="download-the-data-folder-create-working-directory-start-an-r-script"
+class="section level2">
+<h2>Download the data folder, Create working directory, &amp; start an R
+script</h2>
+<p>You will also need the sample data. This involves a whole folder.
+Here is a simple way to download the sample data folder you need:</p>
+<ul>
+<li><p><strong>Go to <a href="https://download-directory.github.io/"
+class="uri">https://download-directory.github.io/</a></strong></p></li>
+<li><p><strong>Paste this url into the bar: <a
+href="https://github.com/dshizuka/networkanalysis/tree/gh-pages/SampleData/RFIDdata_for_download"
+class="uri">https://github.com/dshizuka/networkanalysis/tree/gh-pages/SampleData/RFIDdata_for_download</a></strong></p></li>
+<li><p><strong>Unzip and rename the folder as
+“RFID_sample_data”</strong>. *Don’t skip this step! If the folder is not
+named correctly, the codes won’t work!!**</p></li>
+<li><p><strong>Put the folder in your working directory.</strong> If you
+don’t know how to make a working directory, I recommend using Rstudio
+projects. Here is a brief step-by-step:</p>
+<ul>
+<li><p>Create a folder somewhere on your computer and call it something
+like “RFID_tutorial”</p></li>
+<li><p>Move the “RFID_sample_data” folder into the “RFID_tutorial”
+folder you just created.</p></li>
+<li><p>Open RStudio</p></li>
+<li><p>Go to File &gt; New Project &gt; Existing Directory</p></li>
+<li><p>Click “Browse” and find the “RFID_tutorial” folder you just
+created. Click “Create Project”. This will open a new Rstudio
+window.</p></li>
+<li><p>Go to File &gt; New File &gt; R Script. This will create a new R
+script file. You can then start copying &amp; pasting the code chunks
+from this tutorial.</p></li>
+<li><p><strong>Whenever you want to come back to the R script, make sure
+to start by opening the .rproj file. This will make sure that the
+working directory is always the folder that this .rproj file is
+in.</strong></p></li>
+</ul></li>
+</ul>
+</div>
+<div id="load-necessary-packages" class="section level2">
+<h2>Load necessary packages</h2>
+<p>Now let’s load the R packages that will be necessary for the
 tutorial:</p>
 <pre class="r"><code>library(dplyr)
 library(tidyr)
@@ -358,6 +399,7 @@ library(lubridate)
 library(asnipe)
 library(igraph)</code></pre>
 <hr />
+</div>
 </div>
 <div id="intro" class="section level1">
 <h1>Intro</h1>
@@ -503,8 +545,6 @@ that has to deal with this.</p></li>
 <p>Because I go through the extra step of checking the date/time for
 each file and adding the sensor ID into the data prior to importing to
 R, this is what my raw data from one feeder looks like:</p>
-<pre class="r"><code>feed05=read.csv(&quot;SampleData/RFIDdata/RFID_testdata/Feeder05.csv&quot;)
-head(feed05)</code></pre>
 <div data-pagedtable="false">
 <script data-pagedtable-source type="application/json">
 {"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["RFID"],"name":[1],"type":["chr"],"align":["left"]},{"label":["Antenna"],"name":[2],"type":["int"],"align":["right"]},{"label":["DateTime"],"name":[3],"type":["chr"],"align":["left"]},{"label":["Feeder"],"name":[4],"type":["chr"],"align":["left"]},{"label":["TestRFID_DateTime"],"name":[5],"type":["lgl"],"align":["right"]},{"label":["Time_diff"],"name":[6],"type":["lgl"],"align":["right"]},{"label":["Corrected_DateTime"],"name":[7],"type":["chr"],"align":["left"]},{"label":["Note"],"name":[8],"type":["chr"],"align":["left"]}],"data":[{"1":"011016F118","2":"2","3":"12/05/2021 11:10:37","4":"Feeder05","5":"NA","6":"NA","7":"12/05/2021 11:10:37","8":"No start time to compare with but end time matches up","_rn_":"1"},{"1":"01103F8E56","2":"2","3":"12/05/2021 12:08:17","4":"Feeder05","5":"NA","6":"NA","7":"12/05/2021 12:08:17","8":"","_rn_":"2"},{"1":"01103FE7B4","2":"2","3":"12/06/2021 12:03:22","4":"Feeder05","5":"NA","6":"NA","7":"12/06/2021 12:03:22","8":"","_rn_":"3"},{"1":"01103FE7B4","2":"1","3":"12/06/2021 12:03:23","4":"Feeder05","5":"NA","6":"NA","7":"12/06/2021 12:03:23","8":"","_rn_":"4"},{"1":"01103FE7B4","2":"2","3":"12/06/2021 12:03:23","4":"Feeder05","5":"NA","6":"NA","7":"12/06/2021 12:03:23","8":"","_rn_":"5"},{"1":"01103FE7B4","2":"1","3":"12/06/2021 12:03:23","4":"Feeder05","5":"NA","6":"NA","7":"12/06/2021 12:03:23","8":"","_rn_":"6"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
@@ -528,11 +568,7 @@ different sites/sensors into one dataset.</p>
 collected from 3 different feeders over about one week.</p>
 <p>I can tell R where the files are located and save that as a character
 vector.</p>
-<pre class="r"><code>file_locations=list.files(&quot;SampleData/RFIDdata/RFID_testdata&quot;,pattern=&quot;.csv&quot;, full.names=T)
-file_locations</code></pre>
-<pre><code>## [1] &quot;SampleData/RFIDdata/RFID_testdata/Feeder05.csv&quot;
-## [2] &quot;SampleData/RFIDdata/RFID_testdata/Feeder09.csv&quot;
-## [3] &quot;SampleData/RFIDdata/RFID_testdata/Feeder10.csv&quot;</code></pre>
+<pre class="r"><code>file_locations=list.files(&quot;RFID_sample_data/RFID_testdata&quot;,pattern=&quot;.csv&quot;, full.names=T)</code></pre>
 <p>Then, I can use an <code>lapply()</code> function to import all of
 those files and save them as items in a list called
 <code>files</code>.</p>
@@ -602,7 +638,7 @@ appear in the data.</p>
 <pre class="r"><code>data_count=compiled_data %&gt;% group_by(RFID) %&gt;% summarize(n=n())</code></pre>
 <p>I’m importing the banding data here, and then simplifying it so that
 I just have the columns I might want.</p>
-<pre class="r"><code>band_dat=read.csv(&quot;SampleData/RFIDdata/allbirds_test.csv&quot;)
+<pre class="r"><code>band_dat=read.csv(&quot;SampleData/RFID_sample_data/allbirds_test.csv&quot;)
 band_dat_trim=band_dat %&gt;% select(RFID_error, RFID_as_character, BAND_NUMBER, SPECIES, SEX)</code></pre>
 <div id="note-how-i-deal-with-excel-misreading-my-rfid"
 class="section level4">
@@ -778,7 +814,7 @@ data separately. We will save the outputs into a folder called
 “gmm_daily”. To do this, we need to create that folder, so…</p>
 <p>If it doens’t exist already, create a “gmm_daily” folder within your
 data folder. (If it already exists, do nothing).</p>
-<pre class="r"><code>if(dir.exists(&quot;SampleData/RFIDdata/gmm_daily/&quot;)==F) dir.create(&quot;SampleData/RFIDdata/gmm_daily/&quot;)</code></pre>
+<pre class="r"><code>if(dir.exists(&quot;RFID_sample_data/gmm_daily/&quot;)==F) dir.create(&quot;RFID_sample_data/gmm_daily/&quot;)</code></pre>
 </div>
 <div id="try-running-gmm-for-one-day" class="section level2">
 <h2>4.4. Try running GMM for one day</h2>
@@ -790,7 +826,7 @@ it’ll be easier to expand it to multiple days.</p>
 for(i in 1){
   data1=datastream%&gt;% filter(date(datetime)==use_dates[i])
   gmm_out=gmmevents(time=data1$time_num, identity=data1$BAND_NUMBER, location=data1$Feeder, global_ids = all_ids)
-  save(gmm_out, file=paste(&quot;SampleData/RFIDdata/gmm_daily/&quot;,&quot;gmm_&quot;, use_dates[i], &quot;.rdata&quot;, sep=&quot;&quot;))
+  save(gmm_out, file=paste(&quot;RFID_sample_data/gmm_daily/&quot;,&quot;gmm_&quot;, use_dates[i], &quot;.rdata&quot;, sep=&quot;&quot;))
 }</code></pre>
 <p>You should now see a file called “gmm_2021-12-06.rdata” in your
 “gmm_daily” folder.</p>
@@ -808,7 +844,7 @@ dataset to only a few days and a few feeders.</p>
 for(i in 1:length(use_dates)){
   data1=datastream%&gt;% filter(date(datetime)==use_dates[i])
   gmm_out=gmmevents(time=data1$time_num, identity=data1$BAND_NUMBER, location=data1$Feeder, global_ids = all_ids)
-  save(gmm_out, file=paste(&quot;SampleData/RFIDdata/gmm_daily/&quot;,&quot;gmm_&quot;, use_dates[i], &quot;.rdata&quot;, sep=&quot;&quot;))
+  save(gmm_out, file=paste(&quot;RFID_sample_data/gmm_daily/&quot;,&quot;gmm_&quot;, use_dates[i], &quot;.rdata&quot;, sep=&quot;&quot;))
 }</code></pre>
 </div>
 <div id="bonus-run-it-in-parallel" class="section level2">
@@ -833,7 +869,7 @@ registerDoParallel(numCores)
 foreach(i = 1:length(use_dates)) %dopar% {
   data1=datastream%&gt;% filter(date(datetime)==use_dates[i])
   gmm_out=gmmevents(data1$time_num, data1$BAND_NUMBER, data1$Feeder, global_ids=all_ids)
-  save(gmm_out, file=paste(&quot;SampleData/RFIDdata/gmm_daily/&quot;,&quot;gmm_&quot;, use_dates[i], &quot;.rdata&quot;, sep=&quot;&quot;))
+  save(gmm_out, file=paste(&quot;RFID_sample_data/gmm_daily/&quot;,&quot;gmm_&quot;, use_dates[i], &quot;.rdata&quot;, sep=&quot;&quot;))
 }</code></pre>
 <hr />
 </div>
@@ -843,8 +879,10 @@ class="section level1">
 <h1>5. Creating networks from outputs of GMM events model</h1>
 <p>Load all of the gmm_daily files. Add the names of the files so we
 don’t lose track</p>
-<pre class="r"><code>gmm_filename_full=list.files(&quot;SampleData/RFIDdata/gmm_daily&quot;, full.names = T)
-gmm_filename_short=list.files(&quot;SampleData/RFIDdata/gmm_daily&quot;, full.names = F)
+<p><em>Note: this will only run if you’ve already run the
+<code>gmmevents()</code> routine above</em></p>
+<pre class="r"><code>gmm_filename_full=list.files(&quot;SampleData/RFID_sample_data/gmm_daily&quot;, full.names = T)
+gmm_filename_short=list.files(&quot;SampleData/RFID_sample_data/gmm_daily&quot;, full.names = F)
 gmm_list=list()
 for(i in 1:length(gmm_filename_full)){
   load(gmm_filename_full[[i]])
@@ -882,7 +920,7 @@ labels (because it makes the network hard to read), and make the edge
 widths proportional to their weight (but multiply by a constant so that
 it looks nice).</p>
 <pre class="r"><code>plot(g, vertex.label=&quot;&quot;, edge.width=E(g)$weight*20)</code></pre>
-<p><img src="example_RFID_to_Networks_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p><img src="example_RFID_to_Networks_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 <p>Let’s add some node attributes. Here, I’m going to first add species
 as a node attribute.</p>
 <p>In igraph, node (or vertex) attributes are denoted as
@@ -912,7 +950,7 @@ V(g)$spp_col=spp_colors[match(V(g)$spp, spp_colors[,1]),2]</code></pre>
 <p>Then, we can now use that node attribute to color the nodes in the
 plot</p>
 <pre class="r"><code>plot(g, vertex.label=&quot;&quot;, edge.width=E(g)$weight*20, vertex.color=V(g)$spp_col)</code></pre>
-<p><img src="example_RFID_to_Networks_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p><img src="example_RFID_to_Networks_files/figure-html/unnamed-chunk-40-1.png" width="672" /></p>
 </div>
 
 
