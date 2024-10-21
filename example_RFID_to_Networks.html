@@ -779,9 +779,13 @@ data separately. We will save the outputs into a folder called
 <p>If it doens’t exist already, create a “gmm_daily” folder within your
 data folder. (If it already exists, do nothing).</p>
 <pre class="r"><code>if(dir.exists(&quot;SampleData/RFIDdata/gmm_daily/&quot;)==F) dir.create(&quot;SampleData/RFIDdata/gmm_daily/&quot;)</code></pre>
-<p>Now, let’s try running the <code>gmmevents()</code> function on one
-day’s data. But we will go ahead and structure this as a for-loop so
-that it’ll be easier to expand it to multiple days.</p>
+</div>
+<div id="try-running-gmm-for-one-day" class="section level2">
+<h2>4.4. Try running GMM for one day</h2>
+<p>Because RFID data can be very large and the <code>gmmevents()</code>
+function can take a while, let’s try running the function on one day’s
+data. But we will go ahead and structure this as a for-loop so that
+it’ll be easier to expand it to multiple days.</p>
 <pre class="r"><code>#test with one date
 for(i in 1){
   data1=datastream%&gt;% filter(date(datetime)==use_dates[i])
@@ -790,6 +794,16 @@ for(i in 1){
 }</code></pre>
 <p>You should now see a file called “gmm_2021-12-06.rdata” in your
 “gmm_daily” folder.</p>
+</div>
+<div id="now-test-the-code-for-multiple-days" class="section level2">
+<h2>4.5. Now test the code for multiple days</h2>
+<p>If everything goes smoothly for one day, try it with a few days by
+allowing “i” to be a range of numbers. Then, once that is all good, you
+can run it for all days.</p>
+<p>But this can take a while, so depending on the size of your data set.
+So you can always run it in chunks of dates.</p>
+<p>Here, I’m running it for all dates because I have restricted my
+dataset to only a few days and a few feeders.</p>
 <pre class="r"><code>#test with all dates
 for(i in 1:length(use_dates)){
   data1=datastream%&gt;% filter(date(datetime)==use_dates[i])
@@ -798,7 +812,7 @@ for(i in 1:length(use_dates)){
 }</code></pre>
 </div>
 <div id="bonus-run-it-in-parallel" class="section level2">
-<h2>4.4. BONUS: Run it in parallel</h2>
+<h2>4.6. BONUS: Run it in parallel</h2>
 <p>This Gaussian Mixture Model routine can be run much more efficiently
 by using parallel computing. All modern computers are capable of
 parallel computing across multiple ‘cores’.</p>
@@ -899,14 +913,6 @@ V(g)$spp_col=spp_colors[match(V(g)$spp, spp_colors[,1]),2]</code></pre>
 plot</p>
 <pre class="r"><code>plot(g, vertex.label=&quot;&quot;, edge.width=E(g)$weight*20, vertex.color=V(g)$spp_col)</code></pre>
 <p><img src="example_RFID_to_Networks_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
-<div
-id="to-learn-more-about-what-to-do-with-networks-refer-to-my-network-analysis-tutorial-site-httpsdshizuka.github.ionetworkanalysistutorials.html"
-class="section level4">
-<h4>To learn more about what to do with networks, refer to my network
-analysis tutorial site: <a
-href="https://dshizuka.github.io/networkanalysis/tutorials.html"
-class="uri">https://dshizuka.github.io/networkanalysis/tutorials.html</a></h4>
-</div>
 </div>
 
 

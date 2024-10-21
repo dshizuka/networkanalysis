@@ -316,8 +316,11 @@ If it doens't exist already, create a "gmm_daily" folder within your data folder
 if(dir.exists("SampleData/RFIDdata/gmm_daily/")==F) dir.create("SampleData/RFIDdata/gmm_daily/")
 ```
 
+## 4.4. Try running GMM for one day
 
-Now, let's try running the `gmmevents()` function on one day's data. But we will go ahead and structure this as a for-loop so that it'll be easier to expand it to multiple days.
+Because RFID data can be very large and the `gmmevents()` function can take a while, let's try running the function on one day's data. But we will go ahead and structure this as a for-loop so that it'll be easier to expand it to multiple days.
+
+
 ```{r, eval=F}
 #test with one date
 for(i in 1){
@@ -329,6 +332,14 @@ for(i in 1){
 
 You should now see a file called "gmm_2021-12-06.rdata" in your "gmm_daily" folder.
 
+## 4.5. Now test the code for multiple days
+
+If everything goes smoothly for one day, try it with a few days by allowing "i" to be a range of numbers. Then, once that is all good, you can run it for all days. 
+
+But this can take a while, so depending on the size of your data set. So you can always run it in chunks of dates.
+
+Here, I'm running it for all dates because I have restricted my dataset to only a few days and a few feeders.
+
 ```{r, eval=F}
 #test with all dates
 for(i in 1:length(use_dates)){
@@ -338,7 +349,7 @@ for(i in 1:length(use_dates)){
 }
 ```
 
-## 4.4. BONUS: Run it in parallel
+## 4.6. BONUS: Run it in parallel
 
 This Gaussian Mixture Model routine can be run much more efficiently by using parallel computing. All modern computers are capable of parallel computing across multiple 'cores'. 
 
